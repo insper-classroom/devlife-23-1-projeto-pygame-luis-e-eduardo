@@ -1,4 +1,3 @@
 import pygame 
 
-def fatorial():
-    
+

@@ -1,7 +1,6 @@
 from random import randint
 import pygame
-
-import pygame
+from assets import *
 
 class TelaInicial:
     def __init__(self, window):
@@ -24,7 +23,6 @@ class TelaInicial:
         window.blit(mensagem,(150, 216))
         
 
-
 class Tela1:
     def __init__(self, window):
         self.sprites = pygame.sprite.Group()
@@ -34,9 +32,8 @@ class Tela1:
         self.azul = (0,0,255)
         self.vermelho = (255, 0, 0)
         self.verde = (0,255,0)
-
-        fundo = pygame.image.load("main/img.png")
-        self.fundo = pygame.transform.scale(fundo, (1280,600))
+        fundo = pygame.image.load(assets["fundo1"]) #imagem gerdada 
+        self.fundo = pygame.transform.scale(fundo, (912,512))
 
         self.jogador = Jogador()
         self.sprites.add(self.jogador)
@@ -88,7 +85,7 @@ class Jogador(pygame.sprite.Sprite):
         pygame.init() 
         pygame.sprite.Sprite.__init__(self)
 
-        mario = pygame.image.load("main\mario.png")
+        mario = pygame.image.load("main/mario.png")
         self.image = pygame.transform.scale(mario, (128,60))
         
         self.rect = self.image.get_rect()
@@ -113,7 +110,7 @@ class Jogo:
         pygame.init()
         self.sprites = pygame.sprite.Group()
 
-        self.window = pygame.display.set_mode((1280,600))
+        self.window = pygame.display.set_mode((912,512))
 
         self.tela_atual = TelaInicial(self.window)
         self.last_updated = pygame.time.get_ticks()
