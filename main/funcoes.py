@@ -32,7 +32,7 @@ class Tela1:
         self.azul = (0,0,255)
         self.vermelho = (255, 0, 0)
         self.verde = (0,255,0)
-        fundo = pygame.image.load(assets["fundo1"]) #imagem gerdada 
+        fundo = pygame.image.load(assets["fundo1"]) #imagem gerdada pela AI "https://www.scenario.com/""
         self.fundo = pygame.transform.scale(fundo, (912,512))
 
         self.jogador = Jogador()
@@ -85,8 +85,8 @@ class Jogador(pygame.sprite.Sprite):
         pygame.init() 
         pygame.sprite.Sprite.__init__(self)
 
-        mario = pygame.image.load("main/mario.png")
-        self.image = pygame.transform.scale(mario, (128,60))
+        mario = pygame.image.load("main/assets/imagens/personagem_principal.png")
+        self.image = pygame.transform.scale(mario, (48,48))
         
         self.rect = self.image.get_rect()
         self.rect.x = 1280/2 - self.rect.width/2
