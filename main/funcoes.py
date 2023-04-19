@@ -67,6 +67,9 @@ class Tela1:
         velocidade_x = 4
         velocidade_y = 4
 
+        clock = pygame.time.Clock()
+
+        
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 return None  # Devolve None para sair
@@ -111,6 +114,8 @@ class Tela1:
         else:
             self.jogador.rect.y = 0
         
+        clock.tick(120)
+
         return self
 
     def desenha(self, window):

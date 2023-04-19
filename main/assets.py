@@ -13,3 +13,5 @@ state = {}
 state["posicao_jogador"] = [0.0,400.0]
 state["velocidade_jogador"] = [0.0,0.0]
 state["aceleracao_gravidade"] = 1 # nao sei pq nao tem que ser negativo kkkkk
+state["tempo_0"] = 0 
+state["fps"] = 0
