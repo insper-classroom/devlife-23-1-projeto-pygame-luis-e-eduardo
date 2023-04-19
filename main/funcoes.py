@@ -64,8 +64,8 @@ class Tela1:
 
     def recebe_eventos(self):
         
-        velocidade_x = 1
-        velocidade_y = 3
+        velocidade_x = 4
+        velocidade_y = 4
 
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
