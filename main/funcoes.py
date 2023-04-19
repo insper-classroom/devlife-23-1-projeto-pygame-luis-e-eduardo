@@ -64,8 +64,9 @@ class Tela1:
 
     def recebe_eventos(self):
         
-        velocidade = 4
-        
+        velocidade_x = 1
+        velocidade_y = 3
+
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 return None  # Devolve None para sair
@@ -75,19 +76,20 @@ class Tela1:
             
             #caso o botao seja apertado, ele soma a velocidade ate parar de apertar 
             if event.type == pygame.KEYDOWN and event.key == pygame.K_RIGHT:
-                state["velocidade_jogador"][0] += velocidade
+                state["velocidade_jogador"][0] += velocidade_x
             elif event.type == pygame.KEYUP and event.key == pygame.K_RIGHT:
-                state["velocidade_jogador"][0] -= velocidade
+                state["velocidade_jogador"][0] -= velocidade_x
             
             if event.type == pygame.KEYDOWN and event.key == pygame.K_LEFT:
-                state["velocidade_jogador"][0] -= velocidade
+                state["velocidade_jogador"][0] -= velocidade_x
             elif event.type == pygame.KEYUP and event.key == pygame.K_LEFT:
-                state["velocidade_jogador"][0] += velocidade
+                state["velocidade_jogador"][0] += velocidade_x
              
+
             if event.type == pygame.KEYDOWN and event.key == pygame.K_SPACE:
-                state["velocidade_jogador"][1] -= velocidade
+                state["velocidade_jogador"][1] -= velocidade_y
             elif event.type == pygame.KEYUP and event.key == pygame.K_SPACE:
-                state["velocidade_jogador"][1] += velocidade
+                state["velocidade_jogador"][1] += velocidade_y
 
         if self.jogador.rect.x < 862:
             self.jogador.rect.x = abs(self.jogador.rect.x + state["velocidade_jogador"][0])
