@@ -2,18 +2,12 @@ from random import randint
 import pygame
 from assets import *
 
-def esta_no_chao(obj1,obj2):
-    if obj1.colliderect(obj2):
-        return True 
-    else:
-        return False 
-
 class Plataform(pygame.sprite.Sprite):
     
-    def __init__(self,sprites,x,y):
+    def __init__(self,sprites,plataforma,x,y):
+        self.plataforma = plataforma
         pygame.sprite.Sprite.__init__(self)
-        self.plataforma = pygame.sprite.Group()
-        img_plataforma = pygame.image.load("assets/imagens/ground.png")
+        img_plataforma = pygame.image.load("ground.png")
         self.image = pygame.transform.scale(img_plataforma, assets["bloco"])
         self.rect = self.image.get_rect()
         self.rect.x = x
@@ -57,20 +51,22 @@ class Tela1:
         
         self.chao = pygame.Rect(0,450,912,112) #chao provisório, coords certas 
 
-        self.jogador = Jogador()
+        self.plataforma = pygame.sprite.Group()
+        self.jogador = Jogador(self.plataforma)
         self.sprites.add(self.jogador)
 
         self.window = window
 
         for i in range(30):
             x = 32*i
-            Plataform(self.sprites,x,445)
+            Plataform(self.sprites,self.plataforma,x,445)
         for i in range(5):
             x = 200+32*i
-            Plataform(self.sprites,x,380)
+            Plataform(self.sprites,self.plataforma,x,380)
         for i in range(5):
             x = 350+32*i
-            Plataform(self.sprites,x,380)
+            Plataform(self.sprites,self.plataforma,x,315)
+
     def recebe_eventos(self):
         
         velocidade_x = 1
@@ -100,8 +96,10 @@ class Tela1:
                 state["velocidade_jogador"][1] -= velocidade_y
             elif event.type == pygame.KEYUP and event.key == pygame.K_SPACE:
                 state["velocidade_jogador"][1] += velocidade_y
-
+            if event.type==pygame.KEYDOWN and event.key == pygame.K_e:
+                Tiro(self.sprites, self.plataforma, self.jogador.rect.x, self.jogador.rect.y+25)
         
+
         self.sprites.update()
         clock.tick(120)
 
@@ -135,21 +133,17 @@ class Tela2:
        
 class Jogador(pygame.sprite.Sprite):
     
-    def __init__(self):
+    def __init__(self,chao):
 
         pygame.init() 
         pygame.sprite.Sprite.__init__(self)
 
-        mario = pygame.image.load("assets/imagens/personagem_principal.png")
+        mario = pygame.image.load("personagem_principal.png")
         self.image = pygame.transform.scale(mario, (50,50))
 
         self.rect = self.image.get_rect()
 
-        #posicao do jogador 
-        # self.rect.x = float(state["posicao_jogador"][0])
-        # self.rect.y = float(state["posicao_jogador"][1]) 
-
-        #velocidade jogador 
+        self.chao = chao
 
     def update(self):
 
@@ -164,14 +158,51 @@ class Jogador(pygame.sprite.Sprite):
             self.rect.x = 0
     
         if self.rect.y < 400:
+            anterior = self.rect.y
             self.rect.y = abs(self.rect.y + state["velocidade_jogador"][1]) + (state["aceleracao_gravidade"])
+            lista = pygame.sprite.spritecollide(self, self.chao, False)
+            if len(lista)>0:
+                self.rect.y = anterior
+            lista = []
         else:
+            print(2)
             self.rect.y = 400
     
         if self.rect.y > 0:
+            anterior = self.rect.y
             self.rect.y = abs(self.rect.y + state["velocidade_jogador"][1]) + (state["aceleracao_gravidade"])
-        else:
+            lista = pygame.sprite.spritecollide(self, self.chao, False)
+            if len(lista)>0:
+                self.rect.y = anterior
+            lista = []
+        else: 
+            print(4)
             self.rect.y = 0
+
+class Tiro(pygame.sprite.Sprite):
+    def __init__(self, sprites,meteoros, x, y):
+        pygame.sprite.Sprite.__init__(self)
+
+        img_laser = pygame.image.load('assets/img/laserRed16.png')
+        self.image = pygame.transform.scale(img_laser,(16,12))
+        
+        self.rect = self.image.get_rect()
+        self.vel_y_laser = 0
+
+        self.rect.x = x
+        self.rect.y = y
+        self.vel_y_laser = -500
+
+        self.flag_tiro = False
+        self.meteoros = meteoros
+        sprites.add(self) 
+        self.sprites = sprites 
+    def update(self, delta_t):
+
+        self.rect.y = (self.rect.y + self.vel_y_laser*delta_t)
+        lista = pygame.sprite.spritecollide(self, self.meteoros,True)
+        for tiro in lista:
+            self.sprites.remove(self)
         
 
 class Jogo:
