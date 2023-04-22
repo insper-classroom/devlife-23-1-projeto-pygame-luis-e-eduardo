@@ -1,0 +1,80 @@
+*{
+    margin:0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Press Start 2P', cursive;
+    color: white;
+}
+
+.header__logo{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    
+}
+
+.header{
+    background-color: rgba(0, 0, 0, 0.6);
+}
+
+.header__wraper{
+    display: flex;
+    padding: 0 2%;
+    margin: 0 auto;
+    align-items: center;
+}
+
+.header__menu{
+    text-align: right;
+    width: 100%;
+    display: inline-block;
+    line-height: 80px;
+    transition: 0.8s;
+}
+
+.header__menu a{
+   color: black;
+   text-decoration: underline;
+   margin-right:60px; 
+   padding: 8px 10px;
+   display: inline-block;
+   font-size: 12px
+}
+
+.header__menu a:hover{
+    color: red;
+}
+
+
+.header__hamburger > img{
+    height: 40px;
+}
+
+
+h1 {
+    text-decoration: underline;
+    }
+
+    .imagem_jogo{
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+    
+    .descriçoes {
+        font-size: 12px;
+    }
+    .topicos {
+        font-size: 18px
+    }
+    
+    .texto{
+        padding-left: 1rem;
+        padding-top: 1rem;
+    
+    }
+    
+    .titulo{
+        display: flex;
+        justify-content: center;
+    }
