@@ -12,14 +12,14 @@ class Plataform(pygame.sprite.Sprite):
     
     def __init__(self,sprites,plataform,x,y):
         pygame.sprite.Sprite.__init__(self)
-        img_plataforma = pygame.image.load("main\wood1.png")
-        self.image = pygame.transform.scale(img_plataforma, assets["bloco"])
-        self.rect = self.image.get_rect()
+        #img_plataforma = pygame.image.load("main/grass.png")
+        #self.image = pygame.transform.scale(img_plataforma, assets["bloco"])
+        #self.rect = self.image.get_rect()
         
-        self.rect.x = x
-        self.rect.y = y
-        sprites.add(self)
-        plataform.add(self)
+        #self.rect.x = x
+        #self.rect.y = y
+        #sprites.add(self)
+        #plataform.add(self)
 
 class TelaInicial:
     def __init__(self, window):
@@ -46,6 +46,7 @@ class Tela1:
     def __init__(self, window):
         
         self.sprites = pygame.sprite.Group()
+        self.plataform = pygame.sprite.Group()
         fonte_padrao = pygame.font.get_default_font()
         self.font = pygame.font.Font(fonte_padrao, 24)
         self.azul = (0,0,255)
@@ -55,10 +56,27 @@ class Tela1:
         fundo = pygame.image.load(assets["fundo1"]) #imagem gerdada pela AI "https://www.scenario.com/""
         self.fundo = pygame.transform.scale(fundo, (912,512))
         
-        self.chao = pygame.Rect(0,450,912,112) #chao provisório, coords certas 
+        #criando o chao 
+        chao = pygame.image.load("main/assets/imagens/pixil-frame-0 (2).png")
+        self.chao = pygame.transform.scale(chao,(200,130))
+        #self.chao = pygame.Rect(0,450,912,112) #chao provisório, coords certas 
 
         self.jogador = Jogador()
         self.sprites.add(self.jogador)
+
+        for i in range(30):
+            x = 32*i
+            y = assets["altura_tela"] - 71
+            Plataform(self.sprites,self.plataform,x,y)
+        for i in range(6):
+            x = 300 + 32*i
+            y = assets["altura_tela"] - 6*assets["bloco"][1] 
+            Plataform(self.sprites,self.plataform,x,y)
+        for i in range(4):
+            x = 600 + 32*i
+            y = assets["altura_tela"] - 5*assets["bloco"][1]
+            Plataform(self.sprites,self.plataform,x,y)
+            
 
         self.window = window
 
@@ -68,7 +86,6 @@ class Tela1:
         velocidade_y = 4
 
         clock = pygame.time.Clock()
-
         
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -79,42 +96,26 @@ class Tela1:
             
             #caso o botao seja apertado, ele soma a velocidade ate parar de apertar 
             if event.type == pygame.KEYDOWN and event.key == pygame.K_RIGHT:
-                state["velocidade_jogador"][0] += velocidade_x
+                self.jogador.vel_x += velocidade_x
+                print(1)
             elif event.type == pygame.KEYUP and event.key == pygame.K_RIGHT:
-                state["velocidade_jogador"][0] -= velocidade_x
+                self.jogador.vel_x -= velocidade_x
             
             if event.type == pygame.KEYDOWN and event.key == pygame.K_LEFT:
-                state["velocidade_jogador"][0] -= velocidade_x
+                self.jogador.vel_x -= velocidade_x
             elif event.type == pygame.KEYUP and event.key == pygame.K_LEFT:
-                state["velocidade_jogador"][0] += velocidade_x
+                self.jogador.vel_x += velocidade_x
              
 
             if event.type == pygame.KEYDOWN and event.key == pygame.K_SPACE:
-                state["velocidade_jogador"][1] -= velocidade_y
+                self.jogador.vel_y -= velocidade_y
             elif event.type == pygame.KEYUP and event.key == pygame.K_SPACE:
-                state["velocidade_jogador"][1] += velocidade_y
+                self.jogador.vel_y += velocidade_y
 
-        if self.jogador.rect.x < 862:
-            self.jogador.rect.x = abs(self.jogador.rect.x + state["velocidade_jogador"][0])
-        else:
-            self.jogador.rect.x = 862
-    
-        if self.jogador.rect.x > 0:
-            self.jogador.rect.x = abs(self.jogador.rect.x + state["velocidade_jogador"][0])
-        else:
-            self.jogador.rect.x = 0
-    
-        if self.jogador.rect.y < 400:
-            self.jogador.rect.y = abs(self.jogador.rect.y + state["velocidade_jogador"][1]) + (state["aceleracao_gravidade"])
-        else:
-            self.jogador.rect.y = 400
-    
-        if self.jogador.rect.y > 0:
-            self.jogador.rect.y = abs(self.jogador.rect.y + state["velocidade_jogador"][1]) + (state["aceleracao_gravidade"])
-        else:
-            self.jogador.rect.y = 0
+        self.sprites.update()
         
-        clock.tick(120)
+        
+        clock.tick(60) #definindo um fps max para todos os usuarios
 
         return self
 
@@ -122,7 +123,8 @@ class Tela1:
 
         #window.fill(self.verde)
         window.blit(self.fundo,(0,0)) #colocando o fundo do jogo
-        pygame.draw.rect(window,(150,75,0),self.chao) #desenhando o chao 
+        #pygame.draw.rect(window,(150,75,0),self.chao) #desenhando o chao 
+        window.blit(self.chao,(0,390))
 
         self.sprites.draw(self.window)
         
@@ -157,21 +159,38 @@ class Jogador(pygame.sprite.Sprite):
         self.rect = self.image.get_rect()
 
         #posicao do jogador 
-        self.rect.x = float(state["posicao_jogador"][0])
-        self.rect.y = float(state["posicao_jogador"][1]) 
+        self.rect.x = 0
+        self.rect.y = 400 
+
+        self.vel_x = 0
+        self.vel_y = 0
 
         #velocidade jogador 
 
     def update(self):
         
-        if self.rect.x + self.rect.width >= 912.0:
-            self.rect.x = 912.0 - self.rect.width
-        if self.rect.x  < 0.0:
-            self.rect.x = 0.0
-        if self.rect.y + self.rect.height >= 450.0:
-            self.rect.y = 450.0 - self.rect.height
-        if self.rect.y < 0.0:
-            self.rect.y = 0.0    
+        if self.rect.x < 862:
+            self.rect.x = abs(self.rect.x + self.vel_x)
+            print(2)
+        else:
+            self.rect.x = 862
+        
+        if self.rect.x > 0:
+            self.rect.x = abs(self.rect.x + self.vel_x)
+        else:
+            self.rect.x = 0
+        
+        if self.rect.y < 400:
+            self.rect.y = abs(self.rect.y + self.vel_y) + (state["aceleracao_gravidade"])
+        else:
+            self.rect.y = 400
+    
+        if self.rect.y > 0:
+            self.rect.y = abs(self.rect.y + self.vel_y) + (state["aceleracao_gravidade"])
+        else:
+            self.rect.y = 0  
+
+            #spritecolliderect retorn true ou false e entao se for true o vel_y vira 0
 
 class Jogo:
     
