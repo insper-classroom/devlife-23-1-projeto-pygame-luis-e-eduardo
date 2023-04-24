@@ -6,13 +6,14 @@ class Plataform(pygame.sprite.Sprite):
     def __init__(self,sprites,plataforma,x,y):
         self.plataforma = plataforma
         pygame.sprite.Sprite.__init__(self)
-        img_plataforma = pygame.image.load("esse_chao.png")
-        self.image = pygame.transform.scale(img_plataforma, (100,50))
+        img_plataforma = pygame.image.load("plataforma.png")
+        self.image = pygame.transform.scale(img_plataforma, (50,15))
         self.rect = self.image.get_rect()
         self.rect.x = x
         self.rect.y = y
         sprites.add(self)
         self.plataforma.add(self)
+
 class Portal(pygame.sprite.Sprite):
     def __init__(self,sprites,portal,x,y):
         self.portal = portal
@@ -24,6 +25,7 @@ class Portal(pygame.sprite.Sprite):
         self.rect.y = y
         sprites.add(self)
         self.portal.add(self)
+
 class Monstro(pygame.sprite.Sprite):      
     def __init__(self,sprites,monstros,x,y):
         self.monstros = monstros
@@ -78,7 +80,7 @@ class Tela1:
         self.fundo = pygame.transform.scale(fundo, (912,512))
         
         #criando o chao 
-        chao = pygame.image.load("grass_agora.png")
+        chao = pygame.image.load("grama.png")
         self.chao = pygame.transform.scale(chao,(200,130))
         #self.chao = pygame.Rect(0,450,912,112) #chao provisório, coords certas 
 
@@ -107,12 +109,7 @@ class Tela1:
         for i in range(3):
             x = randint(0,912)
             Monstro(self.sprites,self.monstros, x, 480-50)
-        Monstro(self.sprites, self.monstros, randint(750,900), 210-50)
-        
-        
-
-        
-            
+        Monstro(self.sprites, self.monstros, randint(750,900), 210-50)       
 
     def recebe_eventos(self):
         
@@ -152,7 +149,6 @@ class Tela1:
         self.last_updated = tempo
         self.sprites.update(delta_t)
 
-        
         clock.tick(120)
 
         return self
@@ -164,6 +160,11 @@ class Tela1:
         #pygame.draw.rect(window,(150,75,0),self.chao) #desenhando o chao 
         for i in range(assets["vidas"]):
             window.blit(self.coracao,(i*15,0))
+        window.blit(self.chao,(0,465))
+        window.blit(self.chao,(200,465))
+        window.blit(self.chao,(400,465))
+        window.blit(self.chao,(600,465))
+        window.blit(self.chao,(800,465))
 
         self.sprites.draw(self.window)
         
@@ -216,7 +217,6 @@ class Jogador(pygame.sprite.Sprite):
 
     def update(self, delta_t):
         
-
         self.speedy += self.GRAVITY
         # Atualiza o estado para caindo
         if self.speedy > 0:
@@ -274,8 +274,6 @@ class Jogador(pygame.sprite.Sprite):
         if self.state == self.STILL:
             self.speedy -= self.JUMP_SIZE
             self.state = self.JUMPING
-
-        
 
 class Jogo:
     
