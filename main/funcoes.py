@@ -6,31 +6,29 @@ class Plataform(pygame.sprite.Sprite):
     def __init__(self,sprites,plataforma,x,y):
         self.plataforma = plataforma
         pygame.sprite.Sprite.__init__(self)
-        img_plataforma = pygame.image.load("main/esse_chao.png")
+        img_plataforma = pygame.image.load("esse_chao.png")
         self.image = pygame.transform.scale(img_plataforma, (100,50))
         self.rect = self.image.get_rect()
         self.rect.x = x
         self.rect.y = y
         sprites.add(self)
         self.plataforma.add(self)
-
 class Portal(pygame.sprite.Sprite):
     def __init__(self,sprites,portal,x,y):
         self.portal = portal
         pygame.sprite.Sprite.__init__(self)
-        img_portal = pygame.image.load("main/portal.png")
+        img_portal = pygame.image.load("portal.png")
         self.image = pygame.transform.scale(img_portal, (80,80))
         self.rect = self.image.get_rect()
         self.rect.x = x
         self.rect.y = y
         sprites.add(self)
         self.portal.add(self)
-
 class Monstro(pygame.sprite.Sprite):      
     def __init__(self,sprites,monstros,x,y):
         self.monstros = monstros
         pygame.sprite.Sprite.__init__(self)
-        img_monstro = pygame.image.load("main/monstro.png")
+        img_monstro = pygame.image.load("monstro.png")
         self.image = pygame.transform.scale(img_monstro, (60,70))
         self.rect = self.image.get_rect()
         self.rect.x = x
@@ -71,7 +69,7 @@ class Tela1:
         self.verde = (0,255,0)
         
         self.vidas = 3
-        coracao = pygame.image.load("main/coracao.png")
+        coracao = pygame.image.load("coracao.png")
         self.coracao = pygame.transform.scale(coracao, (15,15))
 
         self.last_updated = 0
@@ -80,7 +78,7 @@ class Tela1:
         self.fundo = pygame.transform.scale(fundo, (912,512))
         
         #criando o chao 
-        chao = pygame.image.load("main/grass_agora.png")
+        chao = pygame.image.load("grass_agora.png")
         self.chao = pygame.transform.scale(chao,(200,130))
         #self.chao = pygame.Rect(0,450,912,112) #chao provisório, coords certas 
 
@@ -109,7 +107,12 @@ class Tela1:
         for i in range(3):
             x = randint(0,912)
             Monstro(self.sprites,self.monstros, x, 480-50)
-        Monstro(self.sprites, self.monstros, randint(750,900), 210-50)       
+        Monstro(self.sprites, self.monstros, randint(750,900), 210-50)
+        
+        
+
+        
+            
 
     def recebe_eventos(self):
         
@@ -138,8 +141,8 @@ class Tela1:
             # elif event.type == pygame.KEYUP and event.key == pygame.K_SPACE:
             #     self.jogador.speedx[1] += velocidade_y
             if event.type==pygame.KEYDOWN and event.key == pygame.K_e:
-                Tiro(self.sprites, self.monstros, self.jogador.rect.x, self.jogador.rect.y+25)
-
+                #Tiro(self.sprites, self.monstros, self.jogador.rect.x, self.jogador.rect.y+25)
+                pass
             if assets["portal"]:
                 return Tela2()
         
@@ -192,7 +195,7 @@ class Jogador(pygame.sprite.Sprite):
         self.monstros = monstros
         self.portal = portal
 
-        mario = pygame.image.load("main/personagem_principal.png")
+        mario = pygame.image.load("personagem_principal.png")
         self.image = pygame.transform.scale(mario, (50,50))
 
         self.rect = self.image.get_rect()
@@ -265,6 +268,12 @@ class Jogador(pygame.sprite.Sprite):
         collisions = pygame.sprite.spritecollide(self, self.portal, True)
         for cada_colisao in collisions:
             assets["portal"] = True
+
+    def jump(self):
+    # Só pode pular se ainda não estiver pulando ou caindo
+        if self.state == self.STILL:
+            self.speedy -= self.JUMP_SIZE
+            self.state = self.JUMPING
 
         
 
