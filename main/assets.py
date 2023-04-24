@@ -6,6 +6,8 @@ assets["window"] = (912.0,512.0)
 assets["altura_tela"] = assets["window"][1]
 assets["largura_tela"] = assets["window"][0]
 assets["bloco"] = (32,24)
+assets["vidas"] = 3
+assets["portal"] = False
 
 # dicionario para guardar os dados que serao usados para o jogo - posicoes/movimento
 state = {}
