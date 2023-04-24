@@ -78,7 +78,7 @@ class Tela1:
         self.fundo = pygame.transform.scale(fundo, (912,512))
         
         #criando o chao 
-        chao = pygame.image.load("main/assets/imagens/grass_agora.png")
+        chao = pygame.image.load("grass_agora.png")
         self.chao = pygame.transform.scale(chao,(200,130))
         #self.chao = pygame.Rect(0,450,912,112) #chao provisório, coords certas 
 
@@ -87,24 +87,6 @@ class Tela1:
         self.portal = pygame.sprite.Group()
         self.jogador = Jogador(self.plataforma,self.monstros,self.portal)
         self.sprites.add(self.jogador)
-
-        
-
-        
-
-        #for i in range(30):
-            #x = 32*i
-            #y = assets["altura_tela"] - 71
-            #Plataform(self.sprites,x,y)
-        for i in range(6):
-            x = 300 + 32*i
-            y = assets["altura_tela"] - 6*assets["bloco"][1] 
-            Plataform(self.sprites,x,y)
-        for i in range(4):
-            x = 600 + 32*i
-            y = assets["altura_tela"] - 5*assets["bloco"][1]
-            Plataform(self.sprites,x,y)
-            
 
         self.window = window
 
@@ -159,8 +141,8 @@ class Tela1:
             # elif event.type == pygame.KEYUP and event.key == pygame.K_SPACE:
             #     self.jogador.speedx[1] += velocidade_y
             if event.type==pygame.KEYDOWN and event.key == pygame.K_e:
-                Tiro(self.sprites, self.monstros, self.jogador.rect.x, self.jogador.rect.y+25)
-
+                #Tiro(self.sprites, self.monstros, self.jogador.rect.x, self.jogador.rect.y+25)
+                pass
             if assets["portal"]:
                 return Tela2()
         
@@ -286,6 +268,12 @@ class Jogador(pygame.sprite.Sprite):
         collisions = pygame.sprite.spritecollide(self, self.portal, True)
         for cada_colisao in collisions:
             assets["portal"] = True
+
+    def jump(self):
+    # Só pode pular se ainda não estiver pulando ou caindo
+        if self.state == self.STILL:
+            self.speedy -= self.JUMP_SIZE
+            self.state = self.JUMPING
 
         
 
