@@ -1,7 +1,7 @@
 # dicionario para guardar os dados que serao usados para o jogo - tela/desenha
 assets = {}
 
-assets["fundo1"] = "assets/imagens/fundo1.png"
+assets["fundo1"] = "fundo1.png"
 assets["window"] = (912.0,512.0)
 assets["altura_tela"] = assets["window"][1]
 assets["largura_tela"] = assets["window"][0]
