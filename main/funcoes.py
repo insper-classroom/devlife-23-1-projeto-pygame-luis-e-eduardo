@@ -61,6 +61,7 @@ class Tela1:
     def __init__(self, window):
         
         self.sprites = pygame.sprite.Group()
+        self.plataform = pygame.sprite.Group()
         fonte_padrao = pygame.font.get_default_font()
         self.font = pygame.font.Font(fonte_padrao, 24)
         self.azul = (0,0,255)
@@ -76,7 +77,10 @@ class Tela1:
         fundo = pygame.image.load(assets["fundo1"]) #imagem gerdada pela AI "https://www.scenario.com/""
         self.fundo = pygame.transform.scale(fundo, (912,512))
         
-        self.chao = pygame.Rect(0,450,912,112) #chao provisório, coords certas 
+        #criando o chao 
+        chao = pygame.image.load("main/assets/imagens/grass_agora.png")
+        self.chao = pygame.transform.scale(chao,(200,130))
+        #self.chao = pygame.Rect(0,450,912,112) #chao provisório, coords certas 
 
         self.plataforma = pygame.sprite.Group()
         self.monstros = pygame.sprite.Group()
@@ -85,6 +89,22 @@ class Tela1:
         self.sprites.add(self.jogador)
 
         
+
+        
+
+        #for i in range(30):
+            #x = 32*i
+            #y = assets["altura_tela"] - 71
+            #Plataform(self.sprites,x,y)
+        for i in range(6):
+            x = 300 + 32*i
+            y = assets["altura_tela"] - 6*assets["bloco"][1] 
+            Plataform(self.sprites,x,y)
+        for i in range(4):
+            x = 600 + 32*i
+            y = assets["altura_tela"] - 5*assets["bloco"][1]
+            Plataform(self.sprites,x,y)
+            
 
         self.window = window
 
@@ -268,39 +288,6 @@ class Jogador(pygame.sprite.Sprite):
             assets["portal"] = True
 
         
-    def jump(self):
-        # Só pode pular se ainda não estiver pulando ou caindo
-        if self.state == self.STILL:
-            self.speedy -= self.JUMP_SIZE
-            self.state = self.JUMPING
-
-class Tiro(pygame.sprite.Sprite):
-    def __init__(self, sprites, monstros, x, y):
-        pygame.sprite.Sprite.__init__(self)
-
-        img_laser = pygame.image.load('tiro.png')
-        self.image = pygame.transform.scale(img_laser,(16,6))
-        
-        self.rect = self.image.get_rect()
-        self.vel_y_laser = 0
-
-        self.rect.x = x
-        self.rect.y = y
-        self.vel_x_laser = 500
-
-        self.flag_tiro = False
-        self.monstros = monstros
-        sprites.add(self) 
-        self.sprites = sprites 
-
-    def update(self, delta_t):
-        self.rect.x = (self.rect.x + self.vel_x_laser*delta_t)
-        lista = pygame.sprite.spritecollide(self, self.monstros,True)
-        for tiro in lista:
-            self.sprites.remove(self)
-
-
-
 
 class Jogo:
     
