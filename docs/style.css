@@ -105,6 +105,12 @@ main {
    padding-top: 450;
 
 }
+.jogar:hover{
+    color: red;
+    opacity: 0.7;
+}
+
+
 /* Caixa geral */
 .texto {
     margin: 0 auto;
