@@ -110,7 +110,7 @@ class TelaInicial:
         altura = 70
         diferenca_largura = (912 - largura)/2
         pygame.draw.polygon(window,(255,0,0),[(diferenca_largura,400),(912 - diferenca_largura,400),(912 - diferenca_largura,470),(diferenca_largura,470)])
-        
+        pygame.draw.circle()
         img_mensagem = self.fonte.render("Aperte uma tecla para continuar", True,(255,255,255))
         mensagem = pygame.transform.scale(img_mensagem, (400,90))
         window.blit(mensagem,(150, 216))
