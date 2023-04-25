@@ -160,6 +160,8 @@ class Tela1:
         Plataform(self.sprites,self.plataforma,200,400)
         Plataform(self.sprites,self.plataforma,500,280)
         Plataform(self.sprites,self.plataforma,680,210)
+        
+        Plataform(self.sprites,self.plataforma,650,210)
         Plataform(self.sprites,self.plataforma,700,210)
         Plataform(self.sprites,self.plataforma,730,210)
         Plataform(self.sprites,self.plataforma,750,210)
@@ -250,6 +252,23 @@ class Tela2:
         default_font_name = pygame.font.get_default_font()
         self.font = pygame.font.Font(default_font_name, 24)
         self.cor = (0, 0, 255)
+        self.fundo2 = pygame.image.load("fundo2.png")
+
+
+        self.sprites = pygame.sprite.Group()
+        self.plataform = pygame.sprite.Group()
+        self.plataforma = pygame.sprite.Group()
+        self.monstros = pygame.sprite.Group()
+        self.portal = pygame.sprite.Group()
+        self.jogador = Jogador(self.plataforma,self.monstros,self.portal)
+        self.sprites.add(self.jogador)
+
+        chao = pygame.image.load("grama.png")
+        self.chao = pygame.transform.scale(chao,(200,130))
+
+        for i in range(30):
+            x = 32*i
+            Plataform(self.sprites,self.plataforma,x, 480)
         
     def recebe_eventos(self):
         for event in pygame.event.get():
@@ -260,7 +279,13 @@ class Tela2:
         return self
 
     def desenha(self, window):
-        window.fill(self.cor)
+        window.blit(self.fundo2,(0,0))
+        
+        window.blit(self.chao,(0,465))
+        window.blit(self.chao,(200,465))
+        window.blit(self.chao,(400,465))
+        window.blit(self.chao,(600,465))
+        window.blit(self.chao,(800,465))
        
 class Jogador(pygame.sprite.Sprite):
     
