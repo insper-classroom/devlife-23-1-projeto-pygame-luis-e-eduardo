@@ -1,6 +1,7 @@
 from random import randint
 import pygame
 from assets import *
+
 def load_spritesheet(spritesheet, rows, columns):
     # Calcula a largura e altura de cada sprite.
     sprite_width = spritesheet.get_width() // columns
@@ -110,7 +111,7 @@ class TelaInicial:
         altura = 70
         diferenca_largura = (912 - largura)/2
         pygame.draw.polygon(window,(255,0,0),[(diferenca_largura,400),(912 - diferenca_largura,400),(912 - diferenca_largura,470),(diferenca_largura,470)])
-        pygame.draw.circle()
+        #pygame.draw.circle()
         img_mensagem = self.fonte.render("Aperte uma tecla para continuar", True,(255,255,255))
         mensagem = pygame.transform.scale(img_mensagem, (400,90))
         window.blit(mensagem,(150, 216))
@@ -208,13 +209,14 @@ class Tela1:
             if event.type == pygame.KEYDOWN and event.key == pygame.K_SPACE:
                 self.jogador.jump()
             if event.type==pygame.KEYDOWN and event.key == pygame.K_e:
-                #Tiro(self.sprites, self.monstros, self.jogador.rect.x, self.jogador.rect.y+25)
+                Tiro(self.sprites, self.monstros, self.jogador.rect.x, self.jogador.rect.y+25)
                 pass
             if assets["portal"]:
                 return Tela2()
         
             #movimentacao dos monstros 
-            Tela1.movimenta_monstro(self)
+            if event.type == pygame.KEYDOWN:    
+                Tela1.movimenta_monstro(self)
         
         ultimo_tempo = self.last_updated 
         tempo = pygame.time.get_ticks()
