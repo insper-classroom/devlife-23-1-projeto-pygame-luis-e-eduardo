@@ -208,7 +208,8 @@ class Tela1:
             if event.type == pygame.KEYDOWN and event.key == pygame.K_SPACE:
                 self.jogador.jump()
             if event.type==pygame.KEYDOWN and event.key == pygame.K_e:
-                Tiro(self.sprites, self.monstros, self.jogador.rect.x, self.jogador.rect.y+25)
+                #Tiro(self.sprites, self.monstros, self.jogador.rect.x, self.jogador.rect.y+25)
+                pass
             if assets["portal"]:
                 return Tela2()
         
