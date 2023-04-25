@@ -64,8 +64,8 @@ class Tiro(pygame.sprite.Sprite):
     def __init__(self, sprites,monstros, x, y):
         pygame.sprite.Sprite.__init__(self)
 
-        img_laser = pygame.image.load('tiro.png')
-        self.image = pygame.transform.scale(img_laser,(20,6))
+        img_laser = pygame.image.load('machado.png')
+        self.image = pygame.transform.scale(img_laser,(20,20))
         
         self.rect = self.image.get_rect()
         self.vel_y_laser = 0
@@ -81,6 +81,7 @@ class Tiro(pygame.sprite.Sprite):
         self.monstros = monstros
         sprites.add(self) 
         self.sprites = sprites 
+    
     def update(self, delta_t):
         
         self.rect.x = (self.rect.x + self.vel_x_laser*delta_t)
