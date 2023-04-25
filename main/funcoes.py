@@ -106,6 +106,11 @@ class TelaInicial:
 
     def desenha(self, window):
         window.fill((0, 0, 0))
+        largura = 200
+        altura = 70
+        diferenca_largura = (912 - largura)/2
+        pygame.draw.polygon(window,(255,0,0),[(diferenca_largura,400),(912 - diferenca_largura,400),(912 - diferenca_largura,470),(diferenca_largura,470)])
+        
         img_mensagem = self.fonte.render("Aperte uma tecla para continuar", True,(255,255,255))
         mensagem = pygame.transform.scale(img_mensagem, (400,90))
         window.blit(mensagem,(150, 216))
@@ -192,21 +197,18 @@ class Tela1:
             #caso o botao seja apertado, ele soma a velocidade ate parar de apertar 
             if event.type == pygame.KEYDOWN and event.key == pygame.K_RIGHT:
                 self.jogador.speedx += velocidade_x
+                assets["esquerda"] = False
             elif event.type == pygame.KEYUP and event.key == pygame.K_RIGHT:
                 self.jogador.speedx -= velocidade_x
             if event.type == pygame.KEYDOWN and event.key == pygame.K_LEFT:
                 self.jogador.speedx -= velocidade_x
+                assets["esquerda"] = True
             elif event.type == pygame.KEYUP and event.key == pygame.K_LEFT:
                 self.jogador.speedx += velocidade_x
             if event.type == pygame.KEYDOWN and event.key == pygame.K_SPACE:
                 self.jogador.jump()
-            #     #implementar condicao do jagor piular quando estiver no chao ou quando houver colisao
-            #     self.jogador.speedx[1] -= velocidade_y
-            # elif event.type == pygame.KEYUP and event.key == pygame.K_SPACE:
-            #     self.jogador.speedx[1] += velocidade_y
             if event.type==pygame.KEYDOWN and event.key == pygame.K_e:
-                #Tiro(self.sprites, self.monstros, self.jogador.rect.x, self.jogador.rect.y+25)
-                pass
+                Tiro(self.sprites, self.monstros, self.jogador.rect.x, self.jogador.rect.y+25)
             if assets["portal"]:
                 return Tela2()
         

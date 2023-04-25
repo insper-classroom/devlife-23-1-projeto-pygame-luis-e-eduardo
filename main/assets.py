@@ -9,7 +9,7 @@ assets["bloco"] = (32,24)
 assets["vidas"] = 3
 assets["portal"] = False
 assets["monstro_img"] = "macaco1.png"
-
+assets["esquerda"] = False
 # dicionario para guardar os dados que serao usados para o jogo - posicoes/movimento
 state = {}
 
