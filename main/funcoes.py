@@ -1,6 +1,27 @@
 from random import randint
 import pygame
 from assets import *
+def load_spritesheet(spritesheet, rows, columns):
+    # Calcula a largura e altura de cada sprite.
+    sprite_width = spritesheet.get_width() // columns
+    sprite_height = spritesheet.get_height() // rows
+    
+    # Percorre todos os sprites adicionando em uma lista.
+    sprites = []
+    for row in range(rows):
+        for column in range(columns):
+            # Calcula posição do sprite atual
+            x = column * sprite_width
+            y = row * sprite_height
+            # Define o retângulo que contém o sprite atual
+            dest_rect = pygame.Rect(x, y, sprite_width, sprite_height)
+
+            # Cria uma imagem vazia do tamanho do sprite
+            image = pygame.Surface((sprite_width, sprite_height), pygame.SRCALPHA)
+            # Copia o sprite atual (do spritesheet) na imagem
+            image.blit(spritesheet, (0, 0), dest_rect)
+            sprites.append(image)
+    return sprites
 
 class Plataform(pygame.sprite.Sprite):
     def __init__(self,sprites,plataforma,x,y):
@@ -37,6 +58,36 @@ class Monstro(pygame.sprite.Sprite):
         self.rect.y = y
         sprites.add(self)
         self.monstros.add(self)
+
+class Tiro(pygame.sprite.Sprite):
+    def __init__(self, sprites,monstros, x, y):
+        pygame.sprite.Sprite.__init__(self)
+
+        img_laser = pygame.image.load('tiro.png')
+        self.image = pygame.transform.scale(img_laser,(20,6))
+        
+        self.rect = self.image.get_rect()
+        self.vel_y_laser = 0
+
+        self.rect.x = x
+        self.rect.y = y
+        if assets["esquerda"]:
+            self.vel_x_laser = -500
+        else:
+            self.vel_x_laser = +500
+
+        self.flag_tiro = False
+        self.monstros = monstros
+        sprites.add(self) 
+        self.sprites = sprites 
+    def update(self, delta_t):
+        
+        self.rect.x = (self.rect.x + self.vel_x_laser*delta_t)
+        lista = pygame.sprite.spritecollide(self, self.monstros,True)
+        for tiro in lista:
+            self.sprites.remove(self)
+        if self.rect.x > 912 or self.rect.x < 0:
+            self.kill()
 
 
 class TelaInicial:
@@ -215,8 +266,8 @@ class Jogador(pygame.sprite.Sprite):
         self.monstros = monstros
         self.portal = portal
 
-        mario = pygame.image.load("personagem_principal.png")
-        self.image = pygame.transform.scale(mario, (50,50))
+        self.mario = pygame.image.load("personagem_principal.png")
+        self.image = pygame.transform.scale(self.mario, (50,50))
 
         self.rect = self.image.get_rect()
 
@@ -233,6 +284,15 @@ class Jogador(pygame.sprite.Sprite):
 
         self.WIDTH = 912 
         self.HEIGHT = 512
+
+        self.lista_jogador = []
+        imagem = pygame.image.load("sprites_megaman_-running.png")
+        self.lista_jogador = load_spritesheet(imagem,2,5)
+
+        self.state = "parado"
+        self.contador = 0
+        self.last_updated = 0
+        self.elapsed_ticks = 0
 
     def update(self, delta_t):
         
@@ -287,6 +347,23 @@ class Jogador(pygame.sprite.Sprite):
         collisions = pygame.sprite.spritecollide(self, self.portal, True)
         for cada_colisao in collisions:
             assets["portal"] = True
+
+        self.elapsed_ticks += delta_t
+        if self.speedx != 0:
+            if self.elapsed_ticks > 0.1:
+                self.contador += 1
+                self.elapsed_ticks = 0
+            if self.contador >= len(self.lista_jogador):
+                self.contador = 0
+            imagem = self.lista_jogador[self.contador]
+            imagem_virada = pygame.transform.flip(imagem, True, False)
+            if self.speedx < 0:
+                self.image = pygame.transform.scale(imagem_virada,(50,50))
+            else:
+                self.image= pygame.transform.scale(imagem,(50,50))
+        if self.speedx == 0:
+            self.contador = 0
+            self.image = pygame.transform.scale(self.mario, (50,50))
 
     def jump(self):
     # Só pode pular se ainda não estiver pulando ou caindo
