@@ -205,7 +205,7 @@ class Tela1:
             # elif event.type == pygame.KEYUP and event.key == pygame.K_SPACE:
             #     self.jogador.speedx[1] += velocidade_y
             if event.type==pygame.KEYDOWN and event.key == pygame.K_e:
-                #Tiro(self.sprites, self.monstros, self.jogador.rect.x, self.jogador.rect.y+25)
+                Tiro(self.sprites, self.monstros, self.jogador.rect.x, self.jogador.rect.y+25)
                 pass
             if assets["portal"]:
                 return Tela2()
