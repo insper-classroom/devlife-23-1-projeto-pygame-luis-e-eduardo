@@ -1,6 +1,7 @@
 from random import randint
 import pygame
 from assets import *
+
 def load_spritesheet(spritesheet, rows, columns):
     # Calcula a largura e altura de cada sprite.
     sprite_width = spritesheet.get_width() // columns
