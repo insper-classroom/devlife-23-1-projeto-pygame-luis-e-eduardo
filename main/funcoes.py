@@ -30,13 +30,14 @@ class Monstro(pygame.sprite.Sprite):
     def __init__(self,sprites,monstros,x,y):
         self.monstros = monstros
         pygame.sprite.Sprite.__init__(self)
-        img_monstro = pygame.image.load("monstro.png")
-        self.image = pygame.transform.scale(img_monstro, (60,70))
+        img_monstro = pygame.image.load(assets["monstro_img"])
+        self.image = pygame.transform.scale(img_monstro, (40,40))
         self.rect = self.image.get_rect()
         self.rect.x = x
         self.rect.y = y
         sprites.add(self)
         self.monstros.add(self)
+
 
 class TelaInicial:
     def __init__(self, window):
@@ -106,11 +107,26 @@ class Tela1:
 
         Portal(self.sprites,self.portal, 780, 140)
         
+        self.lista_de_monstros = []
         for i in range(3):
             x = randint(0,912)
-            Monstro(self.sprites,self.monstros, x, 480-50)
-        Monstro(self.sprites, self.monstros, randint(750,900), 210-50)       
+            self.monstro = Monstro(self.sprites,self.monstros, x, 430) 
+            self.lista_de_monstros.append(self.monstro) 
 
+    def movimenta_monstro(self):
+        for monstro in self.lista_de_monstros:    
+            num_aleatorio1 = randint(0,1)
+            if 10 < monstro.rect.x < 900:
+                if num_aleatorio1 > 0.5:
+                    monstro.rect.x += 10 #direita 
+                else:
+                    monstro.rect.x -= 10 #esquerda
+            elif monstro.rect.x >= 900:
+                monstro.rect.x -= 10 #esquerda
+            elif monstro.rect.x <= 10:
+                monstro.rect.x += 10 #direita 
+
+    
     def recebe_eventos(self):
         
         velocidade_x = 3
@@ -142,6 +158,9 @@ class Tela1:
                 pass
             if assets["portal"]:
                 return Tela2()
+        
+            #movimentacao dos monstros 
+            Tela1.movimenta_monstro(self)
         
         ultimo_tempo = self.last_updated 
         tempo = pygame.time.get_ticks()
