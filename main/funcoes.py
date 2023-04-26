@@ -168,7 +168,7 @@ class TelaInicial:
 class Tela1:
     def __init__(self, window):
         self.window = window
-
+        self.width = pygame.get_width(window)
         self.sprites = pygame.sprite.Group()
         self.plataform = pygame.sprite.Group()
         fonte_padrao = pygame.font.get_default_font()
@@ -270,8 +270,8 @@ class Tela1:
                 self.jogador.jump()
             if event.type==pygame.KEYDOWN and event.key == pygame.K_e:
                 Tiro(self.sprites, self.monstros, self.jogador.rect.x, self.jogador.rect.y+25)
-            if assets["portal"]:
-                assets["portal"] = False
+            if self.jogador.rect.x>=self.width:
+                print("enrreo")
                 return Tela2(self.window)
         
             #movimentacao dos monstros 
@@ -372,7 +372,6 @@ class Tela2:
     def recebe_eventos(self):
         
         velocidade_x = 3
-        velocidade_y = 3
 
         clock = pygame.time.Clock()
         
@@ -469,8 +468,17 @@ class Jogador(pygame.sprite.Sprite):
         self.HEIGHT = 512
 
         self.lista_jogador = []
-        imagem = pygame.image.load("sprites_megaman_-running.png")
-        self.lista_jogador = load_spritesheet(imagem,2,5)
+        imagem = pygame.image.load("pngwing.com (1).png")
+        self.lista_jogador = load_spritesheet(imagem,1,8)
+
+        imagem = pygame.image.load("parado.png")
+        self.lista_jogador_parado = load_spritesheet(imagem,1,2)
+
+        imagem = pygame.image.load("pulando.png")
+        self.lista_jogador_pulando = load_spritesheet(imagem,1,6)
+
+
+        
 
         self.state = "parado"
         self.contador = 0
@@ -541,12 +549,30 @@ class Jogador(pygame.sprite.Sprite):
             imagem = self.lista_jogador[self.contador]
             imagem_virada = pygame.transform.flip(imagem, True, False)
             if self.speedx < 0:
-                self.image = pygame.transform.scale(imagem_virada,(50,50))
+                self.image = pygame.transform.scale(imagem_virada,(65,50))
             else:
-                self.image= pygame.transform.scale(imagem,(50,50))
+                self.image= pygame.transform.scale(imagem,(65,50))
         if self.speedx == 0:
-            self.contador = 0
-            self.image = pygame.transform.scale(self.mario, (50,50))
+            if self.elapsed_ticks > 0.8:
+                self.contador += 1
+                self.elapsed_ticks = 0
+            if self.contador >= len(self.lista_jogador_parado):
+                self.contador = 0
+            imagem = self.lista_jogador_parado[self.contador]
+            self.image = pygame.transform.scale(imagem, (47,45))
+        if self.speedy != 0:
+            if self.elapsed_ticks > 0.4:
+                self.contador += 1
+                self.elapsed_ticks = 0
+            if self.contador >= len(self.lista_jogador_pulando):
+                self.contador = 0
+            imagem = self.lista_jogador_pulando[self.contador]
+            imagem_virada = pygame.transform.flip(imagem, True, False)
+            if self.speedx < 0:
+                self.image = pygame.transform.scale(imagem_virada,(65,50))
+            else:
+                self.image= pygame.transform.scale(imagem,(65,50))
+        
 
     def jump(self):
     # Só pode pular se ainda não estiver pulando ou caindo
