@@ -5,7 +5,7 @@ from assets import *
 import time
 
 def escreve(texto, window,y):
-    delay = 100 # tempo de atraso em milissegundos
+    delay = 10 # tempo de atraso em milissegundos
     x = 0 # posição inicial da letra na tela
     y = y
     fonte = pygame.font.get_default_font()
@@ -18,7 +18,6 @@ def escreve(texto, window,y):
         
         window.blit(imagem_letra, (x, y))
         pygame.display.update() # atualiza a tela
-        clock.tick(10)
         pygame.time.wait(delay) # atraso entre as letras
         x += imagem_letra.get_width() # atualiza a posição da letra
 
@@ -149,26 +148,10 @@ class TelaInicial:
         mensagem = pygame.transform.scale(img_mensagem, (150,60))
         window.blit(mensagem,(diferenca_largura+20, 400))
 
-        # tempo = pygame.time.get_ticks()
-        # ultimo_tempo = self.last_updated
-        # delta_t = (tempo-ultimo_tempo)/1000
-        # self.last_updated = tempo
-
-        # self.elapsed_ticks += delta_t
-        # if self.elapsed_ticks > 0.1:
-        #     self.contador += 1
-        #     self.elapsed_ticks = 0
-        # if self.contador >= len(self.lista_load):
-        #     self.contador = 0
-        # imagem = self.lista_load[self.contador]
-        # self.image= pygame.transform.scale(imagem,(50,50))
-        
-        
-
 class Tela1:
     def __init__(self, window):
         self.window = window
-        self.width = pygame.get_width(window)
+        #self.width = pygame.get_width(window)
         self.sprites = pygame.sprite.Group()
         self.plataform = pygame.sprite.Group()
         fonte_padrao = pygame.font.get_default_font()
@@ -192,14 +175,15 @@ class Tela1:
         #criando o chao 
         chao = pygame.image.load("grama.png")
         self.chao = pygame.transform.scale(chao,(250,90))
-        #self.chao = pygame.Rect(0,450,912,112) #chao provisório, coords certas 
-
         self.plataforma = pygame.sprite.Group()
         self.monstros = pygame.sprite.Group()
         self.portal = pygame.sprite.Group()
         self.jogador = Jogador(self.plataforma,self.monstros,self.portal)
         self.sprites.add(self.jogador)
         self.scroll = 0 
+        luffy = pygame.image.load("Meu projeto.png")
+        self.luffy = pygame.transform.smoothscale(luffy,(70,80))
+        
 
         self.window = window
 
@@ -226,9 +210,7 @@ class Tela1:
             x = randint(0,912)
             self.monstro = Monstro(self.sprites,self.monstros, x, 430) 
             self.lista_de_monstros.append(self.monstro) 
-
-        
-
+    
     def movimenta_monstro(self):
         for monstro in self.lista_de_monstros:    
             num_aleatorio1 = randint(0,1)
@@ -241,9 +223,7 @@ class Tela1:
                 monstro.rect.x -= 10 #esquerda
             elif monstro.rect.x <= 10:
                 monstro.rect.x += 10 #direita 
-
-    
-    
+ 
     def recebe_eventos(self):
         
         velocidade_x = 3
@@ -270,7 +250,7 @@ class Tela1:
                 self.jogador.jump()
             if event.type==pygame.KEYDOWN and event.key == pygame.K_e:
                 Tiro(self.sprites, self.monstros, self.jogador.rect.x, self.jogador.rect.y+25)
-            if self.jogador.rect.x>=self.width:
+            if self.jogador.rect.x > 850:
                 print("enrreo")
                 return Tela2(self.window)
         
@@ -300,6 +280,9 @@ class Tela1:
         window.blit(self.chao,(400,465))
         window.blit(self.chao,(600,465))
         window.blit(self.chao,(800,465))
+        
+        #desenhando o luffy npc
+        window.blit(self.luffy,(100,380))
 
         if assets["texto"]:
             escreve("utilize as setas para se mover", self.window,20)
@@ -559,7 +542,7 @@ class Jogador(pygame.sprite.Sprite):
             if self.contador >= len(self.lista_jogador_parado):
                 self.contador = 0
             imagem = self.lista_jogador_parado[self.contador]
-            self.image = pygame.transform.scale(imagem, (47,45))
+            self.image = pygame.transform.scale(imagem, (37,37))
         if self.speedy != 0:
             if self.elapsed_ticks > 0.4:
                 self.contador += 1
