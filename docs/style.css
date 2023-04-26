@@ -7,14 +7,14 @@
 }
 
 header{
-    background: url(wallpaperbetter.jpg);
+    /* background: url(wallpaperbetter.jpg); */
 }
 
 .header__logo{
     display: flex;
     align-items: center;
     justify-content: center;
-    background: url(wallpaperbetter.jpg)
+    
 }
 
 .header__wraper{
@@ -22,9 +22,9 @@ header{
     padding: 0 2%;
     margin: 0 auto;
     align-items: center;
-    background: url(wallpaperbetter.jpg);
+    /* background: url(wallpaperbetter.jpg); */
     background: rgba(9,9,9, 0.25);
-    
+    margin-left: 0%;
 }
 
 .header__menu{
@@ -53,9 +53,22 @@ header{
     
 }
 
-main {
+.header__main{
     background: url(wallpaperbetter.jpg);
-    background-size: cover;
+    /* background-size: cover;
+    height: 92vh;
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    padding: 0;
+    margin: 0;
+    padding-top: 40px; */
+    min-height: 100vh;
+    background-position: center;
+}
+
+main {
+    /* background: url(wallpaperbetter.jpg); */
     height: 92vh;
     display: flex;
     align-items: center;
@@ -63,6 +76,7 @@ main {
     padding: 0;
     margin: 0;
     padding-top: 40px;
+
 }
 
 .header__wraper{
@@ -70,7 +84,7 @@ main {
     padding: 0 2%;
     margin: 0 auto;
     align-items: center;
-    background: url(wallpaperbetter.jpg)
+    /* background: url(wallpaperbetter.jpg) */
 }
 
 .header__menu{
@@ -101,18 +115,28 @@ main {
 
 .titulo{
     padding-top: 40px;
+    font-family: 'Press Start 2P', cursive;
+    font-size: 60px;
+    color: transparent;
+    -webkit-text-stroke: 1px #FFFFFF;
+    -webkit-text-stroke: 1px #FFFFFF;
+    -moz-text-stroke: 1px #FFFFFF;
+    
 }
 .subtitulo{
   padding-top: 35px;
 }
 
 .jogar{
-   padding-top: 450;
+   padding-top: 350;
+
+
 
 }
 .jogar:hover{
     color: red;
     opacity: 0.7;
+    cursor: pointer;
 }
 
 .principal{
@@ -122,6 +146,8 @@ main {
 }
 .overhide{
     background: rgba(9,9,9, 0.25);
+    min-height: 100vh;
+    
 }
 /* Caixa geral */
 .texto {

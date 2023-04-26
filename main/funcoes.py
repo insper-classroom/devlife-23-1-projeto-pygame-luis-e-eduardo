@@ -110,7 +110,6 @@ class Tiro(pygame.sprite.Sprite):
         if self.rect.x > 912 or self.rect.x < 0:
             self.kill()
 
-
 class TelaInicial:
     def __init__(self, window):
         fonte_padrao = pygame.font.get_default_font()
@@ -184,7 +183,6 @@ class Tela1:
         luffy = pygame.image.load("Meu projeto.png")
         self.luffy = pygame.transform.smoothscale(luffy,(70,80))
         
-
         self.window = window
 
         for i in range(30):
@@ -287,7 +285,6 @@ class Tela1:
         mensagem = pygame.transform.scale(img_mensagem, (20*len(texto),25))
         window.blit(mensagem,(0, 40))
         
-
         window.blit(self.setas,(0,100))
         self.sprites.draw(self.window)
         
@@ -304,19 +301,6 @@ class Tela2:
         self.verde = (0,255,0)
         
         self.vidas = 3
-        coracao = pygame.image.load("coracao.png")
-        self.coracao = pygame.transform.scale(coracao, (15,15))
-
-        self.last_updated = 0
-
-        fundo = pygame.image.load("fundo2.png") #imagem gerdada pela AI "https://www.scenario.com/""
-        self.fundo2 = pygame.transform.scale(fundo, (1200,512))
-        
-        
-
-        chao = pygame.image.load("terra.png")
-        self.chao = pygame.transform.scale(chao,(200,130))
-
 
         self.plataforma = pygame.sprite.Group()
         self.monstros = pygame.sprite.Group()
@@ -326,33 +310,7 @@ class Tela2:
 
         self.window = window
 
-        Plataform(self.sprites,self.plataforma,350,335)
-        Plataform(self.sprites,self.plataforma,200,400)
-        Plataform(self.sprites,self.plataforma,500,280)
-        Plataform(self.sprites,self.plataforma,680,210)
-        
-        Plataform(self.sprites,self.plataforma,650,210)
-        Plataform(self.sprites,self.plataforma,700,210)
-        Plataform(self.sprites,self.plataforma,730,210)
-        Plataform(self.sprites,self.plataforma,750,210)
-
-        Plataform(self.sprites,self.plataforma,650,300)
-        Plataform(self.sprites,self.plataforma,700,300)
-
-        for i in range(30):
-            x = 32*i
-            Plataform(self.sprites,self.plataforma,x, 480)
-
-        Moeda(self.sprites,self.moeda, 350, 290)
-        Moeda(self.sprites,self.moeda, 500, 240)
-        Moeda(self.sprites,self.moeda, 680, 260)
-        Moeda(self.sprites,self.moeda, 780, 140)
-        
-        self.lista_de_monstros = []
-        for i in range(3):
-            x = randint(0,912)
-            self.monstro = Monstro(self.sprites,self.monstros, x, 450) 
-            self.lista_de_monstros.append(self.monstro) 
+        self.gera_mapa() 
 
         self.contador = 60
         self.contagem = 0
@@ -400,7 +358,6 @@ class Tela2:
 
     def desenha(self, window):
         window.blit(self.fundo2,(0,0)) #colocando o fundo do jogo
-        #pygame.draw.rect(window,(150,75,0),self.chao) #desenhando o chao 
         for i in range(assets["vidas"]):
             window.blit(self.coracao,(i*15,0))
         window.blit(self.chao,(0,490))
@@ -422,8 +379,47 @@ class Tela2:
         mensagem = pygame.transform.scale(img_mensagem, (280,25))
         window.blit(mensagem,(850-295, 5))
     
-
         self.sprites.draw(self.window)
+    
+    def gera_mapa(self):
+        coracao = pygame.image.load("coracao.png")
+        self.coracao = pygame.transform.scale(coracao, (15,15))
+
+        self.last_updated = 0
+
+        fundo = pygame.image.load("fundo2.png") #imagem gerdada pela AI "https://www.scenario.com/""
+        self.fundo2 = pygame.transform.scale(fundo, (1200,512))
+
+        chao = pygame.image.load("terra.png")
+        self.chao = pygame.transform.scale(chao,(200,130))
+        
+        Plataform(self.sprites,self.plataforma,350,335)
+        Plataform(self.sprites,self.plataforma,200,400)
+        Plataform(self.sprites,self.plataforma,500,280)
+        Plataform(self.sprites,self.plataforma,680,210)
+        
+        Plataform(self.sprites,self.plataforma,650,210)
+        Plataform(self.sprites,self.plataforma,700,210)
+        Plataform(self.sprites,self.plataforma,730,210)
+        Plataform(self.sprites,self.plataforma,750,210)
+
+        Plataform(self.sprites,self.plataforma,650,300)
+        Plataform(self.sprites,self.plataforma,700,300)
+
+        for i in range(30):
+            x = 32*i
+            Plataform(self.sprites,self.plataforma,x, 480)
+
+        Moeda(self.sprites,self.moeda, 350, 290)
+        Moeda(self.sprites,self.moeda, 500, 240)
+        Moeda(self.sprites,self.moeda, 680, 260)
+        Moeda(self.sprites,self.moeda, 780, 140)
+        
+        self.lista_de_monstros = []
+        for i in range(3):
+            x = randint(0,912)
+            self.monstro = Monstro(self.sprites,self.monstros, x, 450) 
+            self.lista_de_monstros.append(self.monstro)
 
 class Jogador(pygame.sprite.Sprite):
     
@@ -520,7 +516,6 @@ class Jogador(pygame.sprite.Sprite):
 
         collisions = pygame.sprite.spritecollide(self, self.monstros, True)
         for cada_colisao in collisions:
-            print(1)
             assets["vidas"]-=1
 
         collisions = pygame.sprite.spritecollide(self, self.moeda, True)
