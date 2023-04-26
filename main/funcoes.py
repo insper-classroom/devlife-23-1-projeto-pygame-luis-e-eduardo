@@ -97,6 +97,8 @@ class TelaInicial:
         fonte_padrao = pygame.font.get_default_font()
         self.fonte = pygame.font.Font(fonte_padrao, 24)
         self.window = window
+        imagem = pygame.image.load("tela_inicial.jpg")
+        self.image = pygame.transform.scale(imagem,(912,512))
 
     def recebe_eventos(self):
         for evento in pygame.event.get():
@@ -111,12 +113,16 @@ class TelaInicial:
         largura = 200
         altura = 70
         diferenca_largura = (912 - largura)/2
-        pygame.draw.polygon(window,(255,0,0),[(diferenca_largura,400),(912 - diferenca_largura,400),(912 - diferenca_largura,470),(diferenca_largura,470)])
-        pygame.draw.circle(window,(255,0,0),(diferenca_largura, 435), 35)
-        pygame.draw.circle(window,(255,0,0),(912-diferenca_largura, 435), 35)
+        window.blit(self.image,(0,0))
+        pygame.draw.polygon(window,(235,180,51),[(diferenca_largura,400),(912 - diferenca_largura,400),(912 - diferenca_largura,470),(diferenca_largura,470)])
+        pygame.draw.circle(window,(235,180,51),(diferenca_largura, 435), 35)
+        pygame.draw.circle(window,(235,180,51),(912-diferenca_largura, 435), 35)
         img_mensagem = self.fonte.render("Jogar", True,(255,255,255))
         mensagem = pygame.transform.scale(img_mensagem, (150,60))
         window.blit(mensagem,(diferenca_largura+20, 400))
+        
+        
+
         
 
 class Tela1:
@@ -215,7 +221,8 @@ class Tela1:
             if event.type==pygame.KEYDOWN and event.key == pygame.K_e:
                 Tiro(self.sprites, self.monstros, self.jogador.rect.x, self.jogador.rect.y+25)
             if assets["portal"]:
-                return Tela2()
+                assets["portal"] = False
+                return Tela2(self.window)
         
             #movimentacao dos monstros 
             if event.type==pygame.KEYDOWN:
@@ -248,45 +255,104 @@ class Tela1:
         
 class Tela2:
     
-    def __init__(self):
-        default_font_name = pygame.font.get_default_font()
-        self.font = pygame.font.Font(default_font_name, 24)
-        self.cor = (0, 0, 255)
-        self.fundo2 = pygame.image.load("fundo2.png")
-
-
+    def __init__(self, window):
+        
         self.sprites = pygame.sprite.Group()
         self.plataform = pygame.sprite.Group()
+        fonte_padrao = pygame.font.get_default_font()
+        self.font = pygame.font.Font(fonte_padrao, 24)
+        self.azul = (0,0,255)
+        self.vermelho = (255, 0, 0)
+        self.verde = (0,255,0)
+        
+        self.vidas = 3
+        coracao = pygame.image.load("coracao.png")
+        self.coracao = pygame.transform.scale(coracao, (15,15))
+
+        self.last_updated = 0
+
+        fundo = pygame.image.load("fundo2.png") #imagem gerdada pela AI "https://www.scenario.com/""
+        self.fundo2 = pygame.transform.scale(fundo, (912,512))
+        
+        #criando o chao 
+        chao = pygame.image.load("grama.png")
+        self.chao = pygame.transform.scale(chao,(200,130))
+        #self.chao = pygame.Rect(0,450,912,112) #chao provisório, coords certas 
+
         self.plataforma = pygame.sprite.Group()
         self.monstros = pygame.sprite.Group()
         self.portal = pygame.sprite.Group()
         self.jogador = Jogador(self.plataforma,self.monstros,self.portal)
         self.sprites.add(self.jogador)
 
-        chao = pygame.image.load("grama.png")
-        self.chao = pygame.transform.scale(chao,(200,130))
+        self.window = window
 
         for i in range(30):
             x = 32*i
             Plataform(self.sprites,self.plataforma,x, 480)
+        Portal(self.sprites,self.portal, 780, 140)
+        
+        self.lista_de_monstros = []
+        for i in range(3):
+            x = randint(0,912)
+            self.monstro = Monstro(self.sprites,self.monstros, x, 430) 
+            self.lista_de_monstros.append(self.monstro) 
         
     def recebe_eventos(self):
+        
+        velocidade_x = 3
+        velocidade_y = 3
+
+        clock = pygame.time.Clock()
+        
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 return None  # Devolve None para sair
-            elif event.type == pygame.MOUSEBUTTONDOWN:
-                return Tela1()
+            
+            #caso o botao seja apertado, ele soma a velocidade ate parar de apertar 
+            if event.type == pygame.KEYDOWN and event.key == pygame.K_RIGHT:
+                self.jogador.speedx += velocidade_x
+                assets["esquerda"] = False
+            elif event.type == pygame.KEYUP and event.key == pygame.K_RIGHT:
+                self.jogador.speedx -= velocidade_x
+            if event.type == pygame.KEYDOWN and event.key == pygame.K_LEFT:
+                self.jogador.speedx -= velocidade_x
+                assets["esquerda"] = True
+            elif event.type == pygame.KEYUP and event.key == pygame.K_LEFT:
+                self.jogador.speedx += velocidade_x
+            if event.type == pygame.KEYDOWN and event.key == pygame.K_SPACE:
+                self.jogador.jump()
+            if event.type==pygame.KEYDOWN and event.key == pygame.K_e:
+                Tiro(self.sprites, self.monstros, self.jogador.rect.x, self.jogador.rect.y+25)
+            if assets["portal"]:
+                return Tela2(self.window)
+        
+            #movimentacao dos monstros 
+            if event.type==pygame.KEYDOWN:
+                Tela1.movimenta_monstro(self)
+        
+        ultimo_tempo = self.last_updated 
+        tempo = pygame.time.get_ticks()
+        delta_t = (tempo-ultimo_tempo)/1000
+        self.last_updated = tempo
+        self.sprites.update(delta_t)
+        clock.tick(120)
+
         return self
 
     def desenha(self, window):
-        window.blit(self.fundo2,(0,0))
-        
+        window.blit(self.fundo2,(0,0)) #colocando o fundo do jogo
+        #pygame.draw.rect(window,(150,75,0),self.chao) #desenhando o chao 
+        for i in range(assets["vidas"]):
+            window.blit(self.coracao,(i*15,0))
         window.blit(self.chao,(0,465))
         window.blit(self.chao,(200,465))
         window.blit(self.chao,(400,465))
         window.blit(self.chao,(600,465))
         window.blit(self.chao,(800,465))
-       
+
+        self.sprites.draw(self.window)
+
 class Jogador(pygame.sprite.Sprite):
     
     def __init__(self,chao,monstros,portal):
