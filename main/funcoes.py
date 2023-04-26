@@ -2,6 +2,26 @@ from random import randint
 import pygame
 from assets import *
 
+import time
+
+def escreve(texto, window,y):
+    delay = 100 # tempo de atraso em milissegundos
+    x = 0 # posição inicial da letra na tela
+    y = y
+    fonte = pygame.font.get_default_font()
+    fonte = pygame.font.Font(fonte, 12)
+    clock = pygame.time.Clock()
+
+    for letra in texto:
+        img_mensagem = fonte.render(letra, True, (255, 255, 255))
+        imagem_letra = pygame.transform.smoothscale(img_mensagem, (10, 12))
+        
+        window.blit(imagem_letra, (x, y))
+        pygame.display.update() # atualiza a tela
+        clock.tick(10)
+        pygame.time.wait(delay) # atraso entre as letras
+        x += imagem_letra.get_width() # atualiza a posição da letra
+
 def load_spritesheet(spritesheet, rows, columns):
     # Calcula a largura e altura de cada sprite.
     sprite_width = spritesheet.get_width() // columns
@@ -100,12 +120,20 @@ class TelaInicial:
         imagem = pygame.image.load("tela_inicial.jpg")
         self.image = pygame.transform.scale(imagem,(912,512))
 
+        # imagem = pygame.image.load("pap-removebg-preview.png")
+        # self.lista_load = load_spritesheet(imagem,3,4)
+        
+        # self.contador = 0
+        # self.last_updated = 0
+        # self.elapsed_ticks = 0
+
+
     def recebe_eventos(self):
         for evento in pygame.event.get():
             if evento.type == pygame.QUIT:
                 return None 
             elif evento.type == pygame.KEYDOWN: #nao pode apertar as teclas de andar nao sei pq kkkk
-                return Tela1(self.window)
+                return Tela2(self.window)
         return self
 
     def desenha(self, window):
@@ -120,18 +148,31 @@ class TelaInicial:
         img_mensagem = self.fonte.render("Jogar", True,(255,255,255))
         mensagem = pygame.transform.scale(img_mensagem, (150,60))
         window.blit(mensagem,(diferenca_largura+20, 400))
-        
-        
 
+        # tempo = pygame.time.get_ticks()
+        # ultimo_tempo = self.last_updated
+        # delta_t = (tempo-ultimo_tempo)/1000
+        # self.last_updated = tempo
+
+        # self.elapsed_ticks += delta_t
+        # if self.elapsed_ticks > 0.1:
+        #     self.contador += 1
+        #     self.elapsed_ticks = 0
+        # if self.contador >= len(self.lista_load):
+        #     self.contador = 0
+        # imagem = self.lista_load[self.contador]
+        # self.image= pygame.transform.scale(imagem,(50,50))
+        
         
 
 class Tela1:
     def __init__(self, window):
-        
+        self.window = window
+
         self.sprites = pygame.sprite.Group()
         self.plataform = pygame.sprite.Group()
         fonte_padrao = pygame.font.get_default_font()
-        self.font = pygame.font.Font(fonte_padrao, 24)
+        self.fonte = pygame.font.Font(fonte_padrao, 24)
         self.azul = (0,0,255)
         self.vermelho = (255, 0, 0)
         self.verde = (0,255,0)
@@ -144,10 +185,13 @@ class Tela1:
 
         fundo = pygame.image.load(assets["fundo1"]) #imagem gerdada pela AI "https://www.scenario.com/""
         self.fundo = pygame.transform.scale(fundo, (912,512))
+
+        setas = pygame.image.load("setas.png")
+        self.setas = pygame.transform.scale(setas,(200,120))
         
         #criando o chao 
         chao = pygame.image.load("grama.png")
-        self.chao = pygame.transform.scale(chao,(200,130))
+        self.chao = pygame.transform.scale(chao,(250,90))
         #self.chao = pygame.Rect(0,450,912,112) #chao provisório, coords certas 
 
         self.plataforma = pygame.sprite.Group()
@@ -173,12 +217,16 @@ class Tela1:
         Plataform(self.sprites,self.plataforma,750,210)
 
         Portal(self.sprites,self.portal, 780, 140)
+
+        assets["texto"] = True
         
         self.lista_de_monstros = []
         for i in range(3):
             x = randint(0,912)
             self.monstro = Monstro(self.sprites,self.monstros, x, 430) 
             self.lista_de_monstros.append(self.monstro) 
+
+        
 
     def movimenta_monstro(self):
         for monstro in self.lista_de_monstros:    
@@ -193,6 +241,7 @@ class Tela1:
             elif monstro.rect.x <= 10:
                 monstro.rect.x += 10 #direita 
 
+    
     
     def recebe_eventos(self):
         
@@ -251,6 +300,23 @@ class Tela1:
         window.blit(self.chao,(600,465))
         window.blit(self.chao,(800,465))
 
+        if assets["texto"]:
+            escreve("utilize as setas para se mover", self.window,20)
+            escreve("e a barra de espaço para pular", self.window,40)
+            assets["texto"] = False
+
+        texto = "utilize as setas para se mover"
+        texto2 = "e a barra de espaço para pular"
+        img_mensagem = self.fonte.render(texto, True,(255,255,255))
+        mensagem = pygame.transform.scale(img_mensagem, (20*len(texto),25))
+        window.blit(mensagem,(0, 20))
+
+        img_mensagem = self.fonte.render(texto2, True,(255,255,255))
+        mensagem = pygame.transform.scale(img_mensagem, (20*len(texto),25))
+        window.blit(mensagem,(0, 40))
+        
+
+        window.blit(self.setas,(0,100))
         self.sprites.draw(self.window)
         
 class Tela2:
@@ -260,7 +326,7 @@ class Tela2:
         self.sprites = pygame.sprite.Group()
         self.plataform = pygame.sprite.Group()
         fonte_padrao = pygame.font.get_default_font()
-        self.font = pygame.font.Font(fonte_padrao, 24)
+        self.fonte = pygame.font.Font(fonte_padrao, 24)
         self.azul = (0,0,255)
         self.vermelho = (255, 0, 0)
         self.verde = (0,255,0)
@@ -272,7 +338,8 @@ class Tela2:
         self.last_updated = 0
 
         fundo = pygame.image.load("fundo2.png") #imagem gerdada pela AI "https://www.scenario.com/""
-        self.fundo2 = pygame.transform.scale(fundo, (912,512))
+        self.fundo2 = pygame.transform.scale(fundo, (1200,512))
+        
         
         #criando o chao 
         chao = pygame.image.load("grama.png")
@@ -297,6 +364,9 @@ class Tela2:
             x = randint(0,912)
             self.monstro = Monstro(self.sprites,self.monstros, x, 430) 
             self.lista_de_monstros.append(self.monstro) 
+
+        self.contador = 60
+        self.contagem = 0
         
     def recebe_eventos(self):
         
@@ -351,6 +421,20 @@ class Tela2:
         window.blit(self.chao,(600,465))
         window.blit(self.chao,(800,465))
 
+        numero = str(self.contador)
+        img_mensagem = self.fonte.render(numero, True,(255,255,255))
+        mensagem = pygame.transform.scale(img_mensagem, (30,30))
+        window.blit(mensagem,(850,3))
+        self.contagem+=1
+        if self.contagem == 120:
+            self.contador-=1
+            self.contagem = 0
+
+        img_mensagem = self.fonte.render("Tempo restante:", True,(255,255,255))
+        mensagem = pygame.transform.scale(img_mensagem, (280,25))
+        window.blit(mensagem,(850-295, 5))
+    
+
         self.sprites.draw(self.window)
 
 class Jogador(pygame.sprite.Sprite):
@@ -359,6 +443,7 @@ class Jogador(pygame.sprite.Sprite):
 
         pygame.init() 
         pygame.sprite.Sprite.__init__(self)
+
 
         self.monstros = monstros
         self.portal = portal
