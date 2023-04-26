@@ -47,7 +47,7 @@ class Plataform(pygame.sprite.Sprite):
     def __init__(self,sprites,plataforma,x,y):
         self.plataforma = plataforma
         pygame.sprite.Sprite.__init__(self)
-        img_plataforma = pygame.image.load("plataforma.png")
+        img_plataforma = pygame.image.load("grass.png")
         self.image = pygame.transform.scale(img_plataforma, (50,15))
         self.rect = self.image.get_rect()
         self.rect.x = x
@@ -55,17 +55,17 @@ class Plataform(pygame.sprite.Sprite):
         sprites.add(self)
         self.plataforma.add(self)
 
-class Portal(pygame.sprite.Sprite):
-    def __init__(self,sprites,portal,x,y):
-        self.portal = portal
+class Moeda(pygame.sprite.Sprite):
+    def __init__(self,sprites,moeda,x,y):
+        self.moeda = moeda
         pygame.sprite.Sprite.__init__(self)
-        img_portal = pygame.image.load("portal.png")
-        self.image = pygame.transform.scale(img_portal, (80,80))
+        img_moeda = pygame.image.load("moeda-removebg-preview.png")
+        self.image = pygame.transform.scale(img_moeda, (40,40))
         self.rect = self.image.get_rect()
         self.rect.x = x
         self.rect.y = y
         sprites.add(self)
-        self.portal.add(self)
+        self.moeda.add(self)
 
 class Monstro(pygame.sprite.Sprite):      
     def __init__(self,sprites,monstros,x,y):
@@ -173,12 +173,12 @@ class Tela1:
         self.setas = pygame.transform.scale(setas,(200,120))
         
         #criando o chao 
-        chao = pygame.image.load("grama.png")
+        chao = pygame.image.load("terra.png")
         self.chao = pygame.transform.scale(chao,(250,90))
         self.plataforma = pygame.sprite.Group()
         self.monstros = pygame.sprite.Group()
-        self.portal = pygame.sprite.Group()
-        self.jogador = Jogador(self.plataforma,self.monstros,self.portal)
+        self.moeda = pygame.sprite.Group()
+        self.jogador = Jogador(self.plataforma,self.monstros,self.moeda)
         self.sprites.add(self.jogador)
         self.scroll = 0 
         luffy = pygame.image.load("Meu projeto.png")
@@ -191,24 +191,14 @@ class Tela1:
             x = 32*i
             Plataform(self.sprites,self.plataforma,x, 480)
 
-        Plataform(self.sprites,self.plataforma,350,335)
-        Plataform(self.sprites,self.plataforma,200,400)
-        Plataform(self.sprites,self.plataforma,500,280)
-        Plataform(self.sprites,self.plataforma,680,210)
-        
-        Plataform(self.sprites,self.plataforma,650,210)
-        Plataform(self.sprites,self.plataforma,700,210)
-        Plataform(self.sprites,self.plataforma,730,210)
-        Plataform(self.sprites,self.plataforma,750,210)
-
-        Portal(self.sprites,self.portal, 780, 140)
+        Moeda(self.sprites,self.moeda, 200, 440)
 
         assets["texto"] = True
         
         self.lista_de_monstros = []
         for i in range(3):
             x = randint(0,912)
-            self.monstro = Monstro(self.sprites,self.monstros, x, 430) 
+            self.monstro = Monstro(self.sprites,self.monstros, x, 450) 
             self.lista_de_monstros.append(self.monstro) 
     
     def movimenta_monstro(self):
@@ -227,7 +217,6 @@ class Tela1:
     def recebe_eventos(self):
         
         velocidade_x = 3
-        velocidade_y = 3
 
         clock = pygame.time.Clock()
         
@@ -250,8 +239,7 @@ class Tela1:
                 self.jogador.jump()
             if event.type==pygame.KEYDOWN and event.key == pygame.K_e:
                 Tiro(self.sprites, self.monstros, self.jogador.rect.x, self.jogador.rect.y+25)
-            if self.jogador.rect.x > 850:
-                print("enrreo")
+            if self.jogador.rect.x > 850 and assets["moeda"] == 1:
                 return Tela2(self.window)
         
             #movimentacao dos monstros 
@@ -275,11 +263,11 @@ class Tela1:
         #pygame.draw.rect(window,(150,75,0),self.chao) #desenhando o chao 
         for i in range(assets["vidas"]):
             window.blit(self.coracao,(i*15,0))
-        window.blit(self.chao,(0,465))
-        window.blit(self.chao,(200,465))
-        window.blit(self.chao,(400,465))
-        window.blit(self.chao,(600,465))
-        window.blit(self.chao,(800,465))
+        window.blit(self.chao,(0,490))
+        window.blit(self.chao,(200,490))
+        window.blit(self.chao,(400,490))
+        window.blit(self.chao,(600,490))
+        window.blit(self.chao,(800,490))
         
         #desenhando o luffy npc
         window.blit(self.luffy,(100,380))
@@ -325,28 +313,45 @@ class Tela2:
         self.fundo2 = pygame.transform.scale(fundo, (1200,512))
         
         
-        #criando o chao 
-        chao = pygame.image.load("grama.png")
+
+        chao = pygame.image.load("terra.png")
         self.chao = pygame.transform.scale(chao,(200,130))
-        #self.chao = pygame.Rect(0,450,912,112) #chao provisório, coords certas 
+
 
         self.plataforma = pygame.sprite.Group()
         self.monstros = pygame.sprite.Group()
-        self.portal = pygame.sprite.Group()
-        self.jogador = Jogador(self.plataforma,self.monstros,self.portal)
+        self.moeda = pygame.sprite.Group()
+        self.jogador = Jogador(self.plataforma,self.monstros,self.moeda)
         self.sprites.add(self.jogador)
 
         self.window = window
 
+        Plataform(self.sprites,self.plataforma,350,335)
+        Plataform(self.sprites,self.plataforma,200,400)
+        Plataform(self.sprites,self.plataforma,500,280)
+        Plataform(self.sprites,self.plataforma,680,210)
+        
+        Plataform(self.sprites,self.plataforma,650,210)
+        Plataform(self.sprites,self.plataforma,700,210)
+        Plataform(self.sprites,self.plataforma,730,210)
+        Plataform(self.sprites,self.plataforma,750,210)
+
+        Plataform(self.sprites,self.plataforma,650,300)
+        Plataform(self.sprites,self.plataforma,700,300)
+
         for i in range(30):
             x = 32*i
             Plataform(self.sprites,self.plataforma,x, 480)
-        Portal(self.sprites,self.portal, 780, 140)
+
+        Moeda(self.sprites,self.moeda, 350, 290)
+        Moeda(self.sprites,self.moeda, 500, 240)
+        Moeda(self.sprites,self.moeda, 680, 260)
+        Moeda(self.sprites,self.moeda, 780, 140)
         
         self.lista_de_monstros = []
         for i in range(3):
             x = randint(0,912)
-            self.monstro = Monstro(self.sprites,self.monstros, x, 430) 
+            self.monstro = Monstro(self.sprites,self.monstros, x, 450) 
             self.lista_de_monstros.append(self.monstro) 
 
         self.contador = 60
@@ -377,8 +382,8 @@ class Tela2:
                 self.jogador.jump()
             if event.type==pygame.KEYDOWN and event.key == pygame.K_e:
                 Tiro(self.sprites, self.monstros, self.jogador.rect.x, self.jogador.rect.y+25)
-            if assets["portal"]:
-                return Tela2(self.window)
+            if self.jogador.rect.x>=850 and assets["moeda"] == 5:
+                return Tela1(self.window)
         
             #movimentacao dos monstros 
             if event.type==pygame.KEYDOWN:
@@ -398,11 +403,11 @@ class Tela2:
         #pygame.draw.rect(window,(150,75,0),self.chao) #desenhando o chao 
         for i in range(assets["vidas"]):
             window.blit(self.coracao,(i*15,0))
-        window.blit(self.chao,(0,465))
-        window.blit(self.chao,(200,465))
-        window.blit(self.chao,(400,465))
-        window.blit(self.chao,(600,465))
-        window.blit(self.chao,(800,465))
+        window.blit(self.chao,(0,490))
+        window.blit(self.chao,(200,490))
+        window.blit(self.chao,(400,490))
+        window.blit(self.chao,(600,490))
+        window.blit(self.chao,(800,490))
 
         numero = str(self.contador)
         img_mensagem = self.fonte.render(numero, True,(255,255,255))
@@ -422,14 +427,14 @@ class Tela2:
 
 class Jogador(pygame.sprite.Sprite):
     
-    def __init__(self,chao,monstros,portal):
+    def __init__(self,chao,monstros,moeda):
 
         pygame.init() 
         pygame.sprite.Sprite.__init__(self)
 
 
         self.monstros = monstros
-        self.portal = portal
+        self.moeda = moeda
 
         self.mario = pygame.image.load("personagem_principal.png")
         self.image = pygame.transform.scale(self.mario, (50,50))
@@ -518,9 +523,9 @@ class Jogador(pygame.sprite.Sprite):
             print(1)
             assets["vidas"]-=1
 
-        collisions = pygame.sprite.spritecollide(self, self.portal, True)
+        collisions = pygame.sprite.spritecollide(self, self.moeda, True)
         for cada_colisao in collisions:
-            assets["portal"] = True
+            assets["moeda"] +=1
 
         self.elapsed_ticks += delta_t
         if self.speedx != 0:
@@ -542,7 +547,7 @@ class Jogador(pygame.sprite.Sprite):
             if self.contador >= len(self.lista_jogador_parado):
                 self.contador = 0
             imagem = self.lista_jogador_parado[self.contador]
-            self.image = pygame.transform.scale(imagem, (37,37))
+            self.image = pygame.transform.scale(imagem, (49,52))
         if self.speedy != 0:
             if self.elapsed_ticks > 0.4:
                 self.contador += 1
