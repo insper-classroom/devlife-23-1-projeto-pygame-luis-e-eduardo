@@ -133,7 +133,7 @@ class TelaInicial:
             if evento.type == pygame.QUIT:
                 return None 
             elif evento.type == pygame.KEYDOWN: #nao pode apertar as teclas de andar nao sei pq kkkk
-                return Tela2(self.window)
+                return Tela1(self.window)
         return self
 
     def desenha(self, window):
@@ -199,6 +199,7 @@ class Tela1:
         self.portal = pygame.sprite.Group()
         self.jogador = Jogador(self.plataforma,self.monstros,self.portal)
         self.sprites.add(self.jogador)
+        self.scroll = 0 
 
         self.window = window
 
