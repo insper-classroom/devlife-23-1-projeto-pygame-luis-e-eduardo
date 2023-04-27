@@ -272,13 +272,6 @@ class Tela1:
             x = 32*i
             Plataform(self.sprites,self.plataforma,x, 480, 'grass')
 
-        #diferenca_entre_blocos_y = 25
-        #colocar bloco no chao, y = 452
-        
-        #criando as plataformas 
-        #Plataform(self.sprites,self.plataforma,400, 452, 'bloco')
-        #Plataform(self.sprites,self.plataforma,400, 452 - diferenca_entre_blocos_y, 'bloco')
-
         x = 0
         for i in range(4):
             x += 24
@@ -375,14 +368,14 @@ class Tela1_2:
         #npc para dar as instrucoes do "tutorial"
         zoro = pygame.image.load("zoro.png")
         self.zoro = pygame.transform.smoothscale(zoro,(70,80))
-        text_box1 = pygame.image.load("text_box1.png")
+        text_box1 = pygame.image.load("text_box2.png")
         self.text_box1 = pygame.transform.smoothscale(text_box1,(230,230))
         self.aparece_text_box = False 
 
         #gerando os monstros no mapa 
         self.lista_de_monstros = []
-        for i in range(3):
-            x = randint(0,912)
+        for i in range(6):
+            x = randint(427,800)
             self.monstro = Monstro(self.sprites,self.monstros, x, 440) 
             self.lista_de_monstros.append(self.monstro) 
     
@@ -392,6 +385,21 @@ class Tela1_2:
         for i in range(30):
             x = 32*i
             Plataform(self.sprites,self.plataforma,x, 480, 'grass')
+
+        diferenca_entre_blocos_y = 25
+        #colocar bloco no chao, y = 452
+        
+        #criando as plataformas 
+        Plataform(self.sprites,self.plataforma,300, 452, 'bloco')
+        Plataform(self.sprites,self.plataforma,300, 452 - diferenca_entre_blocos_y, 'bloco')
+
+        Plataform(self.sprites,self.plataforma,800, 452, 'bloco')
+        Plataform(self.sprites,self.plataforma,800, 452 - diferenca_entre_blocos_y, 'bloco')
+
+        x = 0
+        for i in range(10):
+            x += 24
+            Plataform(self.sprites,self.plataforma,410 + x, 390, 'bloco')
         
     def movimenta_monstro(self):
         
