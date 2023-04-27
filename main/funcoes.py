@@ -71,14 +71,14 @@ class Tiro(pygame.sprite.Sprite):
     def __init__(self, sprites,monstros, x, y):
         pygame.sprite.Sprite.__init__(self)
 
-        img_laser = pygame.image.load('machado.png')
-        self.image = pygame.transform.scale(img_laser,(20,20))
+        img_laser = pygame.image.load('bola.png')
+        self.image = pygame.transform.scale(img_laser,(15,15))
         
         self.rect = self.image.get_rect()
         self.vel_y_laser = 0
 
         self.rect.x = x
-        self.rect.y = y
+        self.rect.y = y - 10
         if assets["esquerda"]:
             self.vel_x_laser = -500
         else:
