@@ -36,7 +36,7 @@ class Plataform(pygame.sprite.Sprite):
             self.image = pygame.transform.scale(img_plataforma, (50,15))
         if self.tipo == 'bloco':
             img_plataforma = pygame.image.load("bloco1.png")
-            self.image = pygame.transform.scale(img_plataforma, (50,50))
+            self.image = pygame.transform.scale(img_plataforma, (50,30))
         self.rect = self.image.get_rect()
         self.rect.x = x
         self.rect.y = y
@@ -175,13 +175,7 @@ class Tela1:
         
         self.window = window
 
-        for i in range(30):
-            x = 32*i
-            Plataform(self.sprites,self.plataforma,x, 480, 'grass')
-
-        Plataform(self.sprites,self.plataforma,400, 300, 'bloco')
-
-        Moeda(self.sprites,self.moeda, 200, 440)
+        self.gera_mapa()
 
         assets["texto"] = True
         
@@ -190,6 +184,43 @@ class Tela1:
             x = randint(0,912)
             self.monstro = Monstro(self.sprites,self.monstros, x, 440) 
             self.lista_de_monstros.append(self.monstro) 
+
+    def gera_mapa(self):
+        
+        #criando o chao
+        for i in range(30):
+            x = 32*i
+            Plataform(self.sprites,self.plataforma,x, 480, 'grass')
+
+        #diferenca_entre_blocos_y = 25
+        #colocar bloco no chao, y = 452
+        
+        #criando as plataformas 
+        #Plataform(self.sprites,self.plataforma,400, 452, 'bloco')
+        #Plataform(self.sprites,self.plataforma,400, 452 - diferenca_entre_blocos_y, 'bloco')
+
+        x = 0
+        for i in range(4):
+            x += 24
+            Plataform(self.sprites,self.plataforma,250 + x, 430, 'bloco')
+
+        x = 0
+        for i in range(4):
+            x += 24
+            Plataform(self.sprites,self.plataforma,390 + x, 400, 'bloco')
+
+        x = 0
+        for i in range(4):
+            x += 24
+            Plataform(self.sprites,self.plataforma,530 + x, 370, 'bloco')
+
+        x = 0
+        for i in range(4):
+            x += 24
+            Plataform(self.sprites,self.plataforma,670 + x, 340, 'bloco')
+        
+
+        Moeda(self.sprites,self.moeda, 200, 440)
     
     def movimenta_monstro(self):
         for monstro in self.lista_de_monstros:    
@@ -203,7 +234,7 @@ class Tela1:
                 monstro.rect.x -= 10 #esquerda
             elif monstro.rect.x <= 10:
                 monstro.rect.x += 10 #direita 
- 
+     
     def recebe_eventos(self):
         
         velocidade_x = 3
@@ -535,7 +566,7 @@ class Jogador(pygame.sprite.Sprite):
             if self.contador >= len(self.lista_jogador_parado):
                 self.contador = 0
             imagem = self.lista_jogador_parado[self.contador]
-            self.image = pygame.transform.smoothscale(imagem, (47,37))
+            self.image = pygame.transform.smoothscale(imagem, (47,39))
         if self.speedy != 0:
             if self.elapsed_ticks > 0.4:
                 self.contador += 1
@@ -549,8 +580,8 @@ class Jogador(pygame.sprite.Sprite):
             else:
                 self.image= pygame.transform.scale(imagem,(65,50))
         
-        if self.speedx == 0:
-            self.rect.y += 12
+        if self.speedx == 0 and self.speedy == 0:
+            self.rect.y += 13
 
     def jump(self):
     # Só pode pular se ainda não estiver pulando ou caindo
