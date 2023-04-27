@@ -27,11 +27,16 @@ def load_spritesheet(spritesheet, rows, columns):
     return sprites
 
 class Plataform(pygame.sprite.Sprite):
-    def __init__(self,sprites,plataforma,x,y):
+    def __init__(self,sprites,plataforma,x,y,tipo):
         self.plataforma = plataforma
+        self.tipo = tipo 
         pygame.sprite.Sprite.__init__(self)
-        img_plataforma = pygame.image.load("grass.png")
-        self.image = pygame.transform.scale(img_plataforma, (50,15))
+        if self.tipo == 'grass':
+            img_plataforma = pygame.image.load("grass.png")
+            self.image = pygame.transform.scale(img_plataforma, (50,15))
+        if self.tipo == 'bloco':
+            img_plataforma = pygame.image.load("bloco1.png")
+            self.image = pygame.transform.scale(img_plataforma, (50,50))
         self.rect = self.image.get_rect()
         self.rect.x = x
         self.rect.y = y
@@ -162,7 +167,7 @@ class Tela1:
         self.jogador = Jogador(self.plataforma,self.monstros,self.moeda)
         self.sprites.add(self.jogador)
         self.scroll = 0 
-        zoro = pygame.image.load("Meu projeto.png")
+        zoro = pygame.image.load("zoro.png")
         self.zoro = pygame.transform.smoothscale(zoro,(70,80))
         text_box1 = pygame.image.load("text_box1.png")
         self.text_box1 = pygame.transform.smoothscale(text_box1,(230,230))
@@ -172,7 +177,9 @@ class Tela1:
 
         for i in range(30):
             x = 32*i
-            Plataform(self.sprites,self.plataforma,x, 480)
+            Plataform(self.sprites,self.plataforma,x, 480, 'grass')
+
+        Plataform(self.sprites,self.plataforma,400, 300, 'bloco')
 
         Moeda(self.sprites,self.moeda, 200, 440)
 
@@ -247,12 +254,14 @@ class Tela1:
 
     def desenha(self, window):
 
-        #window.fill(self.verde)
-        window.blit(self.fundo,(0,0)) #colocando o fundo do jogo
-        #pygame.draw.rect(window,(150,75,0),self.chao) #desenhando o chao 
+        #colocando o fundo do jogo 
+        window.blit(self.fundo,(0,0))
+        
+        #desenhando a vida do usuario 
         for i in range(assets["vidas"]):
             window.blit(self.coracao,(i*20,0))
 
+        #desenhando ochao embaixo da plataforma 
         x = 0
         for i in range(30):
             x = 32*i
@@ -266,8 +275,6 @@ class Tela1:
         for i in range(30):
             x = 32*i
             window.blit(self.chao,(x,488))
-
-        
         
         #desenhando o zoro npc, para instrucoes 
         window.blit(self.zoro,(200,408))
@@ -313,7 +320,6 @@ class Tela2:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 return None  # Devolve None para sair
-            
             #caso o botao seja apertado, ele soma a velocidade ate parar de apertar 
             if event.type == pygame.KEYDOWN and event.key == pygame.K_RIGHT:
                 self.jogador.speedx += velocidade_x
@@ -331,7 +337,6 @@ class Tela2:
                 Tiro(self.sprites, self.monstros, self.jogador.rect.x, self.jogador.rect.y+25)
             if self.jogador.rect.x>=850 and assets["moeda"] == 5:
                 return Tela1(self.window)
-        
             #movimentacao dos monstros 
             if event.type==pygame.KEYDOWN:
                 Tela1.movimenta_monstro(self)
@@ -382,22 +387,22 @@ class Tela2:
         chao = pygame.image.load("terra.png")
         self.chao = pygame.transform.scale(chao,(200,130))
         
-        Plataform(self.sprites,self.plataforma,350,335)
-        Plataform(self.sprites,self.plataforma,200,400)
-        Plataform(self.sprites,self.plataforma,500,280)
-        Plataform(self.sprites,self.plataforma,680,210)
+        Plataform(self.sprites,self.plataforma,350,335,'grass')
+        Plataform(self.sprites,self.plataforma,200,400,'grass')
+        Plataform(self.sprites,self.plataforma,500,280,'grass')
+        Plataform(self.sprites,self.plataforma,680,210,'grass')
         
-        Plataform(self.sprites,self.plataforma,650,210)
-        Plataform(self.sprites,self.plataforma,700,210)
-        Plataform(self.sprites,self.plataforma,730,210)
-        Plataform(self.sprites,self.plataforma,750,210)
+        Plataform(self.sprites,self.plataforma,650,210,'grass')
+        Plataform(self.sprites,self.plataforma,700,210,'grass')
+        Plataform(self.sprites,self.plataforma,730,210,'grass')
+        Plataform(self.sprites,self.plataforma,750,210,'grass')
 
-        Plataform(self.sprites,self.plataforma,650,300)
-        Plataform(self.sprites,self.plataforma,700,300)
+        Plataform(self.sprites,self.plataforma,650,300,'grass')
+        Plataform(self.sprites,self.plataforma,700,300,'grass')
 
         for i in range(30):
             x = 32*i
-            Plataform(self.sprites,self.plataforma,x, 480)
+            Plataform(self.sprites,self.plataforma,x, 480,'grass')
 
         Moeda(self.sprites,self.moeda, 350, 290)
         Moeda(self.sprites,self.moeda, 500, 240)
@@ -522,7 +527,6 @@ class Jogador(pygame.sprite.Sprite):
             else:
                 self.image= pygame.transform.scale(imagem,(65,50))
         if self.speedx == 0:
-            self.rect.y += 11
             if self.rect.y>480:
                 self.rect.y = 447
             if self.elapsed_ticks > 0.8:
@@ -545,6 +549,8 @@ class Jogador(pygame.sprite.Sprite):
             else:
                 self.image= pygame.transform.scale(imagem,(65,50))
         
+        if self.speedx == 0:
+            self.rect.y += 12
 
     def jump(self):
     # Só pode pular se ainda não estiver pulando ou caindo
