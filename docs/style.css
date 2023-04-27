@@ -6,9 +6,9 @@
     color: white;
 }
 
-header{
-    /* background: url(wallpaperbetter.jpg); */
-}
+/* header{
+    /* background: url(wallpaperbetter.jpg);} */
+ 
 
 .header__logo{
     display: flex;
@@ -54,15 +54,7 @@ header{
 }
 
 .header__main{
-    background: url(wallpaperbetter.jpg);
-    /* background-size: cover;
-    height: 92vh;
-    display: flex;
-    align-items: center;
-    flex-direction: column;
-    padding: 0;
-    margin: 0;
-    padding-top: 40px; */
+    background: url("/docs/imagens/background.jpg");
     min-height: 100vh;
     background-position: center;
 }
@@ -94,6 +86,8 @@ main {
     line-height: 80px;
     transition: 0.8s;
 }
+
+
 
 .header__menu a{
    color: white;
@@ -140,8 +134,10 @@ main {
 }
 
 .principal{
-    background: url("jogo.png");
+    background-image: url("/docs/imagens/jogo.jpg");
     background-size: cover;
+    width: auto;
+    height: auto;
     
 }
 .overhide{
@@ -172,9 +168,62 @@ main {
     margin-bottom: 20px;
   }
 
-  .imagem_jogo{
+.container{
+    width: 100%;
     display: flex;
-    align-items: center;
-    justify-content: center;
+    flex-direction: row;
+}
+
+.tela1{
+    background-image: url('imagens/jogo.jpg');
+    height: 300px;
+    width: 50%;
+    margin: 5px;
+    background-size: cover;
     
 }
+.tela2{
+    background-image: url("imagens/tela_jogo.jpg");
+    height: 300px;
+    width: 50%;
+    margin: 5px;
+    background-size: cover;
+    background-position: center;
+}
+.imagem_moeda{
+    display: flex;
+    align-items: center;
+    background: rgba(189, 182, 182, 0.25);
+}
+
+.imagem_kirb{
+    display: flex;
+    align-items: center;
+    background: rgba(189, 182, 182, 0.25);
+}
+
+.imagem_monkey{
+    display: flex;
+    align-items: center;
+    background: rgba(189, 182, 182, 0.25);
+}
+
+.tela_fases {
+    display: inline-block;
+    justify-content: space-between; /* opcional, define espaço entre as telas */
+    
+  }
+  
+  .tela_fase1, .tela_fase2 {
+    display: flex;
+    align-items: center;
+    width: 50%; /* cada tela tem 50% da largura do container pai */
+  }
+  
+  
+  
+  
+  
+  
+  
+  
