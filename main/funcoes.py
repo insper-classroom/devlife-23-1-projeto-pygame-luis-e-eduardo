@@ -4,23 +4,6 @@ from assets import *
 
 import time
 
-def escreve(texto, window,y):
-    delay = 10 # tempo de atraso em milissegundos
-    x = 0 # posição inicial da letra na tela
-    y = y
-    fonte = pygame.font.get_default_font()
-    fonte = pygame.font.Font(fonte, 12)
-    clock = pygame.time.Clock()
-
-    for letra in texto:
-        img_mensagem = fonte.render(letra, True, (255, 255, 255))
-        imagem_letra = pygame.transform.smoothscale(img_mensagem, (10, 12))
-        
-        window.blit(imagem_letra, (x, y))
-        pygame.display.update() # atualiza a tela
-        pygame.time.wait(delay) # atraso entre as letras
-        x += imagem_letra.get_width() # atualiza a posição da letra
-
 def load_spritesheet(spritesheet, rows, columns):
     # Calcula a largura e altura de cada sprite.
     sprite_width = spritesheet.get_width() // columns
@@ -171,7 +154,6 @@ class Tela1:
         setas = pygame.image.load("setas.png")
         self.setas = pygame.transform.scale(setas,(200,120))
         
-        #criando o chao 
         chao = pygame.image.load("terra.png")
         self.chao = pygame.transform.scale(chao,(250,90))
         self.plataforma = pygame.sprite.Group()
@@ -180,8 +162,11 @@ class Tela1:
         self.jogador = Jogador(self.plataforma,self.monstros,self.moeda)
         self.sprites.add(self.jogador)
         self.scroll = 0 
-        luffy = pygame.image.load("Meu projeto.png")
-        self.luffy = pygame.transform.smoothscale(luffy,(70,80))
+        zoro = pygame.image.load("Meu projeto.png")
+        self.zoro = pygame.transform.smoothscale(zoro,(70,80))
+        text_box1 = pygame.image.load("text_box1.png")
+        self.text_box1 = pygame.transform.smoothscale(text_box1,(230,230))
+        self.aparece_text_box = False 
         
         self.window = window
 
@@ -239,10 +224,16 @@ class Tela1:
                 Tiro(self.sprites, self.monstros, self.jogador.rect.x, self.jogador.rect.y+25)
             if self.jogador.rect.x > 850 and assets["moeda"] == 1:
                 return Tela2(self.window)
-        
-            #movimentacao dos monstros 
-            if event.type==pygame.KEYDOWN:
+            
+            if 100 < self.jogador.rect.x < 300:
+                self.aparece_text_box = True  
+            if 100 > self.jogador.rect.x < 300:
+                self.aparece_text_box = False 
+
+            if event.type==pygame.KEYDOWN: #movimentacao dos monstros 
                 Tela1.movimenta_monstro(self)
+            #self.aparece_text_box = False 
+
         
         ultimo_tempo = self.last_updated 
         tempo = pygame.time.get_ticks()
@@ -267,25 +258,12 @@ class Tela1:
         window.blit(self.chao,(600,490))
         window.blit(self.chao,(800,490))
         
-        #desenhando o luffy npc
-        window.blit(self.luffy,(100,408))
+        #desenhando o zoro npc, para instrucoes 
+        window.blit(self.zoro,(200,408))
+        #desenhando a fala do zoro caso o jogador esteja perto dele 
+        if self.aparece_text_box:
+            window.blit(self.text_box1,(62,275))
 
-        if assets["texto"]:
-            escreve("utilize as setas para se mover", self.window,20)
-            escreve("e a barra de espaço para pular", self.window,40)
-            assets["texto"] = False
-
-        texto = "utilize as setas para se mover"
-        texto2 = "e a barra de espaço para pular"
-        img_mensagem = self.fonte.render(texto, True,(255,255,255))
-        mensagem = pygame.transform.scale(img_mensagem, (20*len(texto),25))
-        window.blit(mensagem,(0, 20))
-
-        img_mensagem = self.fonte.render(texto2, True,(255,255,255))
-        mensagem = pygame.transform.scale(img_mensagem, (20*len(texto),25))
-        window.blit(mensagem,(0, 40))
-        
-        window.blit(self.setas,(0,100))
         self.sprites.draw(self.window)
         
 class Tela2:
