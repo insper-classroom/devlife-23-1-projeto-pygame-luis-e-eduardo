@@ -511,13 +511,14 @@ class Jogador(pygame.sprite.Sprite):
             else:
                 self.image= pygame.transform.scale(imagem,(65,50))
         if self.speedx == 0:
+            self.rect.y += 11
             if self.elapsed_ticks > 0.8:
                 self.contador += 1
                 self.elapsed_ticks = 0
             if self.contador >= len(self.lista_jogador_parado):
                 self.contador = 0
             imagem = self.lista_jogador_parado[self.contador]
-            self.image = pygame.transform.smoothscale(imagem, (50,40))
+            self.image = pygame.transform.smoothscale(imagem, (47,37))
         if self.speedy != 0:
             if self.elapsed_ticks > 0.4:
                 self.contador += 1

@@ -193,19 +193,19 @@ main {
 .imagem_moeda{
     display: flex;
     align-items: center;
-    border: 5px solid red;
+    background: rgba(189, 182, 182, 0.25);
 }
 
 .imagem_kirb{
     display: flex;
     align-items: center;
-    border: 5px solid red;
+    background: rgba(189, 182, 182, 0.25);
 }
 
 .imagem_monkey{
     display: flex;
     align-items: center;
-    border: 5px solid red;
+    background: rgba(189, 182, 182, 0.25);
 }
 
 .tela_fases {
