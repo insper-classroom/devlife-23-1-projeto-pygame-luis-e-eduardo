@@ -154,8 +154,8 @@ class Tela1:
         setas = pygame.image.load("setas.png")
         self.setas = pygame.transform.scale(setas,(200,120))
         
-        chao = pygame.image.load("terra.png")
-        self.chao = pygame.transform.scale(chao,(250,90))
+        chao = pygame.image.load("grass.png")
+        self.chao = pygame.transform.scale(chao,(50,15))
         self.plataforma = pygame.sprite.Group()
         self.monstros = pygame.sprite.Group()
         self.moeda = pygame.sprite.Group()
@@ -252,11 +252,26 @@ class Tela1:
         #pygame.draw.rect(window,(150,75,0),self.chao) #desenhando o chao 
         for i in range(assets["vidas"]):
             window.blit(self.coracao,(i*15,0))
-        window.blit(self.chao,(0,490))
-        window.blit(self.chao,(200,490))
-        window.blit(self.chao,(400,490))
-        window.blit(self.chao,(600,490))
-        window.blit(self.chao,(800,490))
+        #window.blit(self.chao,(0,512))
+        #window.blit(self.chao,(200,490))
+        #window.blit(self.chao,(400,490))
+        #window.blit(self.chao,(600,490))
+        #window.blit(self.chao,(800,490))
+        x = 0
+        for i in range(30):
+            x = 32*i
+            window.blit(self.chao,(x,512))
+        for i in range(30):
+            x = 32*i
+            window.blit(self.chao,(x,504))
+        for i in range(30):
+            x = 32*i
+            window.blit(self.chao,(x,496))
+        for i in range(30):
+            x = 32*i
+            window.blit(self.chao,(x,488))
+
+        
         
         #desenhando o zoro npc, para instrucoes 
         window.blit(self.zoro,(200,408))
