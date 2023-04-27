@@ -225,9 +225,9 @@ class Tela1:
             if self.jogador.rect.x > 850 and assets["moeda"] == 1:
                 return Tela2(self.window)
             
-            if 100 < self.jogador.rect.x < 300:
+            if 300 > self.jogador.rect.x < 400:
                 self.aparece_text_box = True  
-            if 100 > self.jogador.rect.x < 300:
+            if 300 < self.jogador.rect.x > 400:
                 self.aparece_text_box = False 
 
             if event.type==pygame.KEYDOWN: #movimentacao dos monstros 
