@@ -268,7 +268,7 @@ class Tela1:
         window.blit(self.chao,(800,490))
         
         #desenhando o luffy npc
-        window.blit(self.luffy,(100,380))
+        window.blit(self.luffy,(100,408))
 
         if assets["texto"]:
             escreve("utilize as setas para se mover", self.window,20)
@@ -461,9 +461,6 @@ class Jogador(pygame.sprite.Sprite):
         imagem = pygame.image.load("pulando.png")
         self.lista_jogador_pulando = load_spritesheet(imagem,1,6)
 
-
-        
-
         self.state = "parado"
         self.contador = 0
         self.last_updated = 0
@@ -542,7 +539,7 @@ class Jogador(pygame.sprite.Sprite):
             if self.contador >= len(self.lista_jogador_parado):
                 self.contador = 0
             imagem = self.lista_jogador_parado[self.contador]
-            self.image = pygame.transform.scale(imagem, (49,52))
+            self.image = pygame.transform.smoothscale(imagem, (50,40))
         if self.speedy != 0:
             if self.elapsed_ticks > 0.4:
                 self.contador += 1
