@@ -144,7 +144,7 @@ class Tela1:
         
         self.vidas = 3
         coracao = pygame.image.load("coracao.png")
-        self.coracao = pygame.transform.scale(coracao, (15,15))
+        self.coracao = pygame.transform.scale(coracao, (25,25))
 
         self.last_updated = 0
 
@@ -181,7 +181,7 @@ class Tela1:
         self.lista_de_monstros = []
         for i in range(3):
             x = randint(0,912)
-            self.monstro = Monstro(self.sprites,self.monstros, x, 450) 
+            self.monstro = Monstro(self.sprites,self.monstros, x, 440) 
             self.lista_de_monstros.append(self.monstro) 
     
     def movimenta_monstro(self):
@@ -251,12 +251,8 @@ class Tela1:
         window.blit(self.fundo,(0,0)) #colocando o fundo do jogo
         #pygame.draw.rect(window,(150,75,0),self.chao) #desenhando o chao 
         for i in range(assets["vidas"]):
-            window.blit(self.coracao,(i*15,0))
-        #window.blit(self.chao,(0,512))
-        #window.blit(self.chao,(200,490))
-        #window.blit(self.chao,(400,490))
-        #window.blit(self.chao,(600,490))
-        #window.blit(self.chao,(800,490))
+            window.blit(self.coracao,(i*20,0))
+
         x = 0
         for i in range(30):
             x = 32*i
