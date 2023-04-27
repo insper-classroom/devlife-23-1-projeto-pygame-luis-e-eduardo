@@ -512,6 +512,8 @@ class Jogador(pygame.sprite.Sprite):
                 self.image= pygame.transform.scale(imagem,(65,50))
         if self.speedx == 0:
             self.rect.y += 11
+            if self.rect.y>480:
+                self.rect.y = 447
             if self.elapsed_ticks > 0.8:
                 self.contador += 1
                 self.elapsed_ticks = 0
