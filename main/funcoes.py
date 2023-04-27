@@ -225,9 +225,9 @@ class Tela1:
             if self.jogador.rect.x > 850 and assets["moeda"] == 1:
                 return Tela2(self.window)
             
-            if 300 > self.jogador.rect.x < 400:
+            if 100 > self.jogador.rect.x < 300:
                 self.aparece_text_box = True  
-            if 300 < self.jogador.rect.x > 400:
+            if 100 < self.jogador.rect.x > 300:
                 self.aparece_text_box = False 
 
             if event.type==pygame.KEYDOWN: #movimentacao dos monstros 
@@ -511,7 +511,7 @@ class Jogador(pygame.sprite.Sprite):
             else:
                 self.image= pygame.transform.scale(imagem,(65,50))
         if self.speedx == 0:
-            self.rect.y += 11
+            #self.rect.y += 11
             if self.elapsed_ticks > 0.8:
                 self.contador += 1
                 self.elapsed_ticks = 0
