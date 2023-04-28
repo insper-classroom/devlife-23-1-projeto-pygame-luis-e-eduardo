@@ -199,15 +199,15 @@ class Telas():
             
             #caso o botao seja apertado, ele soma a velocidade ate parar de apertar 
             if event.type == pygame.KEYDOWN and event.key == pygame.K_RIGHT:
-                self.jogador.speedx += velocidade_x
-                assets["esquerda"] = False
+                self.jogador.speedx = velocidade_x
+                # assets["esquerda"] = False
             elif event.type == pygame.KEYUP and event.key == pygame.K_RIGHT:
-                self.jogador.speedx -= velocidade_x
+                self.jogador.speedx = 0
             if event.type == pygame.KEYDOWN and event.key == pygame.K_LEFT:
-                self.jogador.speedx -= velocidade_x
-                assets["esquerda"] = True
+                self.jogador.speedx = -velocidade_x
+                # assets["esquerda"] = True
             elif event.type == pygame.KEYUP and event.key == pygame.K_LEFT:
-                self.jogador.speedx += velocidade_x
+                self.jogador.speedx = 0
             if event.type == pygame.KEYDOWN and event.key == pygame.K_SPACE:
                 self.jogador.jump()
             if event.type==pygame.KEYDOWN and event.key == pygame.K_e:
@@ -322,7 +322,6 @@ class Tela1:
                 # assets["esquerda"] = False
             elif event.type == pygame.KEYUP and event.key == pygame.K_RIGHT:
                 self.jogador.speedx = 0
-                print(self.jogador.speedx)
             if event.type == pygame.KEYDOWN and event.key == pygame.K_LEFT:
                 self.jogador.speedx = -velocidade_x
                 # assets["esquerda"] = True
