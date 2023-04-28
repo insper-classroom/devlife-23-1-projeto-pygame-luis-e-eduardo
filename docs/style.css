@@ -54,7 +54,7 @@
 }
 
 .header__main{
-    background: url("../docs/imagens/fundo3.png");
+    background: url("imagens/fundo3.png");
     min-height: 100vh;
     background-size: 100% 100%;
 }
@@ -142,7 +142,7 @@ main {
 }
 
 .principal{
-    background-image: url("/docs/imagens/jogo.jpg");
+    background-image: url("imagens/jogo.jpg");
     
     background-size: cover;
     position: relative;
@@ -247,7 +247,7 @@ main {
 footer {
     position:relative;
     bottom: 0;
-    background-image: url("../docs/imagens/fundo3.png");
+    background-image: url("imagens/fundo3.png");
     background-size: cover;
     background-color: rgba(9,9,9,0.25);
     
