@@ -169,13 +169,29 @@ class Telas():
             num_aleatorio1 = randint(0,1)
             if 10 < monstro.rect.x < 900:
                 if num_aleatorio1 > 0.5:
-                    monstro.rect.x += 10 #direita 
+                    antigo_x = monstro.rect.x
+                    monstro.rect.x += 10 #direita
+                    collisions = pygame.sprite.spritecollide(self.monstros, self.plataforma, False)  
+                    if len(collisions)>0:
+                        monstro.rect.x = antigo_x
                 else:
+                    antigo_x = monstro.rect.x
                     monstro.rect.x -= 10 #esquerda
+                    collisions = pygame.sprite.spritecollide(self.monstros, self.plataforma, False)  
+                    if len(collisions)>0:
+                        monstro.rect.x = antigo_x
             elif monstro.rect.x >= 900:
+                antigo_x = monstro.rect.x
                 monstro.rect.x -= 10 #esquerda
+                collisions = pygame.sprite.spritecollide(self.monstros, self.plataforma, False)  
+                if len(collisions)>0:
+                    monstro.rect.x = antigo_x
             elif monstro.rect.x <= 10:
+                antigo_x = monstro.rect.x
                 monstro.rect.x += 10 #direita 
+                collisions = pygame.sprite.spritecollide(self.monstros, self.plataforma, False)  
+                if len(collisions)>0:
+                    monstro.rect.x = antigo_x
 
     def recebe_eventos(self):
         
@@ -402,7 +418,6 @@ class Tela1_2:
             Plataform(self.sprites,self.plataforma,410 + x, 390, 'bloco')
         
     def movimenta_monstro(self):
-        
         Telas.movimenta_monstro(self)
 
     def recebe_eventos(self):
@@ -521,10 +536,10 @@ class Tela2:
             if event.type==pygame.KEYDOWN and event.key == pygame.K_e:
                 Tiro(self.sprites, self.monstros, self.jogador.rect.x, self.jogador.rect.y+25)
             if self.jogador.rect.x>=850 and assets["moeda"] == 5:
-                return Tela1(self.window)
+                return Tela3(self.window)
             #movimentacao dos monstros 
             if event.type==pygame.KEYDOWN:
-                Tela1.movimenta_monstro(self)
+                Telas.movimenta_monstro(self)
         
         ultimo_tempo = self.last_updated 
         tempo = pygame.time.get_ticks()
@@ -568,6 +583,137 @@ class Tela2:
 
         fundo = pygame.image.load("fundo2.png") #imagem gerdada pela AI "https://www.scenario.com/""
         self.fundo2 = pygame.transform.scale(fundo, (1200,512))
+
+        chao = pygame.image.load("terra.png")
+        self.chao = pygame.transform.scale(chao,(200,130))
+        
+        Plataform(self.sprites,self.plataforma,350,335,'grass')
+        Plataform(self.sprites,self.plataforma,200,400,'grass')
+        Plataform(self.sprites,self.plataforma,500,280,'grass')
+        Plataform(self.sprites,self.plataforma,680,210,'grass')
+        
+        Plataform(self.sprites,self.plataforma,650,210,'grass')
+        Plataform(self.sprites,self.plataforma,700,210,'grass')
+        Plataform(self.sprites,self.plataforma,730,210,'grass')
+        Plataform(self.sprites,self.plataforma,750,210,'grass')
+
+        Plataform(self.sprites,self.plataforma,650,300,'grass')
+        Plataform(self.sprites,self.plataforma,700,300,'grass')
+
+        for i in range(30):
+            x = 32*i
+            Plataform(self.sprites,self.plataforma,x, 480,'grass')
+
+        Moeda(self.sprites,self.moeda, 350, 290)
+        Moeda(self.sprites,self.moeda, 500, 240)
+        Moeda(self.sprites,self.moeda, 680, 260)
+        Moeda(self.sprites,self.moeda, 780, 140)
+        
+        self.lista_de_monstros = []
+        for i in range(3):
+            x = randint(0,912)
+            self.monstro = Monstro(self.sprites,self.monstros, x, 450) 
+            self.lista_de_monstros.append(self.monstro)
+
+class Tela3:
+    
+    def __init__(self, window):
+        
+        self.sprites = pygame.sprite.Group()
+        self.plataform = pygame.sprite.Group()
+        fonte_padrao = pygame.font.get_default_font()
+        self.fonte = pygame.font.Font(fonte_padrao, 24)
+        self.azul = (0,0,255)
+        self.vermelho = (255, 0, 0)
+        self.verde = (0,255,0)
+        
+        self.vidas = 3
+
+        self.plataforma = pygame.sprite.Group()
+        self.monstros = pygame.sprite.Group()
+        self.moeda = pygame.sprite.Group()
+        self.jogador = Jogador(self.plataforma,self.monstros,self.moeda)
+        self.sprites.add(self.jogador)
+
+        self.window = window
+
+        self.gera_mapa() 
+
+        self.contador = 60
+        self.contagem = 0
+        
+    def recebe_eventos(self):
+        
+        velocidade_x = 3
+
+        clock = pygame.time.Clock()
+        
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                return None  # Devolve None para sair
+            #caso o botao seja apertado, ele soma a velocidade ate parar de apertar 
+            if event.type == pygame.KEYDOWN and event.key == pygame.K_RIGHT:
+                self.jogador.speedx += velocidade_x
+                assets["esquerda"] = False
+            elif event.type == pygame.KEYUP and event.key == pygame.K_RIGHT:
+                self.jogador.speedx -= velocidade_x
+            if event.type == pygame.KEYDOWN and event.key == pygame.K_LEFT:
+                self.jogador.speedx -= velocidade_x
+                assets["esquerda"] = True
+            elif event.type == pygame.KEYUP and event.key == pygame.K_LEFT:
+                self.jogador.speedx += velocidade_x
+            if event.type == pygame.KEYDOWN and event.key == pygame.K_SPACE:
+                self.jogador.jump()
+            if event.type==pygame.KEYDOWN and event.key == pygame.K_e:
+                Tiro(self.sprites, self.monstros, self.jogador.rect.x, self.jogador.rect.y+25)
+            if self.jogador.rect.x>=850 and assets["moeda"] == 5:
+                return Tela1(self.window)
+            #movimentacao dos monstros 
+            if event.type==pygame.KEYDOWN:
+                Telas.movimenta_monstro(self)
+        
+        ultimo_tempo = self.last_updated 
+        tempo = pygame.time.get_ticks()
+        delta_t = (tempo-ultimo_tempo)/1000
+        self.last_updated = tempo
+        self.sprites.update(delta_t)
+        clock.tick(120)
+
+        return self
+
+    def desenha(self, window):
+        window.blit(self.fundo2,(0,0)) #colocando o fundo do jogo
+        for i in range(assets["vidas"]):
+            window.blit(self.coracao,(i*15,0))
+        window.blit(self.chao,(0,490))
+        window.blit(self.chao,(200,490))
+        window.blit(self.chao,(400,490))
+        window.blit(self.chao,(600,490))
+        window.blit(self.chao,(800,490))
+
+        numero = str(self.contador)
+        img_mensagem = self.fonte.render(numero, True,(255,255,255))
+        mensagem = pygame.transform.scale(img_mensagem, (30,30))
+        window.blit(mensagem,(850,3))
+        self.contagem+=1
+        if self.contagem == 120:
+            self.contador-=1
+            self.contagem = 0
+
+        img_mensagem = self.fonte.render("Tempo restante:", True,(255,255,255))
+        mensagem = pygame.transform.scale(img_mensagem, (280,25))
+        window.blit(mensagem,(850-295, 5))
+    
+        self.sprites.draw(self.window)
+    
+    def gera_mapa(self):
+        coracao = pygame.image.load("coracao.png")
+        self.coracao = pygame.transform.scale(coracao, (15,15))
+
+        self.last_updated = 0
+
+        fundo = pygame.image.load("fundo3.png") #imagem gerdada pela AI "https://www.scenario.com/""
+        self.fundo2 = pygame.transform.scale(fundo, (912,512))
 
         chao = pygame.image.load("terra.png")
         self.chao = pygame.transform.scale(chao,(200,130))
