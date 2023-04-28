@@ -7,10 +7,14 @@
 }
 
 /* header{
-    /* background: url(wallpaperbetter.jpg);} */
- 
+    position: fixed;
+} */
+ header{
+    position: fixed;
+ }
 
 .header__logo{
+    
     display: flex;
     align-items: center;
     justify-content: center;
@@ -18,13 +22,15 @@
 }
 
 .header__wraper{
+    position: sticky;
+    top: 0;
     display: flex;
     padding: 0 2%;
     margin: 0 auto;
     align-items: center;
     /* background: url(wallpaperbetter.jpg); */
     background: rgba(9,9,9, 0.25);
-    margin-left: 0%;
+    justify-content: space-between;
 }
 
 .header__menu{
@@ -45,12 +51,6 @@
 .header__menu a:hover{
     color: red;
     opacity: 0.7;
-}
-
-
-.header__hamburger > img{
-    height: 40px;
-    
 }
 
 .header__main{
@@ -103,9 +103,6 @@ main {
 }
 
 
-.header__hamburger > img{
-    height: 40px;
-}
 
 .titulo{
     padding-top: 40px;
@@ -122,11 +119,10 @@ main {
 }
 
 .jogar{
-   padding-top: 350;
-
-
-
+   padding-top: 20%;
 }
+
+
 .jogar:hover{
     color: red;
     opacity: 0.7;
@@ -135,7 +131,9 @@ main {
 
 .principal{
     background-image: url("/docs/imagens/jogo.jpg");
+    
     background-size: cover;
+    position: relative;
     width: auto;
     height: auto;
     
@@ -145,6 +143,7 @@ main {
     min-height: 100vh;
     
 }
+
 /* Caixa geral */
 .texto {
     margin: 0 auto;
@@ -152,13 +151,12 @@ main {
     padding: 20px;
   }
   
-
-  
   /* Títulos secundários */
   .topicos {
     font-size: 24px;
     font-weight: bold;
     margin-top: 30px;
+    
   }
   
   /* Textos */
@@ -176,6 +174,7 @@ main {
 
 .tela1{
     background-image: url('imagens/jogo.jpg');
+    
     height: 300px;
     width: 50%;
     margin: 5px;
@@ -220,10 +219,37 @@ main {
     width: 50%; /* cada tela tem 50% da largura do container pai */
   }
   
+ .historico{
+    align-items: center;
+    display: flex;
+  }
   
+footer {
+    position:relative;
+    bottom: 0;
+    background-color: rgb(164, 164, 183);
+    color: #FFF;
+    width: 100%;
+    height: 100px;    
+    text-align: center;
+    line-height: 100px;
+    /* background-image: url("imagens/terra copy.png"); */
+    background-color: rgba(9,9,9,0.25);
+    
+}
+
+.rodape_menu{
+    margin-right:60px;
+    justify-content: space-evenly;
+    display: flex;
+}
   
+.fundo{
+    background-image: url("imagens/fundo3 copy.png");
+    background-size: cover;
+}
   
-  
-  
-  
-  
+.rodape_menu a:hover{
+    color: red;
+    opacity: 0.7;
+}

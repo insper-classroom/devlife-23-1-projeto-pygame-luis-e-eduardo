@@ -11,22 +11,20 @@
     </head>
 
     <body>
+        
         <div class = "header__main">
-            <section class="header">
-                <div class="header__wraper">
-                    <header class="header__logo">
-                        <img src=..\docs\imagens\logo.png width="200" height="105">
-                    </header><!--logo-->
-                    <nav class="header__menu">
-                            <a href="#" class="header__menu__link">Home</a>
-                            <a href="#" class="header__menu__link">Sobre o jogo</a>
-                            <a href="#" class="header__menu__link">Criar conta</a>
-                    </nav><!--menu-->
-                </div>
-            </section>
+                    <div class="header__wraper">
+                        <div class="header__logo">
+                            <img src=..\docs\imagens\logo.png width="200" height="105">
+                        </div><!--logo-->
+                        <nav class="header__menu">
+                                <a href="#Sobre" class="header__menu__link">Sobre o jogo</a>
+                                <a href="#Download" class="header__menu__link">Download</a>
+                        </nav><!--menu-->
+                    </div>
             <main>
                 <h1 class="titulo">
-                    Jogo maneiro
+                    Elf World
                 </h1>
                 <h4 class=" subtitulo">
                     Explore um mundo de mistérios e perigos em busca da verdade
@@ -35,18 +33,19 @@
                     Jogar
                 </h1>
             </main>
-        </div>
+        
 
         <div  class = "principal">
+            <img scr="docs\imagens\kirbi-removebg-preview.png">
             <div class="overhide">
                 <div class="texto">
-                    <h2 class="topicos">
+                    <h2 id="Sobre" class="topicos">
                         Descrição do Jogo
                     </h2>
                     <br>
                     <h3 class="descriçoes">
                         <p>
-                            No jogo, você assume o papel de um Kirb e tem como missão completar todas as fases. Para alcançar este objetivo, você precisa coletar todas as moedas do mapa e avançar para a próxima fase. Fique atento, pois existem inimigos que vão tentar impedir o seu progresso e você precisa derrotá-los para continuar. Esteja preparado para enfrentar os desafios que surgirem em seu caminho!
+                        <p>No jogo, você assume o papel de um Kirb e tem como missão completar todas as fases. Para alcançar este objetivo, você precisa coletar todas as moedas do mapa e avançar para a próxima fase. Fique atento, pois existem inimigos que vão tentar impedir o seu progresso e você precisa derrotá-los para continuar. Esteja preparado para enfrentar os desafios que surgirem em seu caminho!
                         </p>
                     </h3>
                     <br>
@@ -73,13 +72,7 @@
                             
                         </div>
                     </div>
-
-                    
-                    
-
-
-
-                    <h3> Link do jogo </h3>
+                    <h3 id="Download"> Link do jogo </h3>
                     <br>
                     <h4> link aqui </h4>
                     <br>
@@ -88,7 +81,12 @@
                     </h2>
                     <br>
                     <h3 class="descriçoes">
-                        E breve teremos algumas instruções para te auxiliar a executar o jogo
+                        <ol>
+                            <li>Para clonar o repositório do jogo no Github, utilize o comando git clone seguido do link do repositório.</li>
+                            <li>Entre na pasta onde os arquivos do jogo estão armazenados usando o comando CD.</li>
+                            <li>Instale o Pygame utilizando o comando pip install pygame.</li>
+                            <li>Para executar o jogo, utilize o comando python funcoes.py.</li>
+                        </ol>
                     </h3>
                     <br>
                     <h2 class="topicos">
@@ -97,7 +95,33 @@
                     <br>
                     <h3 class="descriçoes"> Em breve haverá um vídeo mostrando o jogo</h3>
                     <br>
+                    <h2 class="topicos">
+                        Histórico
+                    </h2>
+                    <br>
+                    <h3 class="descriçoes"> 
+                        <ul>
+                            <li>18/04 - O projeto foi iniciado.</li>
+                            <li>19/04 - A estrutura básica do código com classes foi criada.</li>
+                            <li>20/04 - Iniciou-se o desenvolvimento do site e a implementação de plataformas no jogo.</li>
+                            <li>21/04 - Foi adicionada a colisão do personagem com as plataformas.</li>
+                            <li>24/04 - O pulo do personagem foi implementado, e grama foi adicionada nas plataformas.</li>
+                            <li>25/04 - O background e cabeçalho do site foram criados, a movimentação aleatória dos mobs e a animação do personagem foram implementadas, a arma do personagem foi adicionada, e a segunda tela do jogo foi criada.</li>
+                            <li>26/04 - Novos personagens foram adicionados e ajustes no site foram feitos com base em críticas recebidas.</li>
+                            <li>27/04 - A descrição do site e as imagens do jogo foram melhoradas.</li>
+                        </ul>
+                        </h3>
                     </div>
-
-            </div>
+                </div>
         </div>
+
+        <footer>
+            <div class="fundo">
+                <nav class="rodape_menu">
+                    <a href="http://www.instagram.com" class="rodape__menu__link" target=_new>Criado por Eduardo e Felipe</a>   
+                    <a href="http://www.instagram.com" class="rodape__menu__link" target = _new>Insper</a>  
+                </nav><!--menu-->
+            </div>
+        </footer>
+    </div>
+    
