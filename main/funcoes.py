@@ -27,11 +27,16 @@ def load_spritesheet(spritesheet, rows, columns):
     return sprites
 
 class Plataform(pygame.sprite.Sprite):
-    def __init__(self,sprites,plataforma,x,y):
+    def __init__(self,sprites,plataforma,x,y,tipo):
         self.plataforma = plataforma
+        self.tipo = tipo 
         pygame.sprite.Sprite.__init__(self)
-        img_plataforma = pygame.image.load("grass.png")
-        self.image = pygame.transform.scale(img_plataforma, (50,15))
+        if self.tipo == 'grass':
+            img_plataforma = pygame.image.load("grass.png")
+            self.image = pygame.transform.scale(img_plataforma, (50,15))
+        if self.tipo == 'bloco':
+            img_plataforma = pygame.image.load("bloco1.png")
+            self.image = pygame.transform.scale(img_plataforma, (50,30))
         self.rect = self.image.get_rect()
         self.rect.x = x
         self.rect.y = y
@@ -66,14 +71,14 @@ class Tiro(pygame.sprite.Sprite):
     def __init__(self, sprites,monstros, x, y):
         pygame.sprite.Sprite.__init__(self)
 
-        img_laser = pygame.image.load('machado.png')
-        self.image = pygame.transform.scale(img_laser,(20,20))
+        img_laser = pygame.image.load('bola.png')
+        self.image = pygame.transform.scale(img_laser,(15,15))
         
         self.rect = self.image.get_rect()
         self.vel_y_laser = 0
 
         self.rect.x = x
-        self.rect.y = y
+        self.rect.y = y - 10
         if assets["esquerda"]:
             self.vel_x_laser = -500
         else:
@@ -130,61 +135,36 @@ class TelaInicial:
         mensagem = pygame.transform.scale(img_mensagem, (150,60))
         window.blit(mensagem,(diferenca_largura+20, 400))
 
-class Tela1:
-    def __init__(self, window):
+class Telas():
+    def __init__(self, window): 
+        
         self.window = window
-        #self.width = pygame.get_width(window)
         self.sprites = pygame.sprite.Group()
         self.plataform = pygame.sprite.Group()
         fonte_padrao = pygame.font.get_default_font()
         self.fonte = pygame.font.Font(fonte_padrao, 24)
-        self.azul = (0,0,255)
-        self.vermelho = (255, 0, 0)
-        self.verde = (0,255,0)
         
-        self.vidas = 3
+        self.vidas = 5
         coracao = pygame.image.load("coracao.png")
-        self.coracao = pygame.transform.scale(coracao, (15,15))
+        self.coracao = pygame.transform.scale(coracao, (25,25))
 
         self.last_updated = 0
-
-        fundo = pygame.image.load(assets["fundo1"]) #imagem gerdada pela AI "https://www.scenario.com/""
-        self.fundo = pygame.transform.scale(fundo, (912,512))
 
         setas = pygame.image.load("setas.png")
         self.setas = pygame.transform.scale(setas,(200,120))
         
-        chao = pygame.image.load("terra.png")
-        self.chao = pygame.transform.scale(chao,(250,90))
+        chao = pygame.image.load("grass.png")
+        self.chao = pygame.transform.scale(chao,(50,15))
         self.plataforma = pygame.sprite.Group()
         self.monstros = pygame.sprite.Group()
         self.moeda = pygame.sprite.Group()
         self.jogador = Jogador(self.plataforma,self.monstros,self.moeda)
         self.sprites.add(self.jogador)
-        self.scroll = 0 
-        zoro = pygame.image.load("Meu projeto.png")
-        self.zoro = pygame.transform.smoothscale(zoro,(70,80))
-        text_box1 = pygame.image.load("text_box1.png")
-        self.text_box1 = pygame.transform.smoothscale(text_box1,(230,230))
-        self.aparece_text_box = False 
         
         self.window = window
 
-        for i in range(30):
-            x = 32*i
-            Plataform(self.sprites,self.plataforma,x, 480)
-
-        Moeda(self.sprites,self.moeda, 200, 440)
-
-        assets["texto"] = True
-        
-        self.lista_de_monstros = []
-        for i in range(3):
-            x = randint(0,912)
-            self.monstro = Monstro(self.sprites,self.monstros, x, 450) 
-            self.lista_de_monstros.append(self.monstro) 
-    
     def movimenta_monstro(self):
+
         for monstro in self.lista_de_monstros:    
             num_aleatorio1 = randint(0,1)
             if 10 < monstro.rect.x < 900:
@@ -196,7 +176,7 @@ class Tela1:
                 monstro.rect.x -= 10 #esquerda
             elif monstro.rect.x <= 10:
                 monstro.rect.x += 10 #direita 
- 
+
     def recebe_eventos(self):
         
         velocidade_x = 3
@@ -225,13 +205,13 @@ class Tela1:
             if self.jogador.rect.x > 850 and assets["moeda"] == 1:
                 return Tela2(self.window)
             
-            if 300 > self.jogador.rect.x < 400:
+            if 100 > self.jogador.rect.x < 300:
                 self.aparece_text_box = True  
-            if 300 < self.jogador.rect.x > 400:
+            if 100 < self.jogador.rect.x > 300:
                 self.aparece_text_box = False 
 
             if event.type==pygame.KEYDOWN: #movimentacao dos monstros 
-                Tela1.movimenta_monstro(self)
+                Telas.movimenta_monstro(self)
             #self.aparece_text_box = False 
 
         
@@ -245,18 +225,124 @@ class Tela1:
 
         return self
 
-    def desenha(self, window):
+    def desenha(self,window):
+        
+        #colocando o fundo do jogo 
+        window.blit(self.fundo,(0,0))
 
-        #window.fill(self.verde)
-        window.blit(self.fundo,(0,0)) #colocando o fundo do jogo
-        #pygame.draw.rect(window,(150,75,0),self.chao) #desenhando o chao 
+        #desenhando ochao embaixo da plataforma 
+        x = 0
+        for i in range(30):
+            x = 32*i
+            window.blit(self.chao,(x,512))
+        for i in range(30):
+            x = 32*i
+            window.blit(self.chao,(x,504))
+        for i in range(30):
+            x = 32*i
+            window.blit(self.chao,(x,496))
+        for i in range(30):
+            x = 32*i
+            window.blit(self.chao,(x,488))
+
+class Tela1:
+    def __init__(self, window):
+        
+        #criando o fund0
+        fundo = pygame.image.load(assets["fundo1"]) #imagem gerdada pela AI "https://www.scenario.com/""
+        self.fundo = pygame.transform.scale(fundo, (912,512))
+
+        #pre-stes de todas as telas 
+        Telas.__init__(self,window)
+
+        #gerando as plataformas dos mapas 
+        self.gera_mapa()
+
+        #npc para dar as instrucoes do "tutorial"
+        zoro = pygame.image.load("zoro.png")
+        self.zoro = pygame.transform.smoothscale(zoro,(70,80))
+        text_box1 = pygame.image.load("text_box1.png")
+        self.text_box1 = pygame.transform.smoothscale(text_box1,(230,230))
+        self.aparece_text_box = False 
+
+    def gera_mapa(self):
+        
+        #criando o chao
+        for i in range(30):
+            x = 32*i
+            Plataform(self.sprites,self.plataforma,x, 480, 'grass')
+
+        x = 0
+        for i in range(4):
+            x += 24
+            Plataform(self.sprites,self.plataforma,250 + x, 430, 'bloco')
+
+        x = 0
+        for i in range(4):
+            x += 24
+            Plataform(self.sprites,self.plataforma,390 + x, 400, 'bloco')
+
+        x = 0
+        for i in range(4):
+            x += 24
+            Plataform(self.sprites,self.plataforma,530 + x, 370, 'bloco')
+
+        x = 0
+        for i in range(4):
+            x += 24
+            Plataform(self.sprites,self.plataforma,670 + x, 340, 'bloco') 
+
+        Moeda(self.sprites,self.moeda, 200, 440)
+     
+    def recebe_eventos(self):
+
+        velocidade_x = 3
+
+        clock = pygame.time.Clock()
+        
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                return None  # Devolve None para sair
+            
+            #caso o botao seja apertado, ele soma a velocidade ate parar de apertar 
+            if event.type == pygame.KEYDOWN and event.key == pygame.K_RIGHT:
+                self.jogador.speedx += velocidade_x
+                assets["esquerda"] = False
+            elif event.type == pygame.KEYUP and event.key == pygame.K_RIGHT:
+                self.jogador.speedx -= velocidade_x
+            if event.type == pygame.KEYDOWN and event.key == pygame.K_LEFT:
+                self.jogador.speedx -= velocidade_x
+                assets["esquerda"] = True
+            elif event.type == pygame.KEYUP and event.key == pygame.K_LEFT:
+                self.jogador.speedx += velocidade_x
+            if event.type == pygame.KEYDOWN and event.key == pygame.K_SPACE:
+                self.jogador.jump()
+            if self.jogador.rect.x > 850 and assets["moeda"] == 1:
+                return Tela1_2(self.window)
+            
+            if 100 > self.jogador.rect.x < 300:
+                self.aparece_text_box = True  
+            if 100 < self.jogador.rect.x > 300:
+                self.aparece_text_box = False 
+
+        ultimo_tempo = self.last_updated 
+        tempo = pygame.time.get_ticks()
+        delta_t = (tempo-ultimo_tempo)/1000
+        self.last_updated = tempo
+        self.sprites.update(delta_t)
+
+        clock.tick(120)
+
+        return self
+
+    def desenha(self, window):
+        
+        #pre-sets de desenho de todas as telas
+        Telas.desenha(self,window)
+
+        #desenhando a vida do usuario 
         for i in range(assets["vidas"]):
-            window.blit(self.coracao,(i*15,0))
-        window.blit(self.chao,(0,490))
-        window.blit(self.chao,(200,490))
-        window.blit(self.chao,(400,490))
-        window.blit(self.chao,(600,490))
-        window.blit(self.chao,(800,490))
+            window.blit(self.coracao,(i*20,0))
         
         #desenhando o zoro npc, para instrucoes 
         window.blit(self.zoro,(200,408))
@@ -266,6 +352,123 @@ class Tela1:
 
         self.sprites.draw(self.window)
         
+class Tela1_2:
+    
+    def __init__(self, window):
+        #criando o fund0
+        fundo = pygame.image.load(assets["fundo1"]) #imagem gerdada pela AI "https://www.scenario.com/""
+        self.fundo = pygame.transform.scale(fundo, (912,512))
+
+        #pre-stes de todas as telas 
+        Telas.__init__(self,window)
+
+        #gerando as plataformas dos mapas 
+        self.gera_mapa()
+
+        #npc para dar as instrucoes do "tutorial"
+        zoro = pygame.image.load("zoro.png")
+        self.zoro = pygame.transform.smoothscale(zoro,(70,80))
+        text_box1 = pygame.image.load("text_box2.png")
+        self.text_box1 = pygame.transform.smoothscale(text_box1,(230,230))
+        self.aparece_text_box = False 
+
+        #gerando os monstros no mapa 
+        self.lista_de_monstros = []
+        for i in range(6):
+            x = randint(427,800)
+            self.monstro = Monstro(self.sprites,self.monstros, x, 440) 
+            self.lista_de_monstros.append(self.monstro) 
+    
+    def gera_mapa(self):
+        
+        #criando o chao
+        for i in range(30):
+            x = 32*i
+            Plataform(self.sprites,self.plataforma,x, 480, 'grass')
+
+        diferenca_entre_blocos_y = 25
+        #colocar bloco no chao, y = 452
+        
+        #criando as plataformas 
+        Plataform(self.sprites,self.plataforma,300, 452, 'bloco')
+        Plataform(self.sprites,self.plataforma,300, 452 - diferenca_entre_blocos_y, 'bloco')
+
+        Plataform(self.sprites,self.plataforma,800, 452, 'bloco')
+        Plataform(self.sprites,self.plataforma,800, 452 - diferenca_entre_blocos_y, 'bloco')
+
+        x = 0
+        for i in range(10):
+            x += 24
+            Plataform(self.sprites,self.plataforma,410 + x, 390, 'bloco')
+        
+    def movimenta_monstro(self):
+        
+        Telas.movimenta_monstro(self)
+
+    def recebe_eventos(self):
+
+        velocidade_x = 3
+
+        clock = pygame.time.Clock()
+        
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                return None  # Devolve None para sair
+            
+            #caso o botao seja apertado, ele soma a velocidade ate parar de apertar 
+            if event.type == pygame.KEYDOWN and event.key == pygame.K_RIGHT:
+                self.jogador.speedx += velocidade_x
+                assets["esquerda"] = False
+            elif event.type == pygame.KEYUP and event.key == pygame.K_RIGHT:
+                self.jogador.speedx -= velocidade_x
+            if event.type == pygame.KEYDOWN and event.key == pygame.K_LEFT:
+                self.jogador.speedx -= velocidade_x
+                assets["esquerda"] = True
+            elif event.type == pygame.KEYUP and event.key == pygame.K_LEFT:
+                self.jogador.speedx += velocidade_x
+            if event.type == pygame.KEYDOWN and event.key == pygame.K_SPACE:
+                self.jogador.jump()
+            if event.type==pygame.KEYDOWN and event.key == pygame.K_e:
+                Tiro(self.sprites, self.monstros, self.jogador.rect.x, self.jogador.rect.y+25)
+            if self.jogador.rect.x > 850 and assets["moeda"] == 1:
+                return Tela2(self.window)
+            
+            if 100 > self.jogador.rect.x < 300:
+                self.aparece_text_box = True  
+            if 100 < self.jogador.rect.x > 300:
+                self.aparece_text_box = False 
+
+            if event.type==pygame.KEYDOWN: #movimentacao dos monstros 
+                Telas.movimenta_monstro(self)
+            #self.aparece_text_box = False 
+
+        ultimo_tempo = self.last_updated 
+        tempo = pygame.time.get_ticks()
+        delta_t = (tempo-ultimo_tempo)/1000
+        self.last_updated = tempo
+        self.sprites.update(delta_t)
+
+        clock.tick(120)
+
+        return self
+
+    def desenha(self,window):
+                
+        #pre-sets de desenho de todas as telas
+        Telas.desenha(self,window)
+
+        #desenhando a vida do usuario 
+        for i in range(assets["vidas"]):
+            window.blit(self.coracao,(i*20,0))
+        
+        #desenhando o zoro npc, para instrucoes 
+        window.blit(self.zoro,(200,408))
+        #desenhando a fala do zoro caso o jogador esteja perto dele 
+        if self.aparece_text_box:
+            window.blit(self.text_box1,(62,275))
+
+        self.sprites.draw(self.window)
+
 class Tela2:
     
     def __init__(self, window):
@@ -302,7 +505,6 @@ class Tela2:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 return None  # Devolve None para sair
-            
             #caso o botao seja apertado, ele soma a velocidade ate parar de apertar 
             if event.type == pygame.KEYDOWN and event.key == pygame.K_RIGHT:
                 self.jogador.speedx += velocidade_x
@@ -320,7 +522,6 @@ class Tela2:
                 Tiro(self.sprites, self.monstros, self.jogador.rect.x, self.jogador.rect.y+25)
             if self.jogador.rect.x>=850 and assets["moeda"] == 5:
                 return Tela1(self.window)
-        
             #movimentacao dos monstros 
             if event.type==pygame.KEYDOWN:
                 Tela1.movimenta_monstro(self)
@@ -371,22 +572,22 @@ class Tela2:
         chao = pygame.image.load("terra.png")
         self.chao = pygame.transform.scale(chao,(200,130))
         
-        Plataform(self.sprites,self.plataforma,350,335)
-        Plataform(self.sprites,self.plataforma,200,400)
-        Plataform(self.sprites,self.plataforma,500,280)
-        Plataform(self.sprites,self.plataforma,680,210)
+        Plataform(self.sprites,self.plataforma,350,335,'grass')
+        Plataform(self.sprites,self.plataforma,200,400,'grass')
+        Plataform(self.sprites,self.plataforma,500,280,'grass')
+        Plataform(self.sprites,self.plataforma,680,210,'grass')
         
-        Plataform(self.sprites,self.plataforma,650,210)
-        Plataform(self.sprites,self.plataforma,700,210)
-        Plataform(self.sprites,self.plataforma,730,210)
-        Plataform(self.sprites,self.plataforma,750,210)
+        Plataform(self.sprites,self.plataforma,650,210,'grass')
+        Plataform(self.sprites,self.plataforma,700,210,'grass')
+        Plataform(self.sprites,self.plataforma,730,210,'grass')
+        Plataform(self.sprites,self.plataforma,750,210,'grass')
 
-        Plataform(self.sprites,self.plataforma,650,300)
-        Plataform(self.sprites,self.plataforma,700,300)
+        Plataform(self.sprites,self.plataforma,650,300,'grass')
+        Plataform(self.sprites,self.plataforma,700,300,'grass')
 
         for i in range(30):
             x = 32*i
-            Plataform(self.sprites,self.plataforma,x, 480)
+            Plataform(self.sprites,self.plataforma,x, 480,'grass')
 
         Moeda(self.sprites,self.moeda, 350, 290)
         Moeda(self.sprites,self.moeda, 500, 240)
@@ -511,7 +712,6 @@ class Jogador(pygame.sprite.Sprite):
             else:
                 self.image= pygame.transform.scale(imagem,(65,50))
         if self.speedx == 0:
-            self.rect.y += 11
             if self.rect.y>480:
                 self.rect.y = 447
             if self.elapsed_ticks > 0.8:
@@ -520,7 +720,7 @@ class Jogador(pygame.sprite.Sprite):
             if self.contador >= len(self.lista_jogador_parado):
                 self.contador = 0
             imagem = self.lista_jogador_parado[self.contador]
-            self.image = pygame.transform.smoothscale(imagem, (47,37))
+            self.image = pygame.transform.smoothscale(imagem, (47,39))
         if self.speedy != 0:
             if self.elapsed_ticks > 0.4:
                 self.contador += 1
@@ -534,6 +734,8 @@ class Jogador(pygame.sprite.Sprite):
             else:
                 self.image= pygame.transform.scale(imagem,(65,50))
         
+        if self.speedx == 0 and self.speedy == 0:
+            self.rect.y += 13
 
     def jump(self):
     # Só pode pular se ainda não estiver pulando ou caindo
