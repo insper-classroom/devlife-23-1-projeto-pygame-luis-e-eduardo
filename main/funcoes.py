@@ -103,6 +103,31 @@ class Tiro(pygame.sprite.Sprite):
         if self.rect.x > 912 or self.rect.x < 0:
             self.kill()
 
+class GameOver():
+    def __init__(self, window):
+
+        
+        fonte_padrao = pygame.font.get_default_font()
+        self.fonte = pygame.font.Font(fonte_padrao, 24)
+        self.window = window
+        imagem = pygame.image.load("game_over.png")
+        self.image = pygame.transform.scale(imagem,(912,580))
+
+
+    def recebe_eventos(self):
+        for evento in pygame.event.get():
+            if evento.type == pygame.QUIT:
+                return None 
+            elif evento.type == pygame.KEYDOWN and evento.key == pygame.K_SPACE:
+                assets["vidas"] = 5
+                assets["moeda"] = 0
+                return Tela1(self.window)
+        return self
+
+    def desenha(self, window):
+        window.fill((0, 0, 0))
+        window.blit(self.image,(0,0))
+  
 class TelaInicial:
     def __init__(self, window):
         
@@ -112,23 +137,20 @@ class TelaInicial:
         fonte_padrao = pygame.font.get_default_font()
         self.fonte = pygame.font.Font(fonte_padrao, 24)
         self.window = window
-        imagem = pygame.image.load("tela_inicial.jpg")
+        imagem = pygame.image.load("fundo_inicial.png")
         self.image = pygame.transform.scale(imagem,(912,512))
-
-        # imagem = pygame.image.load("pap-removebg-preview.png")
-        # self.lista_load = load_spritesheet(imagem,3,4)
-        
-        # self.contador = 0
-        # self.last_updated = 0
-        # self.elapsed_ticks = 0
 
 
     def recebe_eventos(self):
         for evento in pygame.event.get():
             if evento.type == pygame.QUIT:
                 return None 
-            elif evento.type == pygame.KEYDOWN: #nao pode apertar as teclas de andar nao sei pq kkkk
-                return Tela1(self.window)
+            elif evento.type == pygame.MOUSEBUTTONDOWN:
+                posicao = pygame.mouse.get_pos()
+                if posicao[0] >= (912-200)/2 - 35 and posicao[0] <= 912-(912-200)/2 +32:
+                    if posicao[1] >=400 and posicao[1]<=470: #nao pode apertar as teclas de andar nao sei pq kkkk
+                        return Tela1(self.window)
+                        
             elif evento.type == pygame.USEREVENT:#tocando a musica durante o jogo inteiro 
                 pygame.mixer.music.play()
         return self
@@ -143,7 +165,7 @@ class TelaInicial:
         pygame.draw.circle(window,(235,180,51),(912-diferenca_largura, 435), 35)
         img_mensagem = self.fonte.render("Jogar", True,(255,255,255))
         mensagem = pygame.transform.scale(img_mensagem, (150,60))
-        window.blit(mensagem,(diferenca_largura+20, 400))
+        window.blit(mensagem,(diferenca_largura+20, 405))
 
 class Telas():
     def __init__(self, window): 
@@ -331,6 +353,8 @@ class Tela1:
                 self.jogador.jump()
             if self.jogador.rect.x > 850 and assets["moeda"] == 1:
                 return Tela1_2(self.window)
+            if assets["vidas"] <= 0:
+                return GameOver(self.window)
             
             if 100 > self.jogador.rect.x < 300:
                 self.aparece_text_box = True  
@@ -444,6 +468,8 @@ class Tela1_2:
                 Tiro(self.sprites, self.monstros, self.jogador.rect.x, self.jogador.rect.y+25)
             if self.jogador.rect.x > 850 and assets["moeda"] == 1:
                 return Tela2(self.window)
+            if assets["vidas"] <= 0:
+                return GameOver(self.window)
             
             if 100 > self.jogador.rect.x < 300:
                 self.aparece_text_box = True  
@@ -523,7 +549,6 @@ class Tela2:
                 # assets["esquerda"] = False
             elif event.type == pygame.KEYUP and event.key == pygame.K_RIGHT:
                 self.jogador.speedx = 0
-                print(self.jogador.speedx)
             if event.type == pygame.KEYDOWN and event.key == pygame.K_LEFT:
                 self.jogador.speedx = -velocidade_x
                 # assets["esquerda"] = True
@@ -535,9 +560,12 @@ class Tela2:
                 Tiro(self.sprites, self.monstros, self.jogador.rect.x, self.jogador.rect.y+25)
             if self.jogador.rect.x>=850 and assets["moeda"] == 5:
                 return Tela3(self.window)
+            if assets["vidas"] <= 0:
+                return GameOver(self.window)
             #movimentacao dos monstros 
             if event.type==pygame.KEYDOWN:
                 Telas.movimenta_monstro(self)
+            
         
         ultimo_tempo = self.last_updated 
         tempo = pygame.time.get_ticks()
@@ -668,6 +696,8 @@ class Tela3:
             if self.jogador.rect.x>=850 and assets["moeda"] == 10:
                 return Tela4(self.window)
             #movimentacao dos monstros 
+            if assets["vidas"] <= 0:
+                return GameOver(self.window)
             if event.type==pygame.KEYDOWN:
                 Telas.movimenta_monstro(self)
         
