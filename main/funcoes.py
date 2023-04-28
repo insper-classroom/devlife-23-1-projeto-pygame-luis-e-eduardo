@@ -125,7 +125,6 @@ class TelaInicial:
     def desenha(self, window):
         window.fill((0, 0, 0))
         largura = 200
-        altura = 70
         diferenca_largura = (912 - largura)/2
         window.blit(self.image,(0,0))
         pygame.draw.polygon(window,(235,180,51),[(diferenca_largura,400),(912 - diferenca_largura,400),(912 - diferenca_largura,470),(diferenca_largura,470)])
@@ -169,29 +168,13 @@ class Telas():
             num_aleatorio1 = randint(0,1)
             if 10 < monstro.rect.x < 900:
                 if num_aleatorio1 > 0.5:
-                    antigo_x = monstro.rect.x
-                    monstro.rect.x += 10 #direita
-                    collisions = pygame.sprite.spritecollide(self.monstros, self.plataforma, False)  
-                    if len(collisions)>0:
-                        monstro.rect.x = antigo_x
+                    monstro.rect.x += 10 #direita 
                 else:
-                    antigo_x = monstro.rect.x
                     monstro.rect.x -= 10 #esquerda
-                    collisions = pygame.sprite.spritecollide(self.monstros, self.plataforma, False)  
-                    if len(collisions)>0:
-                        monstro.rect.x = antigo_x
             elif monstro.rect.x >= 900:
-                antigo_x = monstro.rect.x
                 monstro.rect.x -= 10 #esquerda
-                collisions = pygame.sprite.spritecollide(self.monstros, self.plataforma, False)  
-                if len(collisions)>0:
-                    monstro.rect.x = antigo_x
             elif monstro.rect.x <= 10:
-                antigo_x = monstro.rect.x
                 monstro.rect.x += 10 #direita 
-                collisions = pygame.sprite.spritecollide(self.monstros, self.plataforma, False)  
-                if len(collisions)>0:
-                    monstro.rect.x = antigo_x
 
     def recebe_eventos(self):
         
@@ -280,6 +263,8 @@ class Tela1:
         text_box1 = pygame.image.load("text_box1.png")
         self.text_box1 = pygame.transform.smoothscale(text_box1,(230,230))
         self.aparece_text_box = False 
+        self.jogador.speedx = 0
+
 
     def gera_mapa(self):
         
@@ -322,15 +307,16 @@ class Tela1:
             
             #caso o botao seja apertado, ele soma a velocidade ate parar de apertar 
             if event.type == pygame.KEYDOWN and event.key == pygame.K_RIGHT:
-                self.jogador.speedx += velocidade_x
-                assets["esquerda"] = False
+                self.jogador.speedx = velocidade_x
+                # assets["esquerda"] = False
             elif event.type == pygame.KEYUP and event.key == pygame.K_RIGHT:
-                self.jogador.speedx -= velocidade_x
+                self.jogador.speedx = 0
+                print(self.jogador.speedx)
             if event.type == pygame.KEYDOWN and event.key == pygame.K_LEFT:
-                self.jogador.speedx -= velocidade_x
-                assets["esquerda"] = True
+                self.jogador.speedx = -velocidade_x
+                # assets["esquerda"] = True
             elif event.type == pygame.KEYUP and event.key == pygame.K_LEFT:
-                self.jogador.speedx += velocidade_x
+                self.jogador.speedx = 0
             if event.type == pygame.KEYDOWN and event.key == pygame.K_SPACE:
                 self.jogador.jump()
             if self.jogador.rect.x > 850 and assets["moeda"] == 1:
@@ -432,15 +418,16 @@ class Tela1_2:
             
             #caso o botao seja apertado, ele soma a velocidade ate parar de apertar 
             if event.type == pygame.KEYDOWN and event.key == pygame.K_RIGHT:
-                self.jogador.speedx += velocidade_x
-                assets["esquerda"] = False
+                self.jogador.speedx = velocidade_x
+                # assets["esquerda"] = False
             elif event.type == pygame.KEYUP and event.key == pygame.K_RIGHT:
-                self.jogador.speedx -= velocidade_x
+                self.jogador.speedx = 0
+                print(self.jogador.speedx)
             if event.type == pygame.KEYDOWN and event.key == pygame.K_LEFT:
-                self.jogador.speedx -= velocidade_x
-                assets["esquerda"] = True
+                self.jogador.speedx = -velocidade_x
+                # assets["esquerda"] = True
             elif event.type == pygame.KEYUP and event.key == pygame.K_LEFT:
-                self.jogador.speedx += velocidade_x
+                self.jogador.speedx = 0
             if event.type == pygame.KEYDOWN and event.key == pygame.K_SPACE:
                 self.jogador.jump()
             if event.type==pygame.KEYDOWN and event.key == pygame.K_e:
@@ -522,15 +509,16 @@ class Tela2:
                 return None  # Devolve None para sair
             #caso o botao seja apertado, ele soma a velocidade ate parar de apertar 
             if event.type == pygame.KEYDOWN and event.key == pygame.K_RIGHT:
-                self.jogador.speedx += velocidade_x
-                assets["esquerda"] = False
+                self.jogador.speedx = velocidade_x
+                # assets["esquerda"] = False
             elif event.type == pygame.KEYUP and event.key == pygame.K_RIGHT:
-                self.jogador.speedx -= velocidade_x
+                self.jogador.speedx = 0
+                print(self.jogador.speedx)
             if event.type == pygame.KEYDOWN and event.key == pygame.K_LEFT:
-                self.jogador.speedx -= velocidade_x
-                assets["esquerda"] = True
+                self.jogador.speedx = -velocidade_x
+                # assets["esquerda"] = True
             elif event.type == pygame.KEYUP and event.key == pygame.K_LEFT:
-                self.jogador.speedx += velocidade_x
+                self.jogador.speedx = 0
             if event.type == pygame.KEYDOWN and event.key == pygame.K_SPACE:
                 self.jogador.jump()
             if event.type==pygame.KEYDOWN and event.key == pygame.K_e:
@@ -653,21 +641,22 @@ class Tela3:
                 return None  # Devolve None para sair
             #caso o botao seja apertado, ele soma a velocidade ate parar de apertar 
             if event.type == pygame.KEYDOWN and event.key == pygame.K_RIGHT:
-                self.jogador.speedx += velocidade_x
-                assets["esquerda"] = False
+                self.jogador.speedx = velocidade_x
+                # assets["esquerda"] = False
             elif event.type == pygame.KEYUP and event.key == pygame.K_RIGHT:
-                self.jogador.speedx -= velocidade_x
+                self.jogador.speedx = 0
+                print(self.jogador.speedx)
             if event.type == pygame.KEYDOWN and event.key == pygame.K_LEFT:
-                self.jogador.speedx -= velocidade_x
-                assets["esquerda"] = True
+                self.jogador.speedx = -velocidade_x
+                # assets["esquerda"] = True
             elif event.type == pygame.KEYUP and event.key == pygame.K_LEFT:
-                self.jogador.speedx += velocidade_x
+                self.jogador.speedx = 0
             if event.type == pygame.KEYDOWN and event.key == pygame.K_SPACE:
                 self.jogador.jump()
             if event.type==pygame.KEYDOWN and event.key == pygame.K_e:
                 Tiro(self.sprites, self.monstros, self.jogador.rect.x, self.jogador.rect.y+25)
-            if self.jogador.rect.x>=850 and assets["moeda"] == 5:
-                return Tela1(self.window)
+            if self.jogador.rect.x>=850 and assets["moeda"] == 10:
+                return Tela4(self.window)
             #movimentacao dos monstros 
             if event.type==pygame.KEYDOWN:
                 Telas.movimenta_monstro(self)
@@ -718,27 +707,29 @@ class Tela3:
         chao = pygame.image.load("terra.png")
         self.chao = pygame.transform.scale(chao,(200,130))
         
-        Plataform(self.sprites,self.plataforma,350,335,'grass')
-        Plataform(self.sprites,self.plataforma,200,400,'grass')
-        Plataform(self.sprites,self.plataforma,500,280,'grass')
-        Plataform(self.sprites,self.plataforma,680,210,'grass')
         
-        Plataform(self.sprites,self.plataforma,650,210,'grass')
-        Plataform(self.sprites,self.plataforma,700,210,'grass')
-        Plataform(self.sprites,self.plataforma,730,210,'grass')
-        Plataform(self.sprites,self.plataforma,750,210,'grass')
-
-        Plataform(self.sprites,self.plataforma,650,300,'grass')
-        Plataform(self.sprites,self.plataforma,700,300,'grass')
-
+        Plataform(self.sprites,self.plataforma,200,400,'grass')
+        for i in range(4):
+            Plataform(self.sprites,self.plataforma,300+40*i,355,'grass')
+        for i in range(3):
+            Plataform(self.sprites,self.plataforma,300-40*i,250,'grass')
+        for i in range(3):
+            Plataform(self.sprites,self.plataforma,330+40*i,160,'grass')
+        for i in range(3):
+            Plataform(self.sprites,self.plataforma,580+40*i,160,'grass')
+        for i in range(3):
+            Plataform(self.sprites,self.plataforma,580+40*i,290,'grass')
         for i in range(30):
             x = 32*i
             Plataform(self.sprites,self.plataforma,x, 480,'grass')
 
-        Moeda(self.sprites,self.moeda, 350, 290)
-        Moeda(self.sprites,self.moeda, 500, 240)
-        Moeda(self.sprites,self.moeda, 680, 260)
-        Moeda(self.sprites,self.moeda, 780, 140)
+        Moeda(self.sprites,self.moeda, 220, 290)
+        Moeda(self.sprites,self.moeda, 310, 190)
+        Moeda(self.sprites,self.moeda, 500, 80)
+        Moeda(self.sprites,self.moeda, 680, 110)
+        Moeda(self.sprites,self.moeda, 640, 220)
+        
+        
         
         self.lista_de_monstros = []
         for i in range(3):
