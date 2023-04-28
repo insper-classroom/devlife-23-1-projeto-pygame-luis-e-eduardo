@@ -122,6 +122,11 @@ main {
    padding-top: 20%;
 }
 
+.quadrado_jogar{
+    width: 160px;
+    height: 60px;
+    background-color: rgb(3, 200, 157);
+}
 
 .jogar:hover{
     color: red;
