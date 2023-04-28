@@ -119,13 +119,20 @@ main {
 }
 
 .jogar{
-   padding-top: 20%;
+   padding-top: 10%;
+   padding-left: 6%;
 }
 
 .quadrado_jogar{
-    width: 160px;
-    height: 60px;
+    width: 180px;
+    height: 70px;
     background-color: rgb(3, 200, 157);
+    position: absolute;
+    top: 60%;
+    left: 50%;
+    transform: translate(-60%, -50%);
+    opacity: 0.8;
+    border-radius: 10px;
 }
 
 .jogar:hover{
@@ -240,7 +247,6 @@ footer {
     line-height: 100px;
     /* background-image: url("imagens/terra copy.png"); */
     background-color: rgba(9,9,9,0.25);
-    
 }
 
 .rodape_menu{
