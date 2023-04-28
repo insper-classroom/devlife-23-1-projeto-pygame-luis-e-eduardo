@@ -26,6 +26,11 @@ def load_spritesheet(spritesheet, rows, columns):
             sprites.append(image)
     return sprites
 
+def musica(musica):
+    pygame.mixer.music.load(musica)
+    pygame.mixer.music.set_endevent(pygame.USEREVENT) #para reniciar a musica caso acabar
+    pygame.mixer.music.play() 
+
 class Plataform(pygame.sprite.Sprite):
     def __init__(self,sprites,plataforma,x,y,tipo):
         self.plataforma = plataforma
@@ -100,6 +105,10 @@ class Tiro(pygame.sprite.Sprite):
 
 class TelaInicial:
     def __init__(self, window):
+        
+        #chamando a musica 
+        musica("musica_MFDOOM.mp3")
+        
         fonte_padrao = pygame.font.get_default_font()
         self.fonte = pygame.font.Font(fonte_padrao, 24)
         self.window = window
@@ -120,6 +129,8 @@ class TelaInicial:
                 return None 
             elif evento.type == pygame.KEYDOWN: #nao pode apertar as teclas de andar nao sei pq kkkk
                 return Tela1(self.window)
+            elif evento.type == pygame.USEREVENT:#tocando a musica durante o jogo inteiro 
+                pygame.mixer.music.play()
         return self
 
     def desenha(self, window):
@@ -246,7 +257,7 @@ class Telas():
 
 class Tela1:
     def __init__(self, window):
-        
+
         #criando o fund0
         fundo = pygame.image.load(assets["fundo1"]) #imagem gerdada pela AI "https://www.scenario.com/""
         self.fundo = pygame.transform.scale(fundo, (912,512))
