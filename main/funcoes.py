@@ -1,8 +1,9 @@
 from random import randint
 import pygame
 from assets import *
-
-import time
+#Comentários
+#A função load_spritesheet server para "recortar um png com os frames do movimento do jogador e nós pegamos essa função do snippets do github"
+#Para fazer o pulo do jogador, nos tambem nos baseamos no algoritimo do snippets
 
 def load_spritesheet(spritesheet, rows, columns):
     # Calcula a largura e altura de cada sprite.
@@ -81,7 +82,6 @@ class Tiro(pygame.sprite.Sprite):
         
         self.rect = self.image.get_rect()
         self.vel_y_laser = 0
-
         self.rect.x = x
         self.rect.y = y - 10
         if assets["esquerda"]:
@@ -222,12 +222,12 @@ class Telas():
             #caso o botao seja apertado, ele soma a velocidade ate parar de apertar 
             if event.type == pygame.KEYDOWN and event.key == pygame.K_RIGHT:
                 self.jogador.speedx = velocidade_x
-                # assets["esquerda"] = False
+                assets["esquerda"] = False #Para o tiro
             elif event.type == pygame.KEYUP and event.key == pygame.K_RIGHT:
                 self.jogador.speedx = 0
             if event.type == pygame.KEYDOWN and event.key == pygame.K_LEFT:
                 self.jogador.speedx = -velocidade_x
-                # assets["esquerda"] = True
+                assets["esquerda"] = True #Para o tiro
             elif event.type == pygame.KEYUP and event.key == pygame.K_LEFT:
                 self.jogador.speedx = 0
             if event.type == pygame.KEYDOWN and event.key == pygame.K_SPACE:
@@ -341,12 +341,12 @@ class Tela1:
             #caso o botao seja apertado, ele soma a velocidade ate parar de apertar 
             if event.type == pygame.KEYDOWN and event.key == pygame.K_RIGHT:
                 self.jogador.speedx = velocidade_x
-                # assets["esquerda"] = False
+                assets["esquerda"] = False #Para o tiro
             elif event.type == pygame.KEYUP and event.key == pygame.K_RIGHT:
                 self.jogador.speedx = 0
             if event.type == pygame.KEYDOWN and event.key == pygame.K_LEFT:
                 self.jogador.speedx = -velocidade_x
-                # assets["esquerda"] = True
+                assets["esquerda"] = True #Para o tiro
             elif event.type == pygame.KEYUP and event.key == pygame.K_LEFT:
                 self.jogador.speedx = 0
             if event.type == pygame.KEYDOWN and event.key == pygame.K_SPACE:
@@ -453,13 +453,13 @@ class Tela1_2:
             #caso o botao seja apertado, ele soma a velocidade ate parar de apertar 
             if event.type == pygame.KEYDOWN and event.key == pygame.K_RIGHT:
                 self.jogador.speedx = velocidade_x
-                # assets["esquerda"] = False
+                assets["esquerda"] = False #Para o tiro
             elif event.type == pygame.KEYUP and event.key == pygame.K_RIGHT:
                 self.jogador.speedx = 0
                 print(self.jogador.speedx)
             if event.type == pygame.KEYDOWN and event.key == pygame.K_LEFT:
                 self.jogador.speedx = -velocidade_x
-                # assets["esquerda"] = True
+                assets["esquerda"] = True #Para o tiro
             elif event.type == pygame.KEYUP and event.key == pygame.K_LEFT:
                 self.jogador.speedx = 0
             if event.type == pygame.KEYDOWN and event.key == pygame.K_SPACE:
@@ -546,12 +546,12 @@ class Tela2:
             #caso o botao seja apertado, ele soma a velocidade ate parar de apertar 
             if event.type == pygame.KEYDOWN and event.key == pygame.K_RIGHT:
                 self.jogador.speedx = velocidade_x
-                # assets["esquerda"] = False
+                assets["esquerda"] = False #Para o tiro 
             elif event.type == pygame.KEYUP and event.key == pygame.K_RIGHT:
                 self.jogador.speedx = 0
             if event.type == pygame.KEYDOWN and event.key == pygame.K_LEFT:
                 self.jogador.speedx = -velocidade_x
-                # assets["esquerda"] = True
+                assets["esquerda"] = True #Para o tiro
             elif event.type == pygame.KEYUP and event.key == pygame.K_LEFT:
                 self.jogador.speedx = 0
             if event.type == pygame.KEYDOWN and event.key == pygame.K_SPACE:
@@ -680,13 +680,13 @@ class Tela3:
             #caso o botao seja apertado, ele soma a velocidade ate parar de apertar 
             if event.type == pygame.KEYDOWN and event.key == pygame.K_RIGHT:
                 self.jogador.speedx = velocidade_x
-                # assets["esquerda"] = False
+                assets["esquerda"] = False #Para o tiro
             elif event.type == pygame.KEYUP and event.key == pygame.K_RIGHT:
                 self.jogador.speedx = 0
                 print(self.jogador.speedx)
             if event.type == pygame.KEYDOWN and event.key == pygame.K_LEFT:
                 self.jogador.speedx = -velocidade_x
-                # assets["esquerda"] = True
+                assets["esquerda"] = True #Para o tiro
             elif event.type == pygame.KEYUP and event.key == pygame.K_LEFT:
                 self.jogador.speedx = 0
             if event.type == pygame.KEYDOWN and event.key == pygame.K_SPACE:
