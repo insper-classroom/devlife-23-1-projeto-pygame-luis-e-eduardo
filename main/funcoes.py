@@ -132,7 +132,7 @@ class TelaInicial:
     def __init__(self, window):
         
         #chamando a musica 
-        musica("musica_MFDOOM.mp3")
+        #musica("musica_MFDOOM.mp3")
         
         fonte_padrao = pygame.font.get_default_font()
         self.fonte = pygame.font.Font(fonte_padrao, 24)
@@ -149,7 +149,7 @@ class TelaInicial:
                 posicao = pygame.mouse.get_pos()
                 if posicao[0] >= (912-200)/2 - 35 and posicao[0] <= 912-(912-200)/2 +32:
                     if posicao[1] >=400 and posicao[1]<=470: #nao pode apertar as teclas de andar nao sei pq kkkk
-                        return Tela1(self.window)
+                        return Tela1_2(self.window)
                         
             elif evento.type == pygame.USEREVENT:#tocando a musica durante o jogo inteiro 
                 pygame.mixer.music.play()
@@ -195,18 +195,18 @@ class Telas():
         
         self.window = window
 
-    def movimenta_monstro(self):
+    def movimenta_monstro(self,lista_limitantes_x):
 
         for monstro in self.lista_de_monstros:    
             num_aleatorio1 = randint(0,1)
-            if 10 < monstro.rect.x < 900:
+            if lista_limitantes_x[0] < monstro.rect.x < lista_limitantes_x[1]:
                 if num_aleatorio1 > 0.5:
                     monstro.rect.x += 10 #direita 
                 else:
                     monstro.rect.x -= 10 #esquerda
-            elif monstro.rect.x >= 900:
+            elif monstro.rect.x >= lista_limitantes_x[1]:
                 monstro.rect.x -= 10 #esquerda
-            elif monstro.rect.x <= 10:
+            elif monstro.rect.x <= lista_limitantes_x[0]:
                 monstro.rect.x += 10 #direita 
 
     def recebe_eventos(self):
@@ -277,7 +277,8 @@ class Telas():
             x = 32*i
             window.blit(self.chao,(x,488))
 
-class Tela1:
+class Tela1: #Tela1: tutorial de movimentacao e pulo
+    
     def __init__(self, window):
 
         #criando o fund0
@@ -319,12 +320,15 @@ class Tela1:
         x = 0
         for i in range(4):
             x += 24
-            Plataform(self.sprites,self.plataforma,530 + x, 370, 'bloco')
+            Plataform(self.sprites,self.plataforma,530 + x, 430, 'bloco')
 
         x = 0
         for i in range(4):
-            x += 24
-            Plataform(self.sprites,self.plataforma,670 + x, 340, 'bloco') 
+            Plataform(self.sprites,self.plataforma,750, 452 - x, 'bloco')
+            x += 25
+        
+        Plataform(self.sprites,self.plataforma,726, 377, 'bloco')
+        Plataform(self.sprites,self.plataforma,774, 377, 'bloco')
 
         Moeda(self.sprites,self.moeda, 200, 440)
      
@@ -409,9 +413,10 @@ class Tela1_2:
         self.aparece_text_box = False 
 
         #gerando os monstros no mapa 
+        self.limita_monstros_x = [350,750]
         self.lista_de_monstros = []
-        for i in range(6):
-            x = randint(427,800)
+        for i in range(8):
+            x = randint(self.limita_monstros_x[0],self.limita_monstros_x[1])
             self.monstro = Monstro(self.sprites,self.monstros, x, 440) 
             self.lista_de_monstros.append(self.monstro) 
     
@@ -436,9 +441,26 @@ class Tela1_2:
         for i in range(10):
             x += 24
             Plataform(self.sprites,self.plataforma,410 + x, 390, 'bloco')
+
+        x = 0
+        for i in range(6):
+            Plataform(self.sprites,self.plataforma,600 + x, 300, 'bloco')
+            x += 24
         
-    def movimenta_monstro(self):
-        Telas.movimenta_monstro(self)
+        x = 0
+        for i in range(6):
+            Plataform(self.sprites,self.plataforma,400 + x, 210, 'bloco')
+            x += 24
+
+        x = 0
+        for i in range(6):
+            Plataform(self.sprites,self.plataforma,180 + x, 260, 'bloco')
+            x += 24
+        
+        x = 0
+        for i in range(3):
+            Plataform(self.sprites,self.plataforma,50 + x, 180, 'bloco')
+            x += 24
 
     def recebe_eventos(self):
 
@@ -477,7 +499,7 @@ class Tela1_2:
                 self.aparece_text_box = False 
 
             if event.type==pygame.KEYDOWN: #movimentacao dos monstros 
-                Telas.movimenta_monstro(self)
+                Telas.movimenta_monstro(self,self.limita_monstros_x)
             #self.aparece_text_box = False 
 
         ultimo_tempo = self.last_updated 
