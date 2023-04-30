@@ -209,7 +209,7 @@ main {
     background-size: cover;
     background-position: center;
 }
-.imagem_moeda{
+.imagem_estrela{
     display: flex;
     align-items: center;
     background: rgba(189, 182, 182, 0.25);

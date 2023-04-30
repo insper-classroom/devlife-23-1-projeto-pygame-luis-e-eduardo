@@ -49,17 +49,17 @@ class Plataform(pygame.sprite.Sprite):
         sprites.add(self)
         self.plataforma.add(self)
 
-class Moeda(pygame.sprite.Sprite):
-    def __init__(self,sprites,moeda,x,y):
-        self.moeda = moeda
+class Estrela(pygame.sprite.Sprite):
+    def __init__(self,sprites,estrela,x,y):
+        self.estrela = estrela
         pygame.sprite.Sprite.__init__(self)
-        img_moeda = pygame.image.load("estrela.png")
-        self.image = pygame.transform.scale(img_moeda, (40,40))
+        img_estrela = pygame.image.load("estrela.png")
+        self.image = pygame.transform.scale(img_estrela, (35,35))
         self.rect = self.image.get_rect()
         self.rect.x = x
         self.rect.y = y
         sprites.add(self)
-        self.moeda.add(self)
+        self.estrela.add(self)
 
 class Monstro(pygame.sprite.Sprite):      
     def __init__(self,sprites,monstros,x,y):
@@ -120,7 +120,7 @@ class GameOver():
                 return None 
             elif evento.type == pygame.KEYDOWN and evento.key == pygame.K_SPACE:
                 assets["vidas"] = 5
-                assets["moeda"] = 0
+                assets["estrela"] = 0
                 return Tela1(self.window)
         return self
 
@@ -149,7 +149,7 @@ class TelaInicial:
                 posicao = pygame.mouse.get_pos()
                 if posicao[0] >= (912-200)/2 - 35 and posicao[0] <= 912-(912-200)/2 +32:
                     if posicao[1] >=400 and posicao[1]<=470: #nao pode apertar as teclas de andar nao sei pq kkkk
-                        return Tela1_0(self.window)
+                        return Tela1_2(self.window)
                         
             elif evento.type == pygame.USEREVENT:#tocando a musica durante o jogo inteiro 
                 pygame.mixer.music.play()
@@ -189,10 +189,12 @@ class Telas():
         self.chao = pygame.transform.scale(chao,(50,15))
         self.plataforma = pygame.sprite.Group()
         self.monstros = pygame.sprite.Group()
-        self.moeda = pygame.sprite.Group()
-        self.jogador = Jogador(self.plataforma,self.monstros,self.moeda)
+        self.estrela = pygame.sprite.Group()
+        self.jogador = Jogador(self.plataforma,self.monstros,self.estrela)
         self.sprites.add(self.jogador)
         
+        assets["estrela"] = 0 #iniciando as coroas com 0 pem toda tela nova 
+
         self.window = window
 
     def movimenta_monstro(self,lista_limitantes_x):
@@ -238,7 +240,7 @@ class Telas():
                 self.jogador.jump()
             if event.type==pygame.KEYDOWN and event.key == pygame.K_e:
                 Tiro(self.sprites, self.monstros, self.jogador.rect.x, self.jogador.rect.y+25)
-            if self.jogador.rect.x > 850 and assets["moeda"] == 1:
+            if self.jogador.rect.x > 850 and assets["estrela"] == 1:
                 return Tela2(self.window)
             
             if 100 > self.jogador.rect.x < 300:
@@ -281,7 +283,7 @@ class Telas():
             x = 32*i
             window.blit(self.chao,(x,488))
 
-class Tela1_0: #Tela1: tutorial de movimentacao e pulo
+class Tela1_0: #Tela1.0: tutorial de mudança de mapa e coleta de estrelas 
     
     def __init__(self, window):
 
@@ -311,7 +313,7 @@ class Tela1_0: #Tela1: tutorial de movimentacao e pulo
             x = 32*i
             Plataform(self.sprites,self.plataforma,x, 480, 'grass')
 
-        Moeda(self.sprites,self.moeda, 700, 440)
+        Estrela(self.sprites,self.estrela, 700, 440)
      
     def recebe_eventos(self):
 
@@ -338,7 +340,7 @@ class Tela1_0: #Tela1: tutorial de movimentacao e pulo
             
             if event.type == pygame.KEYDOWN and event.key == pygame.K_SPACE:
                 self.jogador.jump()
-            if self.jogador.rect.x > 850 and assets["moeda"] == 1:
+            if self.jogador.rect.x > 850:
                 return Tela1(self.window)
             if assets["vidas"] <= 0:
                 return GameOver(self.window)
@@ -428,7 +430,7 @@ class Tela1: #Tela1: tutorial de movimentacao e pulo
         Plataform(self.sprites,self.plataforma,726, 377, 'bloco')
         Plataform(self.sprites,self.plataforma,774, 377, 'bloco')
 
-        Moeda(self.sprites,self.moeda, 200, 440)
+        Estrela(self.sprites,self.estrela, 760, 337)
      
     def recebe_eventos(self):
 
@@ -453,7 +455,7 @@ class Tela1: #Tela1: tutorial de movimentacao e pulo
                 self.jogador.speedx = 0
             if event.type == pygame.KEYDOWN and event.key == pygame.K_SPACE:
                 self.jogador.jump()
-            if self.jogador.rect.x > 850 and assets["moeda"] == 1:
+            if self.jogador.rect.x > 850 and assets["estrela"] == 1:
                 return Tela1_2(self.window)
             if assets["vidas"] <= 0:
                 return GameOver(self.window)
@@ -560,6 +562,8 @@ class Tela1_2:
             Plataform(self.sprites,self.plataforma,50 + x, 180, 'bloco')
             x += 24
 
+        Estrela(self.sprites,self.estrela, 84, 140)
+
     def recebe_eventos(self):
 
         velocidade_x = 3
@@ -586,7 +590,109 @@ class Tela1_2:
                 self.jogador.jump()
             if event.type==pygame.KEYDOWN and event.key == pygame.K_e:
                 Tiro(self.sprites, self.monstros, self.jogador.rect.x, self.jogador.rect.y+25)
-            if self.jogador.rect.x > 850 and assets["moeda"] == 1:
+            if self.jogador.rect.x > 850 and assets["estrela"] == 1:
+                return Tela2_0(self.window)
+            if assets["vidas"] <= 0:
+                return GameOver(self.window)
+            
+            if 100 > self.jogador.rect.x < 300:
+                self.aparece_text_box = True  
+            if 100 < self.jogador.rect.x > 300:
+                self.aparece_text_box = False 
+
+            if event.type==pygame.KEYDOWN: #movimentacao dos monstros 
+                Telas.movimenta_monstro(self,self.limita_monstros_x)
+            #self.aparece_text_box = False 
+
+        ultimo_tempo = self.last_updated 
+        tempo = pygame.time.get_ticks()
+        delta_t = (tempo-ultimo_tempo)/1000
+        self.last_updated = tempo
+        self.sprites.update(delta_t)
+
+        clock.tick(120)
+
+        return self
+
+    def desenha(self,window):
+                
+        #pre-sets de desenho de todas as telas
+        Telas.desenha(self,window)
+
+        #desenhando a vida do usuario 
+        for i in range(assets["vidas"]):
+            window.blit(self.coracao,(i*20,0))
+        
+        #desenhando o zoro npc, para instrucoes 
+        window.blit(self.zoro,(200,408))
+        #desenhando a fala do zoro caso o jogador esteja perto dele 
+        if self.aparece_text_box:
+            window.blit(self.text_box1,(62,275))
+
+        self.sprites.draw(self.window)
+
+class Tela2_0:
+    
+    def __init__(self, window):
+        #criando o fund0
+        fundo = pygame.image.load(assets["fundo1"]) #imagem gerdada pela AI "https://www.scenario.com/""
+        self.fundo = pygame.transform.scale(fundo, (912,512))
+
+        #pre-stes de todas as telas 
+        Telas.__init__(self,window)
+
+        #gerando as plataformas dos mapas 
+        self.gera_mapa()
+
+        #npc para dar as instrucoes do "tutorial"
+        zoro = pygame.image.load("zoro.png")
+        self.zoro = pygame.transform.smoothscale(zoro,(70,80))
+        text_box1 = pygame.image.load("text_box2.png")
+        self.text_box1 = pygame.transform.smoothscale(text_box1,(230,230))
+        self.aparece_text_box = False 
+
+        #gerando os monstros no mapa 
+        #self.limita_monstros_x = [350,750]
+        #self.lista_de_monstros = []
+        #for i in range(8):
+            #x = randint(self.limita_monstros_x[0],self.limita_monstros_x[1])
+            #self.monstro = Monstro(self.sprites,self.monstros, x, 440) 
+            #self.lista_de_monstros.append(self.monstro) 
+    
+    def gera_mapa(self):
+        
+        #criando o chao
+        for i in range(30):
+            x = 32*i
+            Plataform(self.sprites,self.plataforma,x, 480, 'grass')
+
+    def recebe_eventos(self):
+
+        velocidade_x = 3
+
+        clock = pygame.time.Clock()
+        
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                return None  # Devolve None para sair
+            
+            #caso o botao seja apertado, ele soma a velocidade ate parar de apertar 
+            if event.type == pygame.KEYDOWN and event.key == pygame.K_RIGHT:
+                self.jogador.speedx = velocidade_x
+                assets["esquerda"] = False #Para o tiro
+            elif event.type == pygame.KEYUP and event.key == pygame.K_RIGHT:
+                self.jogador.speedx = 0
+                print(self.jogador.speedx)
+            if event.type == pygame.KEYDOWN and event.key == pygame.K_LEFT:
+                self.jogador.speedx = -velocidade_x
+                assets["esquerda"] = True #Para o tiro
+            elif event.type == pygame.KEYUP and event.key == pygame.K_LEFT:
+                self.jogador.speedx = 0
+            if event.type == pygame.KEYDOWN and event.key == pygame.K_SPACE:
+                self.jogador.jump()
+            if event.type==pygame.KEYDOWN and event.key == pygame.K_e:
+                Tiro(self.sprites, self.monstros, self.jogador.rect.x, self.jogador.rect.y+25)
+            if self.jogador.rect.x > 850 and assets["estrela"] == 1:
                 return Tela2(self.window)
             if assets["vidas"] <= 0:
                 return GameOver(self.window)
@@ -627,140 +733,6 @@ class Tela1_2:
 
         self.sprites.draw(self.window)
 
-class Tela2:
-    
-    def __init__(self, window):
-        
-        self.sprites = pygame.sprite.Group()
-        self.plataform = pygame.sprite.Group()
-        fonte_padrao = pygame.font.get_default_font()
-        self.fonte = pygame.font.Font(fonte_padrao, 24)
-        self.azul = (0,0,255)
-        self.vermelho = (255, 0, 0)
-        self.verde = (0,255,0)
-        
-        self.vidas = 3
-
-        self.plataforma = pygame.sprite.Group()
-        self.monstros = pygame.sprite.Group()
-        self.moeda = pygame.sprite.Group()
-        self.jogador = Jogador(self.plataforma,self.monstros,self.moeda)
-        self.sprites.add(self.jogador)
-
-        self.window = window
-
-        self.gera_mapa() 
-
-        self.contador = 60
-        self.contagem = 0
-        
-    def recebe_eventos(self):
-        
-        velocidade_x = 3
-
-        clock = pygame.time.Clock()
-        
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-                return None  # Devolve None para sair
-            #caso o botao seja apertado, ele soma a velocidade ate parar de apertar 
-            if event.type == pygame.KEYDOWN and event.key == pygame.K_RIGHT:
-                self.jogador.speedx = velocidade_x
-                assets["esquerda"] = False #Para o tiro 
-            elif event.type == pygame.KEYUP and event.key == pygame.K_RIGHT:
-                self.jogador.speedx = 0
-            if event.type == pygame.KEYDOWN and event.key == pygame.K_LEFT:
-                self.jogador.speedx = -velocidade_x
-                assets["esquerda"] = True #Para o tiro
-            elif event.type == pygame.KEYUP and event.key == pygame.K_LEFT:
-                self.jogador.speedx = 0
-            if event.type == pygame.KEYDOWN and event.key == pygame.K_SPACE:
-                self.jogador.jump()
-            if event.type==pygame.KEYDOWN and event.key == pygame.K_e:
-                Tiro(self.sprites, self.monstros, self.jogador.rect.x, self.jogador.rect.y+25)
-            if self.jogador.rect.x>=850 and assets["moeda"] == 5:
-                return Tela3(self.window)
-            if assets["vidas"] <= 0:
-                return GameOver(self.window)
-            #movimentacao dos monstros 
-            if event.type==pygame.KEYDOWN:
-                Telas.movimenta_monstro(self)
-            
-        
-        ultimo_tempo = self.last_updated 
-        tempo = pygame.time.get_ticks()
-        delta_t = (tempo-ultimo_tempo)/1000
-        self.last_updated = tempo
-        self.sprites.update(delta_t)
-        clock.tick(120)
-
-        return self
-
-    def desenha(self, window):
-        window.blit(self.fundo2,(0,0)) #colocando o fundo do jogo
-        for i in range(assets["vidas"]):
-            window.blit(self.coracao,(i*15,0))
-        window.blit(self.chao,(0,490))
-        window.blit(self.chao,(200,490))
-        window.blit(self.chao,(400,490))
-        window.blit(self.chao,(600,490))
-        window.blit(self.chao,(800,490))
-
-        numero = str(self.contador)
-        img_mensagem = self.fonte.render(numero, True,(255,255,255))
-        mensagem = pygame.transform.scale(img_mensagem, (30,30))
-        window.blit(mensagem,(850,3))
-        self.contagem+=1
-        if self.contagem == 120:
-            self.contador-=1
-            self.contagem = 0
-
-        img_mensagem = self.fonte.render("Tempo restante:", True,(255,255,255))
-        mensagem = pygame.transform.scale(img_mensagem, (280,25))
-        window.blit(mensagem,(850-295, 5))
-    
-        self.sprites.draw(self.window)
-    
-    def gera_mapa(self):
-        coracao = pygame.image.load("coracao.png")
-        self.coracao = pygame.transform.scale(coracao, (15,15))
-
-        self.last_updated = 0
-
-        fundo = pygame.image.load("fundo2.png") #imagem gerdada pela AI "https://www.scenario.com/""
-        self.fundo2 = pygame.transform.scale(fundo, (1200,512))
-
-        chao = pygame.image.load("terra.png")
-        self.chao = pygame.transform.scale(chao,(200,130))
-        
-        Plataform(self.sprites,self.plataforma,350,335,'grass')
-        Plataform(self.sprites,self.plataforma,200,400,'grass')
-        Plataform(self.sprites,self.plataforma,500,280,'grass')
-        Plataform(self.sprites,self.plataforma,680,210,'grass')
-        
-        Plataform(self.sprites,self.plataforma,650,210,'grass')
-        Plataform(self.sprites,self.plataforma,700,210,'grass')
-        Plataform(self.sprites,self.plataforma,730,210,'grass')
-        Plataform(self.sprites,self.plataforma,750,210,'grass')
-
-        Plataform(self.sprites,self.plataforma,650,300,'grass')
-        Plataform(self.sprites,self.plataforma,700,300,'grass')
-
-        for i in range(30):
-            x = 32*i
-            Plataform(self.sprites,self.plataforma,x, 480,'grass')
-
-        Moeda(self.sprites,self.moeda, 350, 290)
-        Moeda(self.sprites,self.moeda, 500, 240)
-        Moeda(self.sprites,self.moeda, 680, 260)
-        Moeda(self.sprites,self.moeda, 780, 140)
-        
-        self.lista_de_monstros = []
-        for i in range(3):
-            x = randint(0,912)
-            self.monstro = Monstro(self.sprites,self.monstros, x, 450) 
-            self.lista_de_monstros.append(self.monstro)
-
 class Tela3:
     
     def __init__(self, window):
@@ -777,8 +749,8 @@ class Tela3:
 
         self.plataforma = pygame.sprite.Group()
         self.monstros = pygame.sprite.Group()
-        self.moeda = pygame.sprite.Group()
-        self.jogador = Jogador(self.plataforma,self.monstros,self.moeda)
+        self.estrela = pygame.sprite.Group()
+        self.jogador = Jogador(self.plataforma,self.monstros,self.estrela)
         self.sprites.add(self.jogador)
 
         self.window = window
@@ -813,7 +785,7 @@ class Tela3:
                 self.jogador.jump()
             if event.type==pygame.KEYDOWN and event.key == pygame.K_e:
                 Tiro(self.sprites, self.monstros, self.jogador.rect.x, self.jogador.rect.y+25)
-            if self.jogador.rect.x>=850 and assets["moeda"] == 10:
+            if self.jogador.rect.x>=850 and assets["estrela"] == 10:
                 return Tela4(self.window)
             #movimentacao dos monstros 
             if assets["vidas"] <= 0:
@@ -883,11 +855,11 @@ class Tela3:
             x = 32*i
             Plataform(self.sprites,self.plataforma,x, 480,'grass')
 
-        Moeda(self.sprites,self.moeda, 220, 290)
-        Moeda(self.sprites,self.moeda, 310, 190)
-        Moeda(self.sprites,self.moeda, 500, 80)
-        Moeda(self.sprites,self.moeda, 680, 110)
-        Moeda(self.sprites,self.moeda, 640, 220)
+        Estrela(self.sprites,self.Estrela, 220, 290)
+        Estrela(self.sprites,self.Estrela, 310, 190)
+        Estrela(self.sprites,self.Estrela, 500, 80)
+        Estrela(self.sprites,self.Estrela, 680, 110)
+        Estrela(self.sprites,self.Estrela, 640, 220)
         
         
         
@@ -899,14 +871,14 @@ class Tela3:
 
 class Jogador(pygame.sprite.Sprite):
     
-    def __init__(self,chao,monstros,moeda):
+    def __init__(self,chao,monstros,estrela):
 
         pygame.init() 
         pygame.sprite.Sprite.__init__(self)
 
 
         self.monstros = monstros
-        self.moeda = moeda
+        self.estrela = estrela
 
         self.mario = pygame.image.load("personagem_principal.png")
         self.image = pygame.transform.scale(self.mario, (50,50))
@@ -991,9 +963,9 @@ class Jogador(pygame.sprite.Sprite):
         for cada_colisao in collisions:
             assets["vidas"]-=1
 
-        collisions = pygame.sprite.spritecollide(self, self.moeda, True)
+        collisions = pygame.sprite.spritecollide(self, self.estrela, True)
         for cada_colisao in collisions:
-            assets["moeda"] +=1
+            assets["estrela"] += 1
 
         self.elapsed_ticks += delta_t
         if self.speedx != 0:
