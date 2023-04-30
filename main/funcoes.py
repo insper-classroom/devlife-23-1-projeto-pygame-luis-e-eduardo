@@ -53,7 +53,7 @@ class Moeda(pygame.sprite.Sprite):
     def __init__(self,sprites,moeda,x,y):
         self.moeda = moeda
         pygame.sprite.Sprite.__init__(self)
-        img_moeda = pygame.image.load("moeda-removebg-preview.png")
+        img_moeda = pygame.image.load("estrela.png")
         self.image = pygame.transform.scale(img_moeda, (40,40))
         self.rect = self.image.get_rect()
         self.rect.x = x
@@ -149,7 +149,7 @@ class TelaInicial:
                 posicao = pygame.mouse.get_pos()
                 if posicao[0] >= (912-200)/2 - 35 and posicao[0] <= 912-(912-200)/2 +32:
                     if posicao[1] >=400 and posicao[1]<=470: #nao pode apertar as teclas de andar nao sei pq kkkk
-                        return Tela1(self.window)
+                        return Tela1_0(self.window)
                         
             elif evento.type == pygame.USEREVENT:#tocando a musica durante o jogo inteiro 
                 pygame.mixer.music.play()
@@ -225,11 +225,15 @@ class Telas():
                 assets["esquerda"] = False #Para o tiro
             elif event.type == pygame.KEYUP and event.key == pygame.K_RIGHT:
                 self.jogador.speedx = 0
+                #self.jogador.speedx =  - velocidade_x
+
             if event.type == pygame.KEYDOWN and event.key == pygame.K_LEFT:
                 self.jogador.speedx = -velocidade_x
                 assets["esquerda"] = True #Para o tiro
             elif event.type == pygame.KEYUP and event.key == pygame.K_LEFT:
                 self.jogador.speedx = 0
+                #self.jogador.speedx = velocidade_x
+            
             if event.type == pygame.KEYDOWN and event.key == pygame.K_SPACE:
                 self.jogador.jump()
             if event.type==pygame.KEYDOWN and event.key == pygame.K_e:
@@ -276,6 +280,100 @@ class Telas():
         for i in range(30):
             x = 32*i
             window.blit(self.chao,(x,488))
+
+class Tela1_0: #Tela1: tutorial de movimentacao e pulo
+    
+    def __init__(self, window):
+
+        #criando o fund0
+        fundo = pygame.image.load(assets["fundo1"]) #imagem gerdada pela AI "https://www.scenario.com/""
+        self.fundo = pygame.transform.scale(fundo, (912,512))
+
+        #pre-stes de todas as telas 
+        Telas.__init__(self,window)
+
+        #gerando as plataformas dos mapas 
+        self.gera_mapa()
+
+        #npc para dar as instrucoes do "tutorial"
+        zoro = pygame.image.load("zoro.png")
+        self.zoro = pygame.transform.smoothscale(zoro,(70,80))
+        text_box3 = pygame.image.load("text_box3.png")
+        self.text_box1 = pygame.transform.smoothscale(text_box3,(230,230))
+        self.aparece_text_box = False 
+        self.jogador.speedx = 0
+
+
+    def gera_mapa(self):
+        
+        #criando o chao
+        for i in range(30):
+            x = 32*i
+            Plataform(self.sprites,self.plataforma,x, 480, 'grass')
+
+        Moeda(self.sprites,self.moeda, 700, 440)
+     
+    def recebe_eventos(self):
+
+        velocidade_x = 3
+
+        clock = pygame.time.Clock()
+        
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                return None  # Devolve None para sair
+            
+            #caso o botao seja apertado, ele soma a velocidade ate parar de apertar 
+            if event.type == pygame.KEYDOWN and event.key == pygame.K_RIGHT:
+                self.jogador.speedx = velocidade_x
+                assets["esquerda"] = False #Para o tiro
+            if event.type == pygame.KEYUP and event.key == pygame.K_RIGHT:
+                self.jogador.speedx = 0
+            
+            if event.type == pygame.KEYDOWN and event.key == pygame.K_LEFT:
+                self.jogador.speedx = -velocidade_x
+                assets["esquerda"] = True #Para o tiro
+            if event.type == pygame.KEYUP and event.key == pygame.K_LEFT:
+                self.jogador.speedx = 0
+            
+            if event.type == pygame.KEYDOWN and event.key == pygame.K_SPACE:
+                self.jogador.jump()
+            if self.jogador.rect.x > 850 and assets["moeda"] == 1:
+                return Tela1(self.window)
+            if assets["vidas"] <= 0:
+                return GameOver(self.window)
+            
+            if 100 > self.jogador.rect.x < 300:
+                self.aparece_text_box = True  
+            if 100 < self.jogador.rect.x > 300:
+                self.aparece_text_box = False 
+
+        ultimo_tempo = self.last_updated 
+        tempo = pygame.time.get_ticks()
+        delta_t = (tempo-ultimo_tempo)/1000
+        self.last_updated = tempo
+        self.sprites.update(delta_t)
+
+        clock.tick(120)
+
+        return self
+
+    def desenha(self, window):
+        
+        #pre-sets de desenho de todas as telas
+        Telas.desenha(self,window)
+
+        #desenhando a vida do usuario 
+        for i in range(assets["vidas"]):
+            window.blit(self.coracao,(i*20,0))
+        
+        #desenhando o zoro npc, para instrucoes 
+        window.blit(self.zoro,(200,408))
+        #desenhando a fala do zoro caso o jogador esteja perto dele 
+        if self.aparece_text_box:
+            window.blit(self.text_box1,(62,275))
+
+        self.sprites.draw(self.window)
 
 class Tela1: #Tela1: tutorial de movimentacao e pulo
     
