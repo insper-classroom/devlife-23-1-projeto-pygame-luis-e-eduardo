@@ -223,58 +223,6 @@ class Telas():
             elif monstro.rect.x <= lista_limitantes_x[0]:
                 monstro.rect.x += 10 #direita 
 
-    def recebe_eventos(self):
-        
-        velocidade_x = 3
-
-        clock = pygame.time.Clock()
-        
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-                return None  # Devolve None para sair
-            
-            #caso o botao seja apertado, ele soma a velocidade ate parar de apertar 
-            if event.type == pygame.KEYDOWN and event.key == pygame.K_RIGHT:
-                self.jogador.speedx = velocidade_x
-                assets["esquerda"] = False #Para o tiro
-            elif event.type == pygame.KEYUP and event.key == pygame.K_RIGHT:
-                self.jogador.speedx = 0
-                #self.jogador.speedx =  - velocidade_x
-
-            if event.type == pygame.KEYDOWN and event.key == pygame.K_LEFT:
-                self.jogador.speedx = -velocidade_x
-                assets["esquerda"] = True #Para o tiro
-            elif event.type == pygame.KEYUP and event.key == pygame.K_LEFT:
-                self.jogador.speedx = 0
-                #self.jogador.speedx = velocidade_x
-            
-            if event.type == pygame.KEYDOWN and event.key == pygame.K_SPACE:
-                self.jogador.jump()
-            if event.type==pygame.KEYDOWN and event.key == pygame.K_e:
-                Tiro(self.sprites, self.monstros, self.jogador.rect.x, self.jogador.rect.y+25)
-            if self.jogador.rect.x > 850 and assets["estrela"] == 1:
-                return Tela2(self.window)
-            
-            if 100 > self.jogador.rect.x < 300:
-                self.aparece_text_box = True  
-            if 100 < self.jogador.rect.x > 300:
-                self.aparece_text_box = False 
-
-            if event.type==pygame.KEYDOWN: #movimentacao dos monstros 
-                Telas.movimenta_monstro(self)
-            #self.aparece_text_box = False 
-
-        
-        ultimo_tempo = self.last_updated 
-        tempo = pygame.time.get_ticks()
-        delta_t = (tempo-ultimo_tempo)/1000
-        self.last_updated = tempo
-        self.sprites.update(delta_t)
-
-        clock.tick(120)
-
-        return self
-
     def desenha(self,window):
         
         #colocando o fundo do jogo 
@@ -660,11 +608,9 @@ class Tela2_0:
         self.limita_monstros_x = [565,650]
         self.lista_de_monstros = []
         for i in range(2):
-            x = randint(self.limita_monstros_x[0],self.limita_monstros_x[1])
-            self.monstro = Monstro(self.sprites,self.monstros, x, 150) 
+            #x = randint(self.limita_monstros_x[0],self.limita_monstros_x[1])
+            self.monstro = Monstro(self.sprites,self.monstros, 600, 150) 
             self.lista_de_monstros.append(self.monstro)
-        
-
     
     def gera_mapa(self):
         
