@@ -89,7 +89,27 @@ class Monstro(pygame.sprite.Sprite):
     def __init__(self,sprites,monstros,x,y):
         self.monstros = monstros
         pygame.sprite.Sprite.__init__(self)
-        img_monstro = pygame.image.load(assets["monstro_img"])
+        if assets["posicao_monstro"] == 'esquerda':
+            img_monstro = pygame.image.load(assets["monstro_img"])  
+        elif assets["posicao_monstro"] == 'direita':
+            img_monstro1 = pygame.image.load(assets["monstro_img"])
+            img_monstro = pygame.transform.flip(img_monstro1, True, False)
+        self.image = pygame.transform.scale(img_monstro, (40,40))
+        self.rect = self.image.get_rect()
+        self.rect.x = x
+        self.rect.y = y
+        sprites.add(self)
+        self.monstros.add(self)
+
+class Planta(pygame.sprite.Sprite):      
+    def __init__(self,sprites,monstros,x,y):
+        self.monstros = monstros
+        pygame.sprite.Sprite.__init__(self)
+        if assets["posicao_monstro"] == 'esquerda':
+            img_monstro = pygame.image.load(assets["monstro_img"])  
+        elif assets["posicao_monstro"] == 'direita':
+            img_monstro1 = pygame.image.load(assets["monstro_img"])
+            img_monstro = pygame.transform.flip(img_monstro1, True, False)
         self.image = pygame.transform.scale(img_monstro, (40,40))
         self.rect = self.image.get_rect()
         self.rect.x = x
@@ -98,7 +118,7 @@ class Monstro(pygame.sprite.Sprite):
         self.monstros.add(self)
 
 class Tiro(pygame.sprite.Sprite):
-    def __init__(self, sprites,monstros, x, y):
+    def __init__(self, sprites,monstros,plataforma, x, y):
         pygame.sprite.Sprite.__init__(self)
 
         img_laser = pygame.image.load('bola.png')
@@ -115,6 +135,7 @@ class Tiro(pygame.sprite.Sprite):
 
         self.flag_tiro = False
         self.monstros = monstros
+        self.plataforma = plataforma
         sprites.add(self) 
         self.sprites = sprites 
     
@@ -126,7 +147,10 @@ class Tiro(pygame.sprite.Sprite):
             self.sprites.remove(self)
         if self.rect.x > 912 or self.rect.x < 0:
             self.kill()
-
+        lista_plataformas = pygame.sprite.spritecollide(self, self.plataforma,False)
+        for tiro in lista_plataformas:   
+            self.kill()
+            
 class GameOver():
     def __init__(self, window):
 
@@ -229,12 +253,16 @@ class Telas():
             if lista_limitantes_x[0] < monstro.rect.x < lista_limitantes_x[1]:
                 if num_aleatorio1 > 0.5:
                     monstro.rect.x += 10 #direita 
+                    assets["posicao_monstro"] = 'direita'
                 else:
                     monstro.rect.x -= 10 #esquerda
+                    assets["posicao_monstro"] = 'esquerda'
             elif monstro.rect.x >= lista_limitantes_x[1]:
                 monstro.rect.x -= 10 #esquerda
+                assets["posicao_monstro"] = 'esquerda'
             elif monstro.rect.x <= lista_limitantes_x[0]:
                 monstro.rect.x += 10 #direita 
+                assets["posicao_monstro"] = 'direita'
 
     def desenha(self,window):
         
@@ -684,7 +712,7 @@ class Tela2_0:
             if event.type == pygame.KEYDOWN and event.key == pygame.K_SPACE:
                 self.jogador.jump()
             if event.type==pygame.KEYDOWN and event.key == pygame.K_e:
-                Tiro(self.sprites, self.monstros, self.jogador.rect.x, self.jogador.rect.y+25)
+                Tiro(self.sprites, self.monstros,self.plataforma, self.jogador.rect.x, self.jogador.rect.y+25)
             if self.jogador.rect.x > 850 and assets["estrela"] == 3:
                 return Tela2_1(self.window)
             if assets["vidas"] <= 0:
@@ -748,10 +776,11 @@ class Tela2_1:
             x = 32*i
             Plataform(self.sprites,self.plataforma,x, 480, 'grass')
 
-        # Cria as plataformas superiores
+        #criando as plataformas e as estrelas 
         gera_plataforma(self,40, 'x', -50, 450)
         Estrela(self.sprites,self.estrela, 10, 415)
         gera_plataforma(self,25, 'x', -50, 320)
+        Estrela(self.sprites,self.estrela, 10, 285)
         gera_plataforma(self,15, 'x', -50, 190)
 
         gera_plataforma(self,4, 'x', 610, 220)
@@ -785,7 +814,7 @@ class Tela2_1:
             if event.type == pygame.KEYDOWN and event.key == pygame.K_SPACE:
                 self.jogador.jump()
             if event.type==pygame.KEYDOWN and event.key == pygame.K_e:
-                Tiro(self.sprites, self.monstros, self.jogador.rect.x, self.jogador.rect.y+25)
+                Tiro(self.sprites, self.monstros, self.plataforma,self.jogador.rect.x, self.jogador.rect.y+25)
             if self.jogador.rect.x > 850 and assets["estrela"] == 3:
                 return Tela3(self.window)
             if assets["vidas"] <= 0:
@@ -820,8 +849,6 @@ class Tela2_1:
             window.blit(self.img_coracao,(i*20,0))
 
         self.sprites.draw(self.window)
-
-
 
 class Jogador(pygame.sprite.Sprite):
     
