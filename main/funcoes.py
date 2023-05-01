@@ -78,7 +78,7 @@ class Coracao(pygame.sprite.Sprite):
         self.coracao = coracao
         pygame.sprite.Sprite.__init__(self)
         img_coracao = pygame.image.load("coracao.png")
-        self.image = pygame.transform.scale(img_coracao, (35,35))
+        self.image = pygame.transform.scale(img_coracao, (25,25))
         self.rect = self.image.get_rect()
         self.rect.x = x
         self.rect.y = y
@@ -173,7 +173,7 @@ class TelaInicial:
                 posicao = pygame.mouse.get_pos()
                 if posicao[0] >= (912-200)/2 - 35 and posicao[0] <= 912-(912-200)/2 +32:
                     if posicao[1] >=400 and posicao[1]<=470: #nao pode apertar as teclas de andar nao sei pq kkkk
-                        return Tela2_0(self.window)
+                        return Tela2_1(self.window)
                         
             elif evento.type == pygame.USEREVENT:#tocando a musica durante o jogo inteiro 
                 pygame.mixer.music.play()
@@ -757,6 +757,8 @@ class Tela2_1:
         gera_plataforma(self,4, 'x', 610, 220)
         Estrela(self.sprites,self.estrela, 655, 185)
         gera_plataforma(self,2, 'x', 630, 380)
+
+        Coracao(self.sprites, self.coracao, 830, 390)
     
     def recebe_eventos(self):
 
