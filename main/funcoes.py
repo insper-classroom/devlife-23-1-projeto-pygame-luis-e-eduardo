@@ -141,15 +141,15 @@ class Tiro(pygame.sprite.Sprite):
     
     def update(self, delta_t):
         
-        self.rect.x = (self.rect.x + self.vel_x_laser*delta_t)
-        lista = pygame.sprite.spritecollide(self, self.monstros,True)
-        for tiro in lista:
-            self.sprites.remove(self)
-        if self.rect.x > 912 or self.rect.x < 0:
-            self.kill()
-        lista_plataformas = pygame.sprite.spritecollide(self, self.plataforma,False)
-        for tiro in lista_plataformas:   
-            self.kill()
+            self.rect.x = (self.rect.x + self.vel_x_laser*delta_t)
+            lista = pygame.sprite.spritecollide(self, self.monstros,True)
+            for tiro in lista:
+                self.sprites.remove(self)
+            if self.rect.x > 912 or self.rect.x < 0:
+                self.kill()
+            lista_plataformas = pygame.sprite.spritecollide(self, self.plataforma,False)
+            for tiro in lista_plataformas:   
+                self.kill()
             
 class GameOver():
     def __init__(self, window):
@@ -593,7 +593,10 @@ class Tela1_2:
             if event.type == pygame.KEYDOWN and event.key == pygame.K_SPACE:
                 self.jogador.jump()
             if event.type==pygame.KEYDOWN and event.key == pygame.K_e:
-                Tiro(self.sprites, self.monstros, self.jogador.rect.x, self.jogador.rect.y+25)
+                assets["tiro"] -= 1
+                if assets["tiro"] >= 0:
+                    Tiro(self.sprites, self.monstros, self.jogador.rect.x, self.jogador.rect.y+25)
+
             if self.jogador.rect.x > 850 and assets["estrela"] == 1:
                 return Tela2_0(self.window)
             if assets["vidas"] <= 0:
@@ -712,7 +715,9 @@ class Tela2_0:
             if event.type == pygame.KEYDOWN and event.key == pygame.K_SPACE:
                 self.jogador.jump()
             if event.type==pygame.KEYDOWN and event.key == pygame.K_e:
-                Tiro(self.sprites, self.monstros,self.plataforma, self.jogador.rect.x, self.jogador.rect.y+25)
+                assets["tiro"] -= 1
+                if assets["tiro"] >= 0:
+                    Tiro(self.sprites, self.monstros,self.plataforma, self.jogador.rect.x, self.jogador.rect.y+25)
             if self.jogador.rect.x > 850 and assets["estrela"] == 3:
                 return Tela2_1(self.window)
             if assets["vidas"] <= 0:
@@ -814,7 +819,9 @@ class Tela2_1:
             if event.type == pygame.KEYDOWN and event.key == pygame.K_SPACE:
                 self.jogador.jump()
             if event.type==pygame.KEYDOWN and event.key == pygame.K_e:
-                Tiro(self.sprites, self.monstros, self.plataforma,self.jogador.rect.x, self.jogador.rect.y+25)
+                assets["tiro"] -= 1
+                if assets["tiro"] >= 0:
+                    Tiro(self.sprites, self.monstros, self.plataforma,self.jogador.rect.x, self.jogador.rect.y+25)
             if self.jogador.rect.x > 850 and assets["estrela"] == 3:
                 return Tela3(self.window)
             if assets["vidas"] <= 0:
