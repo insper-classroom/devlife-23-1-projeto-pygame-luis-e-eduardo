@@ -5,6 +5,18 @@ from assets import *
 #A função load_spritesheet server para "recortar um png com os frames do movimento do jogador e nós pegamos essa função do snippets do github"
 #Para fazer o pulo do jogador, nos tambem nos baseamos no algoritimo do snippets
 
+def gera_plataforma(self,quantidade_blocos,eixo,inicio,outro_eixo):
+        if eixo == 'x':   
+            x = 0
+            for i in range(quantidade_blocos):
+                Plataform(self.sprites,self.plataforma,inicio + x, outro_eixo, 'bloco')
+                x += 24 
+        if eixo == 'y':
+            x = 0
+            for i in range(quantidade_blocos):
+                Plataform(self.sprites,self.plataforma,outro_eixo, inicio - x, 'bloco')
+                x += 24 
+
 def load_spritesheet(spritesheet, rows, columns):
     # Calcula a largura e altura de cada sprite.
     sprite_width = spritesheet.get_width() // columns
@@ -149,7 +161,7 @@ class TelaInicial:
                 posicao = pygame.mouse.get_pos()
                 if posicao[0] >= (912-200)/2 - 35 and posicao[0] <= 912-(912-200)/2 +32:
                     if posicao[1] >=400 and posicao[1]<=470: #nao pode apertar as teclas de andar nao sei pq kkkk
-                        return Tela1_2(self.window)
+                        return Tela2_0(self.window)
                         
             elif evento.type == pygame.USEREVENT:#tocando a musica durante o jogo inteiro 
                 pygame.mixer.music.play()
@@ -635,7 +647,7 @@ class Tela2_0:
     
     def __init__(self, window):
         #criando o fund0
-        fundo = pygame.image.load(assets["fundo1"]) #imagem gerdada pela AI "https://www.scenario.com/""
+        fundo = pygame.image.load(assets["fundo4"]) #imagem gerdada pela AI "https://www.scenario.com/""
         self.fundo = pygame.transform.scale(fundo, (912,512))
 
         #pre-stes de todas as telas 
@@ -644,20 +656,15 @@ class Tela2_0:
         #gerando as plataformas dos mapas 
         self.gera_mapa()
 
-        #npc para dar as instrucoes do "tutorial"
-        zoro = pygame.image.load("zoro.png")
-        self.zoro = pygame.transform.smoothscale(zoro,(70,80))
-        text_box1 = pygame.image.load("text_box2.png")
-        self.text_box1 = pygame.transform.smoothscale(text_box1,(230,230))
-        self.aparece_text_box = False 
-
         #gerando os monstros no mapa 
-        #self.limita_monstros_x = [350,750]
-        #self.lista_de_monstros = []
-        #for i in range(8):
-            #x = randint(self.limita_monstros_x[0],self.limita_monstros_x[1])
-            #self.monstro = Monstro(self.sprites,self.monstros, x, 440) 
-            #self.lista_de_monstros.append(self.monstro) 
+        self.limita_monstros_x = [565,650]
+        self.lista_de_monstros = []
+        for i in range(2):
+            x = randint(self.limita_monstros_x[0],self.limita_monstros_x[1])
+            self.monstro = Monstro(self.sprites,self.monstros, x, 150) 
+            self.lista_de_monstros.append(self.monstro)
+        
+
     
     def gera_mapa(self):
         
@@ -665,6 +672,27 @@ class Tela2_0:
         for i in range(30):
             x = 32*i
             Plataform(self.sprites,self.plataforma,x, 480, 'grass')
+
+        #criando as plataformas 
+
+        gera_plataforma(self,4,'x',50,180)
+        Estrela(self.sprites,self.estrela, 96, 145)
+
+
+        gera_plataforma(self,4,'x',360,270)
+        Estrela(self.sprites,self.estrela, 400, 235)
+
+        gera_plataforma(self,2,'x',110,420)
+        gera_plataforma(self,2,'x',200,200)
+        gera_plataforma(self,2,'x',240,350)
+
+        gera_plataforma(self,12,'y',455,550)
+        gera_plataforma(self,12,'y',455,780)
+        gera_plataforma(self,4,'x',574,191)
+        gera_plataforma(self,5,'x',780,191)
+        gera_plataforma(self,3,'x',574,390)
+        gera_plataforma(self,3,'x',710,290)
+        Estrela(self.sprites,self.estrela, 680, 445)
 
     def recebe_eventos(self):
 
@@ -692,8 +720,8 @@ class Tela2_0:
                 self.jogador.jump()
             if event.type==pygame.KEYDOWN and event.key == pygame.K_e:
                 Tiro(self.sprites, self.monstros, self.jogador.rect.x, self.jogador.rect.y+25)
-            if self.jogador.rect.x > 850 and assets["estrela"] == 1:
-                return Tela2(self.window)
+            if self.jogador.rect.x > 850 and assets["estrela"] == 3:
+                return Tela3(self.window)
             if assets["vidas"] <= 0:
                 return GameOver(self.window)
             
@@ -724,12 +752,6 @@ class Tela2_0:
         #desenhando a vida do usuario 
         for i in range(assets["vidas"]):
             window.blit(self.coracao,(i*20,0))
-        
-        #desenhando o zoro npc, para instrucoes 
-        window.blit(self.zoro,(200,408))
-        #desenhando a fala do zoro caso o jogador esteja perto dele 
-        if self.aparece_text_box:
-            window.blit(self.text_box1,(62,275))
 
         self.sprites.draw(self.window)
 
