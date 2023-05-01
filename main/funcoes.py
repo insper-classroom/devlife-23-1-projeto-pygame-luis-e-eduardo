@@ -73,6 +73,18 @@ class Estrela(pygame.sprite.Sprite):
         sprites.add(self)
         self.estrela.add(self)
 
+class Coracao(pygame.sprite.Sprite):
+    def __init__(self,sprites,coracao,x,y):
+        self.coracao = coracao
+        pygame.sprite.Sprite.__init__(self)
+        img_coracao = pygame.image.load("coracao.png")
+        self.image = pygame.transform.scale(img_coracao, (35,35))
+        self.rect = self.image.get_rect()
+        self.rect.x = x
+        self.rect.y = y
+        sprites.add(self)
+        self.coracao.add(self)
+
 class Monstro(pygame.sprite.Sprite):      
     def __init__(self,sprites,monstros,x,y):
         self.monstros = monstros
@@ -161,7 +173,7 @@ class TelaInicial:
                 posicao = pygame.mouse.get_pos()
                 if posicao[0] >= (912-200)/2 - 35 and posicao[0] <= 912-(912-200)/2 +32:
                     if posicao[1] >=400 and posicao[1]<=470: #nao pode apertar as teclas de andar nao sei pq kkkk
-                        return Tela2_1(self.window)
+                        return Tela2_0(self.window)
                         
             elif evento.type == pygame.USEREVENT:#tocando a musica durante o jogo inteiro 
                 pygame.mixer.music.play()
@@ -189,8 +201,8 @@ class Telas():
         self.fonte = pygame.font.Font(fonte_padrao, 24)
         
         self.vidas = 5
-        coracao = pygame.image.load("coracao.png")
-        self.coracao = pygame.transform.scale(coracao, (25,25))
+        img_coracao = pygame.image.load("coracao.png")
+        self.img_coracao = pygame.transform.scale(img_coracao, (25,25))
 
         self.last_updated = 0
 
@@ -202,7 +214,8 @@ class Telas():
         self.plataforma = pygame.sprite.Group()
         self.monstros = pygame.sprite.Group()
         self.estrela = pygame.sprite.Group()
-        self.jogador = Jogador(self.plataforma,self.monstros,self.estrela)
+        self.coracao = pygame.sprite.Group()
+        self.jogador = Jogador(self.plataforma,self.monstros,self.estrela, self.coracao)
         self.sprites.add(self.jogador)
         
         assets["estrela"] = 0 #iniciando as coroas com 0 pem toda tela nova 
@@ -327,7 +340,7 @@ class Tela1_0: #Tela1.0: tutorial de mudança de mapa e coleta de estrelas
 
         #desenhando a vida do usuario 
         for i in range(assets["vidas"]):
-            window.blit(self.coracao,(i*20,0))
+            window.blit(self.img_coracao,(i*20,0))
         
         #desenhando o zoro npc, para instrucoes 
         window.blit(self.zoro,(200,408))
@@ -442,7 +455,7 @@ class Tela1: #Tela1: tutorial de movimentacao e pulo
 
         #desenhando a vida do usuario 
         for i in range(assets["vidas"]):
-            window.blit(self.coracao,(i*20,0))
+            window.blit(self.img_coracao,(i*20,0))
         
         #desenhando o zoro npc, para instrucoes 
         window.blit(self.zoro,(200,408))
@@ -523,6 +536,9 @@ class Tela1_2:
             x += 24
 
         Estrela(self.sprites,self.estrela, 84, 140)
+        Coracao(self.sprites, self.coracao, 410, 140)
+        Coracao(self.sprites, self.coracao, 700, 200)
+
 
     def recebe_eventos(self):
 
@@ -581,7 +597,7 @@ class Tela1_2:
 
         #desenhando a vida do usuario 
         for i in range(assets["vidas"]):
-            window.blit(self.coracao,(i*20,0))
+            window.blit(self.img_coracao,(i*20,0))
         
         #desenhando o zoro npc, para instrucoes 
         window.blit(self.zoro,(200,408))
@@ -640,6 +656,9 @@ class Tela2_0:
         gera_plataforma(self,3,'x',710,290)
         Estrela(self.sprites,self.estrela, 680, 445)
 
+        Coracao(self.sprites, self.coracao, 850, 145)
+        Coracao(self.sprites, self.coracao, 280, 300)
+
     def recebe_eventos(self):
 
         velocidade_x = 3
@@ -697,7 +716,7 @@ class Tela2_0:
 
         #desenhando a vida do usuario 
         for i in range(assets["vidas"]):
-            window.blit(self.coracao,(i*20,0))
+            window.blit(self.img_coracao,(i*20,0))
 
         self.sprites.draw(self.window)
 
@@ -796,7 +815,7 @@ class Tela2_1:
 
         #desenhando a vida do usuario 
         for i in range(assets["vidas"]):
-            window.blit(self.coracao,(i*20,0))
+            window.blit(self.img_coracao,(i*20,0))
 
         self.sprites.draw(self.window)
 
@@ -804,12 +823,12 @@ class Tela2_1:
 
 class Jogador(pygame.sprite.Sprite):
     
-    def __init__(self,chao,monstros,estrela):
+    def __init__(self,chao,monstros,estrela, coracao):
 
         pygame.init() 
         pygame.sprite.Sprite.__init__(self)
 
-
+        self.coracao = coracao
         self.monstros = monstros
         self.estrela = estrela
 
@@ -899,6 +918,11 @@ class Jogador(pygame.sprite.Sprite):
         collisions = pygame.sprite.spritecollide(self, self.estrela, True)
         for cada_colisao in collisions:
             assets["estrela"] += 1
+
+        collisions = pygame.sprite.spritecollide(self, self.coracao, True)
+        for cada_colisao in collisions:
+            if assets["vidas"] < 5:
+                assets["vidas"] += 1
 
         self.elapsed_ticks += delta_t
         if self.speedx != 0:
