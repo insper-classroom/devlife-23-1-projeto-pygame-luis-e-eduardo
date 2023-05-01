@@ -14,6 +14,7 @@ assets["estrela"] = 0
 assets["monstro_img"] = "macaco1.png"
 assets["esquerda"] = False
 assets["texto"] = False
+assets["posicao_monstro"] = 'direita'
 
 # dicionario para guardar os dados que serao usados para o jogo - posicoes/movimento
 state = {}
