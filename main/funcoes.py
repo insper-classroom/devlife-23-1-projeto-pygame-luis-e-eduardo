@@ -144,7 +144,7 @@ class TelaInicial:
     def __init__(self, window):
         
         #chamando a musica 
-        musica("musica_MFDOOM.mp3")
+        #musica("musica_MFDOOM.mp3")
         
         fonte_padrao = pygame.font.get_default_font()
         self.fonte = pygame.font.Font(fonte_padrao, 24)
@@ -667,6 +667,95 @@ class Tela2_0:
             if event.type==pygame.KEYDOWN and event.key == pygame.K_e:
                 Tiro(self.sprites, self.monstros, self.jogador.rect.x, self.jogador.rect.y+25)
             if self.jogador.rect.x > 850 and assets["estrela"] == 3:
+                return Tela2_1(self.window)
+            if assets["vidas"] <= 0:
+                return GameOver(self.window)
+            
+            if 100 > self.jogador.rect.x < 300:
+                self.aparece_text_box = True  
+            if 100 < self.jogador.rect.x > 300:
+                self.aparece_text_box = False 
+
+            if event.type==pygame.KEYDOWN: #movimentacao dos monstros 
+                Telas.movimenta_monstro(self,self.limita_monstros_x)
+            #self.aparece_text_box = False 
+
+        ultimo_tempo = self.last_updated 
+        tempo = pygame.time.get_ticks()
+        delta_t = (tempo-ultimo_tempo)/1000
+        self.last_updated = tempo
+        self.sprites.update(delta_t)
+
+        clock.tick(120)
+
+        return self
+
+    def desenha(self,window):
+                
+        #pre-sets de desenho de todas as telas
+        Telas.desenha(self,window)
+
+        #desenhando a vida do usuario 
+        for i in range(assets["vidas"]):
+            window.blit(self.coracao,(i*20,0))
+
+        self.sprites.draw(self.window)
+
+class Tela2_1:
+    
+    def __init__(self, window):
+        #criando o fund0
+        fundo = pygame.image.load(assets["fundo4"]) #imagem gerdada pela AI "https://www.scenario.com/""
+        self.fundo = pygame.transform.scale(fundo, (912,512))
+
+        #pre-stes de todas as telas 
+        Telas.__init__(self,window)
+
+        #gerando as plataformas dos mapas 
+        self.gera_mapa()
+
+        #gerando os monstros no mapa 
+        self.limita_monstros_x = [565,650]
+        self.lista_de_monstros = []
+        for i in range(2):
+            #x = randint(self.limita_monstros_x[0],self.limita_monstros_x[1])
+            self.monstro = Monstro(self.sprites,self.monstros, 600, 150) 
+            self.lista_de_monstros.append(self.monstro)
+    
+    def gera_mapa(self):
+        
+        #criando o chao
+        for i in range(30):
+            x = 32*i
+            Plataform(self.sprites,self.plataforma,x, 480, 'grass')
+
+    def recebe_eventos(self):
+
+        velocidade_x = 3
+
+        clock = pygame.time.Clock()
+        
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                return None  # Devolve None para sair
+            
+            #caso o botao seja apertado, ele soma a velocidade ate parar de apertar 
+            if event.type == pygame.KEYDOWN and event.key == pygame.K_RIGHT:
+                self.jogador.speedx = velocidade_x
+                assets["esquerda"] = False #Para o tiro
+            elif event.type == pygame.KEYUP and event.key == pygame.K_RIGHT:
+                self.jogador.speedx = 0
+                print(self.jogador.speedx)
+            if event.type == pygame.KEYDOWN and event.key == pygame.K_LEFT:
+                self.jogador.speedx = -velocidade_x
+                assets["esquerda"] = True #Para o tiro
+            elif event.type == pygame.KEYUP and event.key == pygame.K_LEFT:
+                self.jogador.speedx = 0
+            if event.type == pygame.KEYDOWN and event.key == pygame.K_SPACE:
+                self.jogador.jump()
+            if event.type==pygame.KEYDOWN and event.key == pygame.K_e:
+                Tiro(self.sprites, self.monstros, self.jogador.rect.x, self.jogador.rect.y+25)
+            if self.jogador.rect.x > 850 and assets["estrela"] == 3:
                 return Tela3(self.window)
             if assets["vidas"] <= 0:
                 return GameOver(self.window)
@@ -701,141 +790,7 @@ class Tela2_0:
 
         self.sprites.draw(self.window)
 
-class Tela3:
-    
-    def __init__(self, window):
-        
-        self.sprites = pygame.sprite.Group()
-        self.plataform = pygame.sprite.Group()
-        fonte_padrao = pygame.font.get_default_font()
-        self.fonte = pygame.font.Font(fonte_padrao, 24)
-        self.azul = (0,0,255)
-        self.vermelho = (255, 0, 0)
-        self.verde = (0,255,0)
-        
-        self.vidas = 3
 
-        self.plataforma = pygame.sprite.Group()
-        self.monstros = pygame.sprite.Group()
-        self.estrela = pygame.sprite.Group()
-        self.jogador = Jogador(self.plataforma,self.monstros,self.estrela)
-        self.sprites.add(self.jogador)
-
-        self.window = window
-
-        self.gera_mapa() 
-
-        self.contador = 60
-        self.contagem = 0
-        
-    def recebe_eventos(self):
-        
-        velocidade_x = 3
-
-        clock = pygame.time.Clock()
-        
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-                return None  # Devolve None para sair
-            #caso o botao seja apertado, ele soma a velocidade ate parar de apertar 
-            if event.type == pygame.KEYDOWN and event.key == pygame.K_RIGHT:
-                self.jogador.speedx = velocidade_x
-                assets["esquerda"] = False #Para o tiro
-            elif event.type == pygame.KEYUP and event.key == pygame.K_RIGHT:
-                self.jogador.speedx = 0
-                print(self.jogador.speedx)
-            if event.type == pygame.KEYDOWN and event.key == pygame.K_LEFT:
-                self.jogador.speedx = -velocidade_x
-                assets["esquerda"] = True #Para o tiro
-            elif event.type == pygame.KEYUP and event.key == pygame.K_LEFT:
-                self.jogador.speedx = 0
-            if event.type == pygame.KEYDOWN and event.key == pygame.K_SPACE:
-                self.jogador.jump()
-            if event.type==pygame.KEYDOWN and event.key == pygame.K_e:
-                Tiro(self.sprites, self.monstros, self.jogador.rect.x, self.jogador.rect.y+25)
-            if self.jogador.rect.x>=850 and assets["estrela"] == 10:
-                return Tela4(self.window)
-            #movimentacao dos monstros 
-            if assets["vidas"] <= 0:
-                return GameOver(self.window)
-            if event.type==pygame.KEYDOWN:
-                Telas.movimenta_monstro(self)
-        
-        ultimo_tempo = self.last_updated 
-        tempo = pygame.time.get_ticks()
-        delta_t = (tempo-ultimo_tempo)/1000
-        self.last_updated = tempo
-        self.sprites.update(delta_t)
-        clock.tick(120)
-
-        return self
-
-    def desenha(self, window):
-        window.blit(self.fundo2,(0,0)) #colocando o fundo do jogo
-        for i in range(assets["vidas"]):
-            window.blit(self.coracao,(i*15,0))
-        window.blit(self.chao,(0,490))
-        window.blit(self.chao,(200,490))
-        window.blit(self.chao,(400,490))
-        window.blit(self.chao,(600,490))
-        window.blit(self.chao,(800,490))
-
-        numero = str(self.contador)
-        img_mensagem = self.fonte.render(numero, True,(255,255,255))
-        mensagem = pygame.transform.scale(img_mensagem, (30,30))
-        window.blit(mensagem,(850,3))
-        self.contagem+=1
-        if self.contagem == 120:
-            self.contador-=1
-            self.contagem = 0
-
-        img_mensagem = self.fonte.render("Tempo restante:", True,(255,255,255))
-        mensagem = pygame.transform.scale(img_mensagem, (280,25))
-        window.blit(mensagem,(850-295, 5))
-    
-        self.sprites.draw(self.window)
-    
-    def gera_mapa(self):
-        coracao = pygame.image.load("coracao.png")
-        self.coracao = pygame.transform.scale(coracao, (15,15))
-
-        self.last_updated = 0
-
-        fundo = pygame.image.load("fundo3.png") #imagem gerdada pela AI "https://www.scenario.com/""
-        self.fundo2 = pygame.transform.scale(fundo, (912,512))
-
-        chao = pygame.image.load("terra.png")
-        self.chao = pygame.transform.scale(chao,(200,130))
-        
-        
-        Plataform(self.sprites,self.plataforma,200,400,'grass')
-        for i in range(4):
-            Plataform(self.sprites,self.plataforma,300+40*i,355,'grass')
-        for i in range(3):
-            Plataform(self.sprites,self.plataforma,300-40*i,250,'grass')
-        for i in range(3):
-            Plataform(self.sprites,self.plataforma,330+40*i,160,'grass')
-        for i in range(3):
-            Plataform(self.sprites,self.plataforma,580+40*i,160,'grass')
-        for i in range(3):
-            Plataform(self.sprites,self.plataforma,580+40*i,290,'grass')
-        for i in range(30):
-            x = 32*i
-            Plataform(self.sprites,self.plataforma,x, 480,'grass')
-
-        Estrela(self.sprites,self.Estrela, 220, 290)
-        Estrela(self.sprites,self.Estrela, 310, 190)
-        Estrela(self.sprites,self.Estrela, 500, 80)
-        Estrela(self.sprites,self.Estrela, 680, 110)
-        Estrela(self.sprites,self.Estrela, 640, 220)
-        
-        
-        
-        self.lista_de_monstros = []
-        for i in range(3):
-            x = randint(0,912)
-            self.monstro = Monstro(self.sprites,self.monstros, x, 450) 
-            self.lista_de_monstros.append(self.monstro)
 
 class Jogador(pygame.sprite.Sprite):
     
