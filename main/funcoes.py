@@ -161,7 +161,7 @@ class TelaInicial:
                 posicao = pygame.mouse.get_pos()
                 if posicao[0] >= (912-200)/2 - 35 and posicao[0] <= 912-(912-200)/2 +32:
                     if posicao[1] >=400 and posicao[1]<=470: #nao pode apertar as teclas de andar nao sei pq kkkk
-                        return Tela2_0(self.window)
+                        return Tela2_1(self.window)
                         
             elif evento.type == pygame.USEREVENT:#tocando a musica durante o jogo inteiro 
                 pygame.mixer.music.play()
@@ -715,11 +715,11 @@ class Tela2_1:
         self.gera_mapa()
 
         #gerando os monstros no mapa 
-        self.limita_monstros_x = [565,650]
+        self.limita_monstros_x = [0,500]
         self.lista_de_monstros = []
-        for i in range(2):
-            #x = randint(self.limita_monstros_x[0],self.limita_monstros_x[1])
-            self.monstro = Monstro(self.sprites,self.monstros, 600, 150) 
+        for i in range(6):
+            x = randint(self.limita_monstros_x[0],self.limita_monstros_x[1])
+            self.monstro = Monstro(self.sprites,self.monstros, x, 412) 
             self.lista_de_monstros.append(self.monstro)
     
     def gera_mapa(self):
@@ -729,6 +729,16 @@ class Tela2_1:
             x = 32*i
             Plataform(self.sprites,self.plataforma,x, 480, 'grass')
 
+        # Cria as plataformas superiores
+        gera_plataforma(self,40, 'x', -50, 450)
+        Estrela(self.sprites,self.estrela, 10, 415)
+        gera_plataforma(self,25, 'x', -50, 320)
+        gera_plataforma(self,15, 'x', -50, 190)
+
+        gera_plataforma(self,4, 'x', 610, 220)
+        Estrela(self.sprites,self.estrela, 655, 185)
+        gera_plataforma(self,2, 'x', 630, 380)
+    
     def recebe_eventos(self):
 
         velocidade_x = 3
