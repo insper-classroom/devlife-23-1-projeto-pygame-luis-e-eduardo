@@ -38,7 +38,7 @@ class Plataform(pygame.sprite.Sprite):
             self.rect.y = y
             sprites.add(self)
             self.plataforma.add(self)
-        if self.tipo == 'sand':
+        if self.tipo == 'sand': # Tipo de bloco que é quebrável
             img_plataforma = pygame.image.load(assets["sand"])
             self.image = pygame.transform.scale(img_plataforma, (25,25))
             self.rect = self.image.get_rect()
@@ -376,7 +376,7 @@ class Tiro_monstro(pygame.sprite.Sprite):
         self.rect.x = (self.rect.x + self.vel_x_laser*delta_t)
         if self.rect.x > 912 or self.rect.x < 0:
             self.kill()
-        lista_plataformas = pygame.sprite.spritecollide(self, self.plataforma,False)
+        lista_plataformas = pygame.sprite.spritecollide(self, self.plataforma,False) #colisao com plataforma
         for tiro in lista_plataformas:   
             self.kill()
         lista_plataformas_quebraveis = pygame.sprite.spritecollide(self, self.plataformas_quebraveis,False)
