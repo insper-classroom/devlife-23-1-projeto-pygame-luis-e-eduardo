@@ -130,16 +130,25 @@ class Monstro(pygame.sprite.Sprite):
 class Banana_tiro(pygame.sprite.Sprite):
     def __init__(self, jogador):
         pygame.sprite.Sprite.__init__(self)
-        self.image = assets["monstro_img"]
+        self.image = pygame.image.load("tiro.png")  
         self.rect = self.image.get_rect()
         self.rect.x = jogador.rect.centerx
         self.rect.y = 0
         self.velocidade = 1
 
-    def update(self):
-        self.rect.y += self.velocidade
-
 class Gorila(pygame.sprite.Sprite):      
+    def __init__(self,sprites,gorila,x,y):
+        self.gorila = gorila
+        pygame.sprite.Sprite.__init__(self)
+        img_gorila = pygame.image.load(assets["gorila_img"])  
+        self.image = pygame.transform.scale(img_gorila, (120,150))
+        self.rect = self.image.get_rect()
+        self.rect.x = x
+        self.rect.y = y
+        sprites.add(self)
+        self.gorila.add(self)
+
+class Passaro(pygame.sprite.Sprite):      
     def __init__(self,sprites,gorila,x,y):
         self.gorila = gorila
         pygame.sprite.Sprite.__init__(self)
@@ -236,7 +245,7 @@ class TelaInicial:
                 posicao = pygame.mouse.get_pos()
                 if posicao[0] >= (912-200)/2 - 35 and posicao[0] <= 912-(912-200)/2 +32:
                     if posicao[1] >=400 and posicao[1]<=470: #nao pode apertar as teclas de andar nao sei pq kkkk
-                        return Tela2_2(self.window)
+                        return Tela1_0(self.window)
                         
             elif evento.type == pygame.USEREVENT:#tocando a musica durante o jogo inteiro 
                 pygame.mixer.music.play()
@@ -951,7 +960,7 @@ class Tela2_2:
 
         gera_plataforma(self,5, 'x', 150, 220)
         gera_plataforma(self,5, 'x', 620, 220)
-        gera_plataforma(self,5, 'x', 400, 140)
+        gera_plataforma(self,5, 'x', 380, 140)
         
         x = 0
         for i in range(5):
