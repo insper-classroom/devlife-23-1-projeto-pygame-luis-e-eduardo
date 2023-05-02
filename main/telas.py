@@ -80,7 +80,7 @@ class TelaInicial:
                 posicao = pygame.mouse.get_pos()
                 if posicao[0] >= (912-200)/2 - 35 and posicao[0] <= 912-(912-200)/2 +32:
                     if posicao[1] >=400 and posicao[1]<=470: #nao pode apertar as teclas de andar nao sei pq kkkk
-                        return Tela2_2(self.window)
+                        return Tela3_1(self.window)
                         
             elif evento.type == pygame.USEREVENT:#tocando a musica durante o jogo inteiro 
                 pygame.mixer.music.play()
@@ -1098,6 +1098,119 @@ class Tela3_1:
         #gerando as plataformas dos mapas 
         self.gera_mapa()
 
+        self.lista_passaros = []
+        for i in range(6):
+            x = randint(200,800)
+            y = randint(31,81)
+            passaro = Passaro(self.sprites,self.passaro, x, y,self.jogador,self.lista_passaros) 
+            self.lista_passaros.append(passaro)
+
+        img_tiro = pygame.image.load('bola.png')
+        self.tiro = pygame.transform.scale(img_tiro,(15,15))
+        self.contador = 0
+
+        #npc para dar as instrucoes do final do jogo 
+        sanji = pygame.image.load(assets["sanji"])
+        sanji_certo = pygame.transform.smoothscale(sanji,(90,110))
+        self.sanji = pygame.transform.flip(sanji_certo, True, False)
+        text_box4 = pygame.image.load(assets["text_box4"])
+        self.text_box4 = pygame.transform.smoothscale(text_box4,(230,230))
+        self.aparece_text_box = False 
+    
+    def gera_mapa(self):
+        
+        #criando o chao
+        for i in range(30):
+            x = 32*i
+            Plataform(self.sprites,self.plataforma,self.plataformas_quebraveis,x, 480, 'grass')
+
+    def recebe_eventos(self):
+
+        velocidade_x = 3
+
+        clock = pygame.time.Clock()
+        
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                return None  # Devolve None para sair
+            
+            #caso o botao seja apertado, ele soma a velocidade ate parar de apertar 
+            if event.type == pygame.KEYDOWN and event.key == pygame.K_RIGHT:
+                self.jogador.speedx = velocidade_x
+                assets["esquerda"] = False #Para o tiro
+            elif event.type == pygame.KEYUP and event.key == pygame.K_RIGHT:
+                self.jogador.speedx = 0
+            if event.type == pygame.KEYDOWN and event.key == pygame.K_LEFT:
+                self.jogador.speedx = -velocidade_x
+                assets["esquerda"] = True #Para o tiro
+            elif event.type == pygame.KEYUP and event.key == pygame.K_LEFT:
+                self.jogador.speedx = 0
+            if event.type == pygame.KEYDOWN and event.key == pygame.K_SPACE:
+                self.jogador.jump()
+            if event.type==pygame.KEYDOWN and event.key == pygame.K_e:
+                assets["tiro"] -= 1
+                if assets["tiro"] >= 0:
+                    Tiro(self.sprites, self.monstros, self.plataforma,self.plataformas_quebraveis,self.gorilas, self.passaro, self.jogador.rect.x, self.jogador.rect.y+25)
+            if self.jogador.rect.x > 850:
+                return Tela3_2(self.window)
+            if assets["vidas"] <= 0:
+                return GameOver(self.window)
+
+            if  50 < self.jogador.rect.x < 400:
+                self.aparece_text_box = True  
+            if 50 < self.jogador.rect.x > 400:
+                self.aparece_text_box = False 
+
+        ultimo_tempo = self.last_updated 
+        tempo = pygame.time.get_ticks()
+        delta_t = (tempo-ultimo_tempo)/1000
+        self.last_updated = tempo
+        self.sprites.update(delta_t)
+
+        clock.tick(120)
+
+        return self
+
+    def desenha(self,window):
+                
+        #pre-sets de desenho de todas as telas
+        Telas.desenha(self,window)
+
+        #desenhando a vida do usuario 
+        for i in range(assets["vidas"]):
+            window.blit(self.img_coracao,(i*20,0))
+        
+        for i in range(assets["tiro"]):
+            if i<10:
+                window.blit(self.tiro,(i*14 + 770,0))
+            if i < 20 and i >= 10:
+                window.blit(self.tiro,(i*14-70+700,13))
+            if i < 30 and i>=20:
+                window.blit(self.tiro,(i*14-140+630,26))
+            if i < 40 and i>=30:
+                window.blit(self.tiro,(i*14-210+560,39))
+
+        #desenhando o sanji npc, para instrucoes 
+        window.blit(self.sanji,(200,380))
+        #desenhando a fala do sanji caso o jogador esteja perto dele 
+        if self.aparece_text_box:
+            window.blit(self.text_box4,(60,265))    
+
+        self.sprites.draw(self.window)
+
+class Tela3_2:
+    
+    def __init__(self, window):
+        #criando o fund0
+        fundo = pygame.image.load(assets["fundo3"]) #imagem gerdada pela AI "https://www.scenario.com/""
+        self.fundo = pygame.transform.scale(fundo, (912,512))
+
+        #pre-stes de todas as telas 
+        Telas.__init__(self,window)
+
+        #gerando as plataformas dos mapas 
+        self.gera_mapa()
+
         #gerando os monstros no mapa 
         self.limita_monstros_x = [0,100]
         self.lista_de_monstros = []
@@ -1107,7 +1220,7 @@ class Tela3_1:
             self.lista_de_monstros.append(self.monstro)
 
         self.lista_de_gorilas = []
-        for i in range(0):
+        for i in range(1):
             gorilas = Gorila(self.sprites,self.gorilas, 690, 250, 'direita') 
             self.lista_de_gorilas.append(gorilas)
 
@@ -1120,7 +1233,8 @@ class Tela3_1:
 
         img_tiro = pygame.image.load('bola.png')
         self.tiro = pygame.transform.scale(img_tiro,(15,15))
-    
+        self.contador = 0
+
     def gera_mapa(self):
         
         #criando o chao
@@ -1163,6 +1277,11 @@ class Tela3_1:
             if event.type==pygame.KEYDOWN: #movimentacao dos monstros 
                 Telas.movimenta_monstro(self,self.limita_monstros_x)
             #self.aparece_text_box = False 
+
+            if  50 < self.jogador.rect.x < 400:
+                self.aparece_text_box = True  
+            if 50 < self.jogador.rect.x > 400:
+                self.aparece_text_box = False 
 
         ultimo_tempo = self.last_updated 
         tempo = pygame.time.get_ticks()

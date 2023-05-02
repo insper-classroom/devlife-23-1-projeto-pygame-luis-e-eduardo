@@ -6,6 +6,11 @@ assets["fundo1"] = "fundo1.png"
 assets["fundo4"] = "fundo4.png"
 assets["fundo3"] = "fundo3.png"
 
+#imagens 
+assets["sanji"] = "sanji.png"
+
+#falas
+assets["text_box4"] = "text_box4.png"
 
 assets["tiro"] = 40
 assets["window"] = (912.0,512.0)
