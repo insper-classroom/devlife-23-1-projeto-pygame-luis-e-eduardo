@@ -99,6 +99,18 @@ class Coracao(pygame.sprite.Sprite):
         sprites.add(self)
         self.coracao.add(self)
 
+class Pocao(pygame.sprite.Sprite):
+    def __init__(self,sprites,pocao,x,y):
+        self.pocao = pocao
+        pygame.sprite.Sprite.__init__(self)
+        img_pocao = pygame.image.load("pocao.png")
+        self.image = pygame.transform.scale(img_pocao, (25,25))
+        self.rect = self.image.get_rect()
+        self.rect.x = x
+        self.rect.y = y
+        sprites.add(self)
+        self.pocao.add(self)
+
 class Monstro(pygame.sprite.Sprite):      
     def __init__(self,sprites,monstros,x,y):
         self.monstros = monstros
@@ -195,6 +207,7 @@ class GameOver():
             elif evento.type == pygame.KEYDOWN and evento.key == pygame.K_SPACE:
                 assets["vidas"] = 5
                 assets["estrela"] = 0
+                assets["tiro"] = 20
                 return Tela1(self.window)
         return self
 
@@ -268,7 +281,8 @@ class Telas():
         self.estrela = pygame.sprite.Group()
         self.coracao = pygame.sprite.Group()
         self.banas = pygame.sprite.Group()
-        self.jogador = Jogador(self.plataforma,self.monstros,self.estrela, self.coracao,self.gorilas,self.banas)
+        self.pocao = pygame.sprite.Group()
+        self.jogador = Jogador(self.plataforma,self.monstros,self.estrela, self.coracao,self.gorilas,self.banas, self.pocao)
         self.sprites.add(self.jogador)
         
         assets["estrela"] = 0 #iniciando as coroas com 0 pem toda tela nova 
@@ -542,6 +556,9 @@ class Tela1_2:
         self.text_box1 = pygame.transform.smoothscale(text_box1,(230,230))
         self.aparece_text_box = False 
 
+        img_tiro = pygame.image.load('bola.png')
+        self.tiro = pygame.transform.scale(img_tiro,(15,15))
+
         #gerando os monstros no mapa 
         self.limita_monstros_x = [350,750]
         self.lista_de_monstros = []
@@ -595,6 +612,9 @@ class Tela1_2:
         Estrela(self.sprites,self.estrela, 84, 140)
         Coracao(self.sprites, self.coracao, 410, 140)
         Coracao(self.sprites, self.coracao, 700, 200)
+        Pocao(self.sprites, self.pocao, 600, 350)
+        Pocao(self.sprites, self.pocao, 200, 200)
+
 
 
     def recebe_eventos(self):
@@ -624,7 +644,7 @@ class Tela1_2:
             if event.type==pygame.KEYDOWN and event.key == pygame.K_e:
                 assets["tiro"] -= 1
                 if assets["tiro"] >= 0:
-                    Tiro(self.sprites, self.monstros, self.plataforma, self.jogador.rect.x, self.jogador.rect.y+25)
+                    Tiro(self.sprites, self.monstros,self.plataforma, self.jogador.rect.x, self.jogador.rect.y+25)
 
             if self.jogador.rect.x > 850 and assets["estrela"] == 1:
                 return Tela2_0(self.window)
@@ -658,6 +678,24 @@ class Tela1_2:
         #desenhando a vida do usuario 
         for i in range(assets["vidas"]):
             window.blit(self.img_coracao,(i*20,0))
+        for i in range(assets["tiro"]):
+            if i<5:
+                window.blit(self.tiro,(i*14 + 835,0))
+            if i < 10 and i >= 5:
+                window.blit(self.tiro,(i*14-70+835,13))
+            if i < 15 and i>=10:
+                window.blit(self.tiro,(i*14-140+835,26))
+            if i < 20 and i>=15:
+                window.blit(self.tiro,(i*14-210+835,39))
+
+        # quant_tiros = assets["tiro"]
+        # tiro = pygame.transform.scale(self.tiro,(40,40))
+        # window.blit(tiro,(850,0))
+        # fonte = pygame.font.get_default_font()
+        # fonte = pygame.font.Font(fonte,20)
+        # img_quant_tiros = fonte.render(f"{quant_tiros}", True, (0,0,0))
+        # window.blit(img_quant_tiros,(860,13))
+
         
         #desenhando o zoro npc, para instrucoes 
         window.blit(self.zoro,(200,408))
@@ -687,6 +725,9 @@ class Tela2_0:
             #x = randint(self.limita_monstros_x[0],self.limita_monstros_x[1])
             self.monstro = Monstro(self.sprites,self.monstros, 600, 150) 
             self.lista_de_monstros.append(self.monstro)
+        
+        img_tiro = pygame.image.load('bola.png')
+        self.tiro = pygame.transform.scale(img_tiro,(15,15))
     
     def gera_mapa(self):
         
@@ -718,6 +759,7 @@ class Tela2_0:
 
         Coracao(self.sprites, self.coracao, 850, 145)
         Coracao(self.sprites, self.coracao, 280, 300)
+        Pocao(self.sprites, self.pocao, 600, 350)
 
     def recebe_eventos(self):
 
@@ -779,6 +821,16 @@ class Tela2_0:
         #desenhando a vida do usuario 
         for i in range(assets["vidas"]):
             window.blit(self.img_coracao,(i*20,0))
+        
+        for i in range(assets["tiro"]):
+            if i<5:
+                window.blit(self.tiro,(i*14 + 835,0))
+            if i < 10 and i >= 5:
+                window.blit(self.tiro,(i*14-70+835,13))
+            if i < 15 and i>=10:
+                window.blit(self.tiro,(i*14-140+835,26))
+            if i < 20 and i>=15:
+                window.blit(self.tiro,(i*14-210+835,39))
 
         self.sprites.draw(self.window)
 
@@ -807,7 +859,10 @@ class Tela2_1:
         for i in range(1):
             self.gorilas = Gorila(self.sprites,self.gorilas, 380, 220) 
             self.lista_de_gorilas.append(self.gorilas)
-    
+
+        img_tiro = pygame.image.load('bola.png')
+        self.tiro = pygame.transform.scale(img_tiro,(15,15))
+
     def gera_mapa(self):
         
         #criando o chao
@@ -827,6 +882,8 @@ class Tela2_1:
         gera_plataforma(self,2, 'x', 630, 380)
 
         Coracao(self.sprites, self.coracao, 830, 390)
+        Pocao(self.sprites, self.pocao, 650, 350)
+        Pocao(self.sprites, self.pocao, 120, 250)
     
     def recebe_eventos(self):
 
@@ -983,12 +1040,22 @@ class Tela2_2:
         #desenhando a vida do usuario 
         for i in range(assets["vidas"]):
             window.blit(self.img_coracao,(i*20,0))
+        
+        for i in range(assets["tiro"]):
+            if i<5:
+                window.blit(self.tiro,(i*14 + 835,0))
+            if i < 10 and i >= 5:
+                window.blit(self.tiro,(i*14-70+835,13))
+            if i < 15 and i>=10:
+                window.blit(self.tiro,(i*14-140+835,26))
+            if i < 20 and i>=15:
+                window.blit(self.tiro,(i*14-210+835,39))
 
         self.sprites.draw(self.window)
 
 class Jogador(pygame.sprite.Sprite):
     
-    def __init__(self,chao,monstros,estrela, coracao, gorilas, bananas):
+    def __init__(self,chao,monstros,estrela, coracao, gorilas, bananas, pocao):
 
         pygame.init() 
         pygame.sprite.Sprite.__init__(self)
@@ -998,6 +1065,7 @@ class Jogador(pygame.sprite.Sprite):
         self.estrela = estrela
         self.gorilas = gorilas
         self.bananas = bananas
+        self.pocao = pocao
 
         self.mario = pygame.image.load("personagem_principal.png")
         self.image = pygame.transform.scale(self.mario, (50,50))
@@ -1090,6 +1158,13 @@ class Jogador(pygame.sprite.Sprite):
         for cada_colisao in collisions:
             if assets["vidas"] < 5:
                 assets["vidas"] += 1
+
+        collisions = pygame.sprite.spritecollide(self, self.pocao, True)
+        for cada_colisao in collisions:
+            if assets["tiro"] <= 15:
+                assets["tiro"] += 5
+            if assets["tiro"]>15 and assets["tiro"]<20:
+                assets["tiro"] = 20
 
         self.elapsed_ticks += delta_t
         if self.speedx != 0:
