@@ -154,6 +154,7 @@ class Passaro(pygame.sprite.Sprite):
         self.jogador = jogador 
         self.lista_passaros = lista_passaros
         self.vel_x = 3
+        self.vel_y = 1
 
     def update(self,delta_t):
         if self.rect.x <= 0:
@@ -162,6 +163,11 @@ class Passaro(pygame.sprite.Sprite):
             self.vel_x = -3
         self.rect.x = (self.rect.x + self.vel_x)
 
+        if self.rect.y < 120:
+            self.vel_y = 1
+        if self.rect.y > 200:
+            self.vel_y = -1
+        self.rect.y = (self.rect.y + self.vel_y)
 
 class Tiro(pygame.sprite.Sprite):
     def __init__(self, sprites,monstros,plataforma,plataformas_quebraveis, x, y):
@@ -875,7 +881,6 @@ class Tela2_0:
             if i < 40 and i>=30:
                 window.blit(self.tiro,(i*14-210+560,39))
 
-
         self.sprites.draw(self.window)
 
 class Tela2_1:
@@ -905,7 +910,8 @@ class Tela2_1:
             self.lista_de_gorilas.append(self.gorilas)
 
         self.lista_passaros = []
-        for i in range(1):
+        for i in range(2):
+            
             self.passaro = Passaro(self.sprites,self.passaro, 400, 100,self.jogador,self.lista_passaros) 
             self.lista_de_gorilas.append(self.passaro)
 
