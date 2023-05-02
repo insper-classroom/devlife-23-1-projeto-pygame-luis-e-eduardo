@@ -929,7 +929,6 @@ class Tela2_2:
         if self.contador == 120:
             self.contador = 0
             if assets["gorila_vivo"]:
-          
                 Tiro_monstro(self.sprites, self.plataforma,self.plataformas_quebraveis,780, 270, self.tiro_monstro,"esquerda")
         self.sprites.draw(self.window)
 
@@ -1083,6 +1082,12 @@ class Tela3_0:
             if i < 40 and i>=30:
                 window.blit(self.tiro,(i*14-210+560,39))
 
+        self.contador+=1
+        if self.contador == 120:
+            self.contador = 0
+            if assets["gorila_vivo"]:
+                Tiro_monstro(self.sprites, self.plataforma,self.plataformas_quebraveis,680, 310, self.tiro_monstro,"esquerda")
+
         self.sprites.draw(self.window)
 
 class Tela3_1:
@@ -1196,11 +1201,10 @@ class Tela3_1:
         self.contador+=1
         print(self.contador)
         if self.contador == 120:
-            print(2)
             self.contador = 0
             if assets["gorila_vivo"]:
-                print(1)
-                Tiro_monstro(self.sprites, self.plataforma,self.plataformas_quebraveis,700, 290, self.tiro_monstro,"esquerda")
+ 
+                Tiro_monstro(self.sprites, self.plataforma,self.plataformas_quebraveis,650, 310, self.tiro_monstro,"esquerda")
 
         self.sprites.draw(self.window)
 
