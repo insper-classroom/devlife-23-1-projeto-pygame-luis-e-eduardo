@@ -968,6 +968,9 @@ class Tela2_2:
         for i in range(0):
             self.gorilas = Gorila(self.sprites,self.gorilas, 380, 220) 
             self.lista_de_gorilas.append(self.gorilas)
+
+        img_tiro = pygame.image.load('bola.png')
+        self.tiro = pygame.transform.scale(img_tiro,(15,15))
     
     def gera_mapa(self):
         
