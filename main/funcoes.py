@@ -1,6 +1,7 @@
 from random import randint
 import pygame
 from assets import *
+import time
 
 #Comentários
 #A função load_spritesheet server para "recortar um png com os frames do movimento do jogador e nós pegamos essa função do snippets do github"
@@ -1192,6 +1193,8 @@ class Jogador(pygame.sprite.Sprite):
         self.last_updated = 0
         self.elapsed_ticks = 0
 
+        self.flag = True
+
     def update(self, delta_t):
         
         self.speedy += self.GRAVITY
@@ -1256,6 +1259,13 @@ class Jogador(pygame.sprite.Sprite):
         collisions = pygame.sprite.spritecollide(self, self.tiro_banana, True)
         for cada_colisao in collisions:
             assets["vidas"] -= 1
+        
+        
+        collisions = pygame.sprite.spritecollide(self, self.passaro, True)
+        for cada_colisao in collisions:
+            assets["vidas"] -= 1
+                
+            
 
         collisions = pygame.sprite.spritecollide(self, self.pocao, True)
         for cada_colisao in collisions:
