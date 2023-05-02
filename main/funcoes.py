@@ -101,21 +101,29 @@ class Monstro(pygame.sprite.Sprite):
         sprites.add(self)
         self.monstros.add(self)
 
-class Planta(pygame.sprite.Sprite):      
-    def __init__(self,sprites,monstros,x,y):
-        self.monstros = monstros
+class Banana_tiro(pygame.sprite.Sprite):
+    def __init__(self, jogador):
         pygame.sprite.Sprite.__init__(self)
-        if assets["posicao_monstro"] == 'esquerda':
-            img_monstro = pygame.image.load(assets["monstro_img"])  
-        elif assets["posicao_monstro"] == 'direita':
-            img_monstro1 = pygame.image.load(assets["monstro_img"])
-            img_monstro = pygame.transform.flip(img_monstro1, True, False)
-        self.image = pygame.transform.scale(img_monstro, (40,40))
+        self.image = assets["monstro_img"]
+        self.rect = self.image.get_rect()
+        self.rect.x = jogador.rect.centerx
+        self.rect.y = 0
+        self.velocidade = 1
+
+    def update(self):
+        self.rect.y += self.velocidade
+
+class Gorila(pygame.sprite.Sprite):      
+    def __init__(self,sprites,gorila,x,y):
+        self.gorila = gorila
+        pygame.sprite.Sprite.__init__(self)
+        img_gorila = pygame.image.load(assets["gorila_img"])  
+        self.image = pygame.transform.scale(img_gorila, (120,150))
         self.rect = self.image.get_rect()
         self.rect.x = x
         self.rect.y = y
         sprites.add(self)
-        self.monstros.add(self)
+        self.gorila.add(self)
 
 class Tiro(pygame.sprite.Sprite):
     def __init__(self, sprites,monstros,plataforma, x, y):
@@ -237,9 +245,11 @@ class Telas():
         self.chao = pygame.transform.scale(chao,(50,15))
         self.plataforma = pygame.sprite.Group()
         self.monstros = pygame.sprite.Group()
+        self.gorilas = pygame.sprite.Group()
         self.estrela = pygame.sprite.Group()
         self.coracao = pygame.sprite.Group()
-        self.jogador = Jogador(self.plataforma,self.monstros,self.estrela, self.coracao)
+        self.banas = pygame.sprite.Group()
+        self.jogador = Jogador(self.plataforma,self.monstros,self.estrela, self.coracao,self.gorilas,self.banas)
         self.sprites.add(self.jogador)
         
         assets["estrela"] = 0 #iniciando as coroas com 0 pem toda tela nova 
@@ -768,6 +778,11 @@ class Tela2_1:
             x = randint(self.limita_monstros_x[0],self.limita_monstros_x[1])
             self.monstro = Monstro(self.sprites,self.monstros, x, 412) 
             self.lista_de_monstros.append(self.monstro)
+
+        self.lista_de_gorilas = []
+        for i in range(1):
+            self.gorilas = Gorila(self.sprites,self.gorilas, 380, 220) 
+            self.lista_de_gorilas.append(self.gorilas)
     
     def gera_mapa(self):
         
@@ -850,7 +865,7 @@ class Tela2_1:
 
 class Jogador(pygame.sprite.Sprite):
     
-    def __init__(self,chao,monstros,estrela, coracao):
+    def __init__(self,chao,monstros,estrela, coracao, gorilas, bananas):
 
         pygame.init() 
         pygame.sprite.Sprite.__init__(self)
@@ -858,6 +873,8 @@ class Jogador(pygame.sprite.Sprite):
         self.coracao = coracao
         self.monstros = monstros
         self.estrela = estrela
+        self.gorilas = gorilas
+        self.bananas = bananas
 
         self.mario = pygame.image.load("personagem_principal.png")
         self.image = pygame.transform.scale(self.mario, (50,50))
@@ -1005,7 +1022,7 @@ class Jogo:
 
         self.window = pygame.display.set_mode((912,512))
 
-        self.tela_atual = TelaInicial(self.window)
+        self.tela_atual = Tela2_1(self.window)
         self.last_updated = pygame.time.get_ticks()
 
     def recebe_eventos(self):

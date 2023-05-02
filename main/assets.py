@@ -12,6 +12,7 @@ assets["bloco"] = (32,24)
 assets["vidas"] = 5
 assets["estrela"] = 0
 assets["monstro_img"] = "macaco1.png"
+assets["gorila_img"] = "gorila.png"
 assets["esquerda"] = False
 assets["texto"] = False
 assets["posicao_monstro"] = 'direita'
