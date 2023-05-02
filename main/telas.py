@@ -968,8 +968,9 @@ class Tela3_0:
             Plataform(self.sprites,self.plataforma,self.plataformas_quebraveis,x, 480, 'grass')
 
         gera_plataforma(self,4,'x',100,410)
-        gera_plataforma(self,4,'x',180,350)
-        gera_plataforma(self,4,'x',260,290)
+        gera_plataforma(self,4,'x',210,350)
+        gera_plataforma(self,4,'x',320,290)
+        gera_plataforma(self,4,'x',240,200)
 
         Estrela(self.sprites,self.estrela, 850, 415)
         Coracao(self.sprites, self.coracao, 600, 260)
@@ -1246,7 +1247,3 @@ class Jogo:
     def finaliza(self):
         pygame.quit()
 
-if __name__ == '__main__':
-    jogo = Jogo()
-    jogo.game_loop()
-    jogo.finaliza()
