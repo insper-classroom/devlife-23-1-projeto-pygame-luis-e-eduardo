@@ -104,7 +104,7 @@ class TelaInicial:
         Parameters
         ----------
         window : pygame.Surface
-            A superfície da janela onde a tela será desenhada.
+            A superfície da janela onde a tela será desenhada. 
         """
         window.fill((0, 0, 0))
         largura = 200
@@ -209,7 +209,7 @@ class Telas():
             x = 32*i
             window.blit(self.chao,(x,488))
 
-class Tela1_0: #Tela1.0: tutorial de mudança de mapa e coleta de estrelas 
+class Tela1_0(Telas): #Tela1.0: tutorial de mudança de mapa e coleta de estrelas 
     
     def __init__(self, window):
 
@@ -267,7 +267,6 @@ class Tela1_0: #Tela1.0: tutorial de mudança de mapa e coleta de estrelas
                 assets["esquerda"] = True #Para o tiro
             if event.type == pygame.KEYUP and event.key == pygame.K_LEFT:
                 self.jogador.speedx = 0
-            
             if event.type == pygame.KEYDOWN and event.key == pygame.K_SPACE:
                 self.jogador.jump()
             if self.jogador.rect.x > 850:
@@ -275,6 +274,7 @@ class Tela1_0: #Tela1.0: tutorial de mudança de mapa e coleta de estrelas
             if assets["vidas"] <= 0:
                 return GameOver(self.window)
             
+            #Para aparecer o textbox
             if 100 > self.jogador.rect.x < 300:
                 self.aparece_text_box = True  
             if 100 < self.jogador.rect.x > 300:
@@ -307,7 +307,7 @@ class Tela1_0: #Tela1.0: tutorial de mudança de mapa e coleta de estrelas
 
         self.sprites.draw(self.window)
 
-class Tela1: #Tela1: tutorial de movimentacao e pulo
+class Tela1(Telas): #Tela1: tutorial de movimentacao e pulo
     
     def __init__(self, window):
 
@@ -466,8 +466,6 @@ class Tela1_2(Telas):
         Pocao(self.sprites, self.pocao, 600, 350)
         Pocao(self.sprites, self.pocao, 210, 200)
 
-
-
     def recebe_eventos(self):
 
         velocidade_x = 3
@@ -529,7 +527,7 @@ class Tela1_2(Telas):
         #desenhando a vida do usuario 
         for i in range(assets["vidas"]):
             window.blit(self.img_coracao,(i*20,0))
-        for i in range(assets["tiro"]):
+        for i in range(assets["tiro"]): #Aparece na tela quantos tiros o jogador ainda tem
             if i<10:
                 window.blit(self.tiro,(i*14 + 770,0))
             if i < 20 and i >= 10:
@@ -547,7 +545,7 @@ class Tela1_2(Telas):
 
         self.sprites.draw(self.window)
 
-class Tela2_0:
+class Tela2_0(Telas):
     
     def __init__(self, window):
         #criando o fund0
@@ -625,7 +623,6 @@ class Tela2_0:
                 assets["esquerda"] = False #Para o tiro
             elif event.type == pygame.KEYUP and event.key == pygame.K_RIGHT:
                 self.jogador.speedx = 0
-                print(self.jogador.speedx)
             if event.type == pygame.KEYDOWN and event.key == pygame.K_LEFT:
                 self.jogador.speedx = -velocidade_x
                 assets["esquerda"] = True #Para o tiro
@@ -816,7 +813,7 @@ class Tela2_1(Telas):
 
         self.sprites.draw(self.window)
 
-class Tela2_2:
+class Tela2_2(Telas):
     
     def __init__(self, window):
         #criando o fund0
@@ -912,7 +909,6 @@ class Tela2_2:
                 assets["esquerda"] = False #Para o tiro
             elif event.type == pygame.KEYUP and event.key == pygame.K_RIGHT:
                 self.jogador.speedx = 0
-                print(self.jogador.speedx)
             if event.type == pygame.KEYDOWN and event.key == pygame.K_LEFT:
                 self.jogador.speedx = -velocidade_x
                 assets["esquerda"] = True #Para o tiro
@@ -963,14 +959,14 @@ class Tela2_2:
             if i < 40 and i>=30:
                 window.blit(self.tiro,(i*14-210+560,39))
 
-        self.contador+=1
+        self.contador+=1 #Controla o intervalo que atira as bananas
         if self.contador == 120:
             self.contador = 0
             if assets["gorila_vivo"]:
                 Tiro_monstro(self.sprites, self.plataforma,self.plataformas_quebraveis,780, 270, self.tiro_monstro,"esquerda")
         self.sprites.draw(self.window)
 
-class Tela3_0:
+class Tela3_0(Telas):
     
     def __init__(self, window):
         #criando o fund0
@@ -1129,7 +1125,7 @@ class Tela3_0:
 
         self.sprites.draw(self.window)
 
-class Tela3_1:
+class Tela3_1(Telas):
     
     def __init__(self, window):
         #criando o fund0
@@ -1268,7 +1264,7 @@ class Tela3_2(Telas):
         self.lista_de_gorilas.append(gorilas4)
 
         self.lista_passaros = []
-        for i in range(3):
+        for i in range(3): #Cria 3 passaros em posicoes aleatorias
             x = randint(200,800)
             y = randint(31,81)
             passaro = Passaro(self.sprites,self.passaro, x, y,self.jogador,self.lista_passaros) 
@@ -1377,7 +1373,7 @@ class Tela3_2(Telas):
         if self.contador == 120:
             self.contador = 0
             
-            self.contador2+=1
+            self.contador2+=1 # Cria as bananas em posicoes alternadas
             if self.contador2 == 4:
                 self.contador2 = 0          
                 Tiro_monstro(self.sprites, self.plataforma,self.plataformas_quebraveis,900, 290, self.tiro_monstro,"esquerda")
@@ -1389,7 +1385,7 @@ class Tela3_2(Telas):
                     Tiro_monstro(self.sprites, self.plataforma,self.plataformas_quebraveis,730, 90, self.tiro_monstro,"esquerda")
         self.sprites.draw(self.window)
 
-class Tela3_3:
+class Tela3_3(Telas): 
     
     def __init__(self, window):
         #criando o fund0
