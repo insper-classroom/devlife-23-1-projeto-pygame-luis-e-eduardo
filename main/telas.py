@@ -92,7 +92,7 @@ class TelaInicial:
                 posicao = pygame.mouse.get_pos()
                 if posicao[0] >= (912-200)/2 - 35 and posicao[0] <= 912-(912-200)/2 +32:
                     if posicao[1] >=400 and posicao[1]<=470: #nao pode apertar as teclas de andar nao sei pq kkkk
-                        return Tela1_0(self.window)                        
+                        return Tela2_1(self.window)                        
             elif evento.type == pygame.USEREVENT:#tocando a musica durante o jogo inteiro 
                 pygame.mixer.music.play()
         return self
@@ -737,7 +737,7 @@ class Tela2_1(Telas):
         gera_plataforma(self,2, 'x', 630, 380)
 
         Coracao(self.sprites, self.coracao, 830, 390)
-        Pocao(self.sprites, self.pocao, 650, 350)
+        Pocao(self.sprites, self.pocao, 650, 345)
         Pocao(self.sprites, self.pocao, 120, 250)
     
     def recebe_eventos(self):
