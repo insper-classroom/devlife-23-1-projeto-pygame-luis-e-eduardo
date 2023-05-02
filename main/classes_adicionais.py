@@ -172,6 +172,8 @@ class Tiro(pygame.sprite.Sprite):
             lista_plataformas_quebraveis = pygame.sprite.spritecollide(self, self.gorilas,True)
             for tiro in lista_plataformas_quebraveis:
                 self.kill()
+                lista_plataformas_quebraveis = []
+                assets["gorila_vivo"] = False
             lista_plataformas_quebraveis = pygame.sprite.spritecollide(self, self.passaro,True)
             for tiro in lista_plataformas_quebraveis:
                 self.kill()

@@ -80,7 +80,7 @@ class TelaInicial:
                 posicao = pygame.mouse.get_pos()
                 if posicao[0] >= (912-200)/2 - 35 and posicao[0] <= 912-(912-200)/2 +32:
                     if posicao[1] >=400 and posicao[1]<=470: #nao pode apertar as teclas de andar nao sei pq kkkk
-                        return Tela3_1(self.window)
+                        return Tela2_2(self.window)
                         
             elif evento.type == pygame.USEREVENT:#tocando a musica durante o jogo inteiro 
                 pygame.mixer.music.play()
@@ -365,7 +365,7 @@ class Tela1: #Tela1: tutorial de movimentacao e pulo
 
         self.sprites.draw(self.window)
         
-class Tela1_2:
+class Tela1_2(Telas):
     
     def __init__(self, window):
         #criando o fund0
@@ -719,7 +719,6 @@ class Tela2_1:
                 assets["esquerda"] = False #Para o tiro
             elif event.type == pygame.KEYUP and event.key == pygame.K_RIGHT:
                 self.jogador.speedx = 0
-                print(self.jogador.speedx)
             if event.type == pygame.KEYDOWN and event.key == pygame.K_LEFT:
                 self.jogador.speedx = -velocidade_x
                 assets["esquerda"] = True #Para o tiro
@@ -774,7 +773,6 @@ class Tela2_1:
         if self.contador == 120:
             self.contador = 0
             if assets["gorila_vivo"]:
-                assets["gorila_vivo"] = False
                 Tiro_monstro(self.sprites, self.plataforma,self.plataformas_quebraveis,140, 290, self.tiro_monstro,"direita")
 
 
@@ -814,6 +812,9 @@ class Tela2_2:
 
         img_tiro = pygame.image.load('bola.png')
         self.tiro = pygame.transform.scale(img_tiro,(15,15))
+
+        self.contador = 0
+        assets["gorila_vivo"] = True
     
     def gera_mapa(self):
         
@@ -886,6 +887,7 @@ class Tela2_2:
                 if assets["tiro"] >= 0:
                     Tiro(self.sprites, self.monstros, self.plataforma,self.plataformas_quebraveis,self.gorilas,self.passaro,self.jogador.rect.x, self.jogador.rect.y+25)
             if self.jogador.rect.x > 850 and assets["estrela"] == 2:
+                assets["gorila_vivo"] = True
                 return Tela3_0(self.window)
             if assets["vidas"] <= 0:
                 return GameOver(self.window)
@@ -923,6 +925,12 @@ class Tela2_2:
             if i < 40 and i>=30:
                 window.blit(self.tiro,(i*14-210+560,39))
 
+        self.contador+=1
+        if self.contador == 120:
+            self.contador = 0
+            if assets["gorila_vivo"]:
+          
+                Tiro_monstro(self.sprites, self.plataforma,self.plataformas_quebraveis,780, 270, self.tiro_monstro,"esquerda")
         self.sprites.draw(self.window)
 
 class Tela3_0:
@@ -960,6 +968,8 @@ class Tela3_0:
 
         img_tiro = pygame.image.load('bola.png')
         self.tiro = pygame.transform.scale(img_tiro,(15,15))
+
+        self.contador = 0
     
     def gera_mapa(self):
         
@@ -1134,7 +1144,6 @@ class Tela3_1:
                 assets["esquerda"] = False #Para o tiro
             elif event.type == pygame.KEYUP and event.key == pygame.K_RIGHT:
                 self.jogador.speedx = 0
-                print(self.jogador.speedx)
             if event.type == pygame.KEYDOWN and event.key == pygame.K_LEFT:
                 self.jogador.speedx = -velocidade_x
                 assets["esquerda"] = True #Para o tiro
@@ -1183,6 +1192,15 @@ class Tela3_1:
                 window.blit(self.tiro,(i*14-140+630,26))
             if i < 40 and i>=30:
                 window.blit(self.tiro,(i*14-210+560,39))
+        
+        self.contador+=1
+        print(self.contador)
+        if self.contador == 120:
+            print(2)
+            self.contador = 0
+            if assets["gorila_vivo"]:
+                print(1)
+                Tiro_monstro(self.sprites, self.plataforma,self.plataformas_quebraveis,700, 290, self.tiro_monstro,"esquerda")
 
         self.sprites.draw(self.window)
 
