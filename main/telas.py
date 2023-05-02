@@ -42,7 +42,7 @@ class TelaInicial:
         fonte_padrao = pygame.font.get_default_font()
         self.fonte = pygame.font.Font(fonte_padrao, 24)
         self.window = window
-        imagem = pygame.image.load("fundo_inicial.png")
+        imagem = pygame.image.load(assets["tela_inicial"])
         self.image = pygame.transform.scale(imagem,(912,512))
 
 
@@ -54,8 +54,8 @@ class TelaInicial:
                 posicao = pygame.mouse.get_pos()
                 if posicao[0] >= (912-200)/2 - 35 and posicao[0] <= 912-(912-200)/2 +32:
                     if posicao[1] >=400 and posicao[1]<=470: #nao pode apertar as teclas de andar nao sei pq kkkk
-                        return Tela3_2(self.window)
-                        
+                        return Tela3_3(self.window)
+                        return Tela1_0(self.window)
                         
             elif evento.type == pygame.USEREVENT:#tocando a musica durante o jogo inteiro 
                 pygame.mixer.music.play()
@@ -396,8 +396,6 @@ class Tela1_2(Telas):
         gera_plataforma(self,3,'x',50,180)
 
         Estrela(self.sprites,self.estrela, 84, 140)
-        Coracao(self.sprites, self.coracao, 410, 140)
-        Coracao(self.sprites, self.coracao, 700, 200)
         Pocao(self.sprites, self.pocao, 600, 350)
         Pocao(self.sprites, self.pocao, 200, 200)
 
@@ -473,15 +471,6 @@ class Tela1_2(Telas):
                 window.blit(self.tiro,(i*14-140+630,26))
             if i < 40 and i>=30:
                 window.blit(self.tiro,(i*14-210+560,39))
-
-        # quant_tiros = assets["tiro"]
-        # tiro = pygame.transform.scale(self.tiro,(40,40))
-        # window.blit(tiro,(850,0))
-        # fonte = pygame.font.get_default_font()
-        # fonte = pygame.font.Font(fonte,20)
-        # img_quant_tiros = fonte.render(f"{quant_tiros}", True, (0,0,0))
-        # window.blit(img_quant_tiros,(860,13))
-
         
         #desenhando o zoro npc, para instrucoes 
         window.blit(self.zoro,(200,408))
@@ -512,7 +501,13 @@ class Tela2_0:
             self.monstro = Monstro(self.sprites,self.monstros, 600, 150) 
             self.lista_de_monstros.append(self.monstro)
         
-        img_tiro = pygame.image.load('bola.png')
+        self.lista_passaros = []
+        for i in range(2):
+            x = randint(200,800)
+            passaro = Passaro(self.sprites,self.passaro, x, 30,self.jogador,self.lista_passaros) 
+            self.lista_passaros.append(passaro)
+
+        img_tiro = pygame.image.load(assets["img_bola"])
         self.tiro = pygame.transform.scale(img_tiro,(15,15))
     
     def gera_mapa(self):
@@ -543,8 +538,8 @@ class Tela2_0:
         gera_plataforma(self,3,'x',710,290)
         Estrela(self.sprites,self.estrela, 680, 445)
 
-        Coracao(self.sprites, self.coracao, 850, 145)
-        Coracao(self.sprites, self.coracao, 280, 300)
+        Coracao(self.sprites, self.coracao, 850, 150)
+        Coracao(self.sprites, self.coracao, 260, 316)
         Pocao(self.sprites, self.pocao, 600, 350)
 
     def recebe_eventos(self):
