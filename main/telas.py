@@ -14,10 +14,9 @@ class GameOver():
         fonte_padrao = pygame.font.get_default_font()
         self.fonte = pygame.font.Font(fonte_padrao, 24)
         self.window = window
-        imagem = pygame.image.load(assets["game_over"])
+        imagem = pygame.image.load(assets["tela_inicial"])
         self.image = pygame.transform.scale(imagem,(912,580))
-
-
+ 
     def recebe_eventos(self):
         for evento in pygame.event.get():
             if evento.type == pygame.QUIT:
@@ -30,12 +29,25 @@ class GameOver():
         return self
 
     def desenha(self, window):
-        window.fill((0, 0, 0))
         window.blit(self.image,(0,0))
-  
+        renicia_jogo_mensagem1 = self.fonte.render("O Kirb morreu!", True,(255,255,255))
+        renicia_jogo_mensagem2 = self.fonte.render("Aperte espaço para reniciar o jogo", True,(255,255,255))
+        window.blit(renicia_jogo_mensagem1,(400,100))
+        window.blit(renicia_jogo_mensagem2,(290,320))
+
 class TelaInicial:
+    """
+    Classe que representa a tela inicial do jogo.
+    """
     def __init__(self, window):
-        
+        """
+        Inicializa a tela inicial.
+
+        Parameters
+        ----------
+        window : pygame.Surface
+            A superfície da janela onde a tela será desenhada.
+        """
         #chamando a musica 
         musica("musica_MFDOOM.mp3")
         
@@ -47,6 +59,13 @@ class TelaInicial:
 
 
     def recebe_eventos(self):
+        """
+        Recebe eventos do teclado e do mouse e retorna a próxima tela a ser exibida.
+
+        Returns
+        -------
+        Tela1_0, a primeira tela do jogo 
+        """
         for evento in pygame.event.get():
             if evento.type == pygame.QUIT:
                 return None 
@@ -54,14 +73,20 @@ class TelaInicial:
                 posicao = pygame.mouse.get_pos()
                 if posicao[0] >= (912-200)/2 - 35 and posicao[0] <= 912-(912-200)/2 +32:
                     if posicao[1] >=400 and posicao[1]<=470: #nao pode apertar as teclas de andar nao sei pq kkkk
-                        return Tela3_3(self.window)
-                        return Tela1_0(self.window)
-                        
+                        return GameOver(self.window)                        
             elif evento.type == pygame.USEREVENT:#tocando a musica durante o jogo inteiro 
                 pygame.mixer.music.play()
         return self
 
     def desenha(self, window):
+        """
+        Desenha a tela inicial na janela especificada.
+
+        Parameters
+        ----------
+        window : pygame.Surface
+            A superfície da janela onde a tela será desenhada.
+        """
         window.fill((0, 0, 0))
         largura = 200
         diferenca_largura = (912 - largura)/2
@@ -69,7 +94,7 @@ class TelaInicial:
         pygame.draw.polygon(window,(0,0,0),[(diferenca_largura,400),(912 - diferenca_largura,400),(912 - diferenca_largura,470),(diferenca_largura,470)])
         img_mensagem = self.fonte.render("Jogar", True,(255,255,255))
         mensagem = pygame.transform.scale(img_mensagem, (150,60))
-        creditos = self.fonte.render("Feito por Lipe e Edu", True,(255,255,255))
+        creditos = self.fonte.render("Feito por SocratesMorreu e DiogesVivo", True,(255,255,255))
         window.blit(mensagem,(diferenca_largura+20, 405))
         window.blit(creditos,(0,0))
 

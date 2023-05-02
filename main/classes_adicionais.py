@@ -233,7 +233,23 @@ class Passaro(pygame.sprite.Sprite):
         self.rect.y = (self.rect.y + self.vel_y)
 
 class Tiro(pygame.sprite.Sprite):
+    """"
+    Classe representa os tiros do jogador dentro do jogo 
+    """
     def __init__(self, sprites,monstros,plataforma,plataformas_quebraveis,gorilas,passaro, x, y):
+        """
+        Inicializa a classe Tiro com as coordenadas do tiro e adiciona-o ao grupo de sprites.
+
+        Parâmetros:
+        - sprites: grupo de sprites que o tiro será adicionado
+        - monstros: grupo de sprites dos monstros que podem ser atingidos pelo tiro
+        - plataforma: grupo de sprites das plataformas
+        - plataformas_quebraveis: grupo de sprites das plataformas quebráveis
+        - gorilas: grupo de sprites dos gorilas que podem ser atingidos pelo tiro
+        - passaro: grupo de sprites dos passaros que podem ser atingidos pelo tiro
+        - x: coordenada x do tiro
+        - y: coordenada y do tiro
+        """
         pygame.sprite.Sprite.__init__(self)
 
         img_laser = pygame.image.load(assets["img_bola"])
@@ -258,32 +274,60 @@ class Tiro(pygame.sprite.Sprite):
         self.sprites = sprites 
     
     def update(self, delta_t):
-        
-            self.rect.x = (self.rect.x + self.vel_x_laser*delta_t)
-            lista = pygame.sprite.spritecollide(self, self.monstros,True)
-            for tiro in lista:
-                self.sprites.remove(self)
-            if self.rect.x > 912 or self.rect.x < 0:
-                self.kill()
-            lista_plataformas = pygame.sprite.spritecollide(self, self.plataforma,False)
-            for tiro in lista_plataformas:   
-                self.kill()
-            lista_plataformas_quebraveis = pygame.sprite.spritecollide(self, self.plataformas_quebraveis,True)
-            for tiro in lista_plataformas_quebraveis:
-                self.kill()
+        """
+        Atualiza a posição do tiro e verifica se atingiu algum alvo (monstros, plataformas, gorilas, passaros).
 
-            lista_plataformas_quebraveis = pygame.sprite.spritecollide(self, self.gorilas,True)
-            for tiro in lista_plataformas_quebraveis:
-                self.kill()
-                lista_plataformas_quebraveis = []
-                assets["gorila_vivo"] = False
+        Parâmetros:
+        - delta_t: valor de tempo para atualização da posição do tiro
+        """
+        self.rect.x = (self.rect.x + self.vel_x_laser*delta_t)
+        lista = pygame.sprite.spritecollide(self, self.monstros,True)
+        for tiro in lista:
+            self.sprites.remove(self)
+        if self.rect.x > 912 or self.rect.x < 0:
+            self.kill()
+        lista_plataformas = pygame.sprite.spritecollide(self, self.plataforma,False)
+        for tiro in lista_plataformas:   
+            self.kill()
+        lista_plataformas_quebraveis = pygame.sprite.spritecollide(self, self.plataformas_quebraveis,True)
+        for tiro in lista_plataformas_quebraveis:
+            self.kill()
 
-            lista_plataformas_quebraveis = pygame.sprite.spritecollide(self, self.passaro,True)
-            for tiro in lista_plataformas_quebraveis:
-                self.kill()
+        lista_plataformas_quebraveis = pygame.sprite.spritecollide(self, self.gorilas,True)
+        for tiro in lista_plataformas_quebraveis:
+            self.kill()
+            lista_plataformas_quebraveis = []
+            assets["gorila_vivo"] = False
+
+        lista_plataformas_quebraveis = pygame.sprite.spritecollide(self, self.passaro,True)
+        for tiro in lista_plataformas_quebraveis:
+            self.kill()
 
 class Tiro_monstro(pygame.sprite.Sprite):
+    """"
+    Classe para representar o tiro dos gorilas 
+    """
     def __init__(self, sprites,plataforma,plataformas_quebraveis, x, y, tiro_monstro, direcao):
+        """
+        Inicializa a classe Tiro_monstro.
+
+        Parâmetros
+        ----------
+        sprites : pygame.sprite.Group
+            grupo de sprites do jogo
+        plataforma : pygame.sprite.Group
+            grupo de plataformas do jogo
+        plataformas_quebraveis : pygame.sprite.Group
+            grupo de plataformas quebráveis do jogo
+        x : int
+            posição x inicial do tiro
+        y : int
+            posição y inicial do tiro
+        tiro_monstro : pygame.sprite.Group
+            grupo de tiros do monstro
+        direcao : str
+            direção do tiro (esquerda ou direita)
+        """
         pygame.sprite.Sprite.__init__(self)
 
         img_laser = pygame.image.load(assets["img_banana"])
@@ -313,13 +357,20 @@ class Tiro_monstro(pygame.sprite.Sprite):
         self.sprites = sprites 
     
     def update(self, delta_t):
-        
-            self.rect.x = (self.rect.x + self.vel_x_laser*delta_t)
-            if self.rect.x > 912 or self.rect.x < 0:
-                self.kill()
-            lista_plataformas = pygame.sprite.spritecollide(self, self.plataforma,False)
-            for tiro in lista_plataformas:   
-                self.kill()
-            lista_plataformas_quebraveis = pygame.sprite.spritecollide(self, self.plataformas_quebraveis,False)
-            for tiro in lista_plataformas_quebraveis:
-                self.kill()
+        """
+        Atualiza a posição do tiro e verifica se colidiu com alguma plataforma.
+
+        Parâmetros
+        ----------
+        delta_t : float
+            tempo transcorrido desde a última atualização
+        """
+        self.rect.x = (self.rect.x + self.vel_x_laser*delta_t)
+        if self.rect.x > 912 or self.rect.x < 0:
+            self.kill()
+        lista_plataformas = pygame.sprite.spritecollide(self, self.plataforma,False)
+        for tiro in lista_plataformas:   
+            self.kill()
+        lista_plataformas_quebraveis = pygame.sprite.spritecollide(self, self.plataformas_quebraveis,False)
+        for tiro in lista_plataformas_quebraveis:
+            self.kill()
