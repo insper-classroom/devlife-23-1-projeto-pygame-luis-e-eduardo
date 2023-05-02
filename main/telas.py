@@ -92,7 +92,7 @@ class TelaInicial:
                 posicao = pygame.mouse.get_pos()
                 if posicao[0] >= (912-200)/2 - 35 and posicao[0] <= 912-(912-200)/2 +32:
                     if posicao[1] >=400 and posicao[1]<=470: #nao pode apertar as teclas de andar nao sei pq kkkk
-                        return Tela1_0(self.window)                        
+                        return Tela2_1(self.window)                        
             elif evento.type == pygame.USEREVENT:#tocando a musica durante o jogo inteiro 
                 pygame.mixer.music.play()
         return self
@@ -104,7 +104,7 @@ class TelaInicial:
         Parameters
         ----------
         window : pygame.Surface
-            A superfície da janela onde a tela será desenhada.
+            A superfície da janela onde a tela será desenhada. 
         """
         window.fill((0, 0, 0))
         largura = 200
@@ -209,7 +209,7 @@ class Telas():
             x = 32*i
             window.blit(self.chao,(x,488))
 
-class Tela1_0: #Tela1.0: tutorial de mudança de mapa e coleta de estrelas 
+class Tela1_0(Telas): #Tela1.0: tutorial de mudança de mapa e coleta de estrelas 
     
     def __init__(self, window):
 
@@ -307,7 +307,7 @@ class Tela1_0: #Tela1.0: tutorial de mudança de mapa e coleta de estrelas
 
         self.sprites.draw(self.window)
 
-class Tela1: #Tela1: tutorial de movimentacao e pulo
+class Tela1(Telas): #Tela1: tutorial de movimentacao e pulo
     
     def __init__(self, window):
 
@@ -546,7 +546,7 @@ class Tela1_2(Telas):
 
         self.sprites.draw(self.window)
 
-class Tela2_0:
+class Tela2_0(Telas):
     
     def __init__(self, window):
         #criando o fund0
@@ -815,7 +815,7 @@ class Tela2_1(Telas):
 
         self.sprites.draw(self.window)
 
-class Tela2_2:
+class Tela2_2(Telas):
     
     def __init__(self, window):
         #criando o fund0
@@ -969,7 +969,7 @@ class Tela2_2:
                 Tiro_monstro(self.sprites, self.plataforma,self.plataformas_quebraveis,780, 270, self.tiro_monstro,"esquerda")
         self.sprites.draw(self.window)
 
-class Tela3_0:
+class Tela3_0(Telas):
     
     def __init__(self, window):
         #criando o fund0
@@ -1128,7 +1128,7 @@ class Tela3_0:
 
         self.sprites.draw(self.window)
 
-class Tela3_1:
+class Tela3_1(Telas):
     
     def __init__(self, window):
         #criando o fund0
@@ -1397,7 +1397,7 @@ class Tela3_2(Telas):
                     Tiro_monstro(self.sprites, self.plataforma,self.plataformas_quebraveis,730, 90, self.tiro_monstro,"esquerda")
         self.sprites.draw(self.window)
 
-class Tela3_3:
+class Tela3_3(Telas):
     
     def __init__(self, window):
         #criando o fund0

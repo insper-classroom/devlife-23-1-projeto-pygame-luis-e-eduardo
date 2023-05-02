@@ -298,14 +298,14 @@ class Tiro(pygame.sprite.Sprite):
         for tiro in lista_plataformas_quebraveis:
             self.kill()
 
-            lista_plataformas_quebraveis = pygame.sprite.spritecollide(self, self.gorilas,True)
-            for tiro in lista_plataformas_quebraveis:
-                self.kill()
-                lista_plataformas_quebraveis = []
-                assets["gorila_vivo"] = False
-                musica_estrela = pygame.mixer.Sound("gorila_morreu.mp3")
-                musica_estrela.set_volume(0.9)
-                musica_estrela.play()
+        lista_plataformas_quebraveis = pygame.sprite.spritecollide(self, self.gorilas,True)
+        for tiro in lista_plataformas_quebraveis:
+            self.kill()
+            lista_plataformas_quebraveis = []
+            assets["gorila_vivo"] = False
+            musica_estrela = pygame.mixer.Sound("gorila_morreu.mp3")
+            musica_estrela.set_volume(0.9)
+            musica_estrela.play()
 
         lista_plataformas_quebraveis = pygame.sprite.spritecollide(self, self.passaro,True)
         for tiro in lista_plataformas_quebraveis:
