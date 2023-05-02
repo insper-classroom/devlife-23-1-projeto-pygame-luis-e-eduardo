@@ -128,15 +128,6 @@ class Monstro(pygame.sprite.Sprite):
         sprites.add(self)
         self.monstros.add(self)
 
-class Banana_tiro(pygame.sprite.Sprite):
-    def __init__(self, jogador):
-        pygame.sprite.Sprite.__init__(self)
-        self.image = pygame.image.load("tiro.png")  
-        self.rect = self.image.get_rect()
-        self.rect.x = jogador.rect.centerx
-        self.rect.y = 0
-        self.velocidade = 1
-
 class Gorila(pygame.sprite.Sprite):      
     def __init__(self,sprites,gorila,x,y):
         self.gorila = gorila
@@ -321,7 +312,7 @@ class TelaInicial:
                 posicao = pygame.mouse.get_pos()
                 if posicao[0] >= (912-200)/2 - 35 and posicao[0] <= 912-(912-200)/2 +32:
                     if posicao[1] >=400 and posicao[1]<=470: #nao pode apertar as teclas de andar nao sei pq kkkk
-                        return Tela1_0(self.window)
+                        return Tela2_1(self.window)
                         
             elif evento.type == pygame.USEREVENT:#tocando a musica durante o jogo inteiro 
                 pygame.mixer.music.play()
@@ -348,6 +339,7 @@ class Telas():
         self.plataformas_quebraveis = pygame.sprite.Group()
         fonte_padrao = pygame.font.get_default_font()
         self.fonte = pygame.font.Font(fonte_padrao, 24)
+        self.tiro_monstro = pygame.sprite.Group()
         
         self.vidas = 5
         img_coracao = pygame.image.load("coracao.png")
@@ -366,9 +358,8 @@ class Telas():
         self.estrela = pygame.sprite.Group()
         self.passaro = pygame.sprite.Group()
         self.coracao = pygame.sprite.Group()
-        self.banas = pygame.sprite.Group()
         self.pocao = pygame.sprite.Group()
-        self.jogador = Jogador(self.plataforma,self.monstros,self.estrela, self.coracao,self.gorilas,self.banas, self.pocao,self.plataformas_quebraveis)
+        self.jogador = Jogador(self.plataforma,self.monstros,self.estrela, self.coracao,self.gorilas, self.pocao,self.plataformas_quebraveis,self.passaro,self.tiro_monstro)
         self.sprites.add(self.jogador)
         
         assets["estrela"] = 0 #iniciando as coroas com 0 pem toda tela nova 
@@ -1153,7 +1144,7 @@ class Tela2_2:
 
 class Jogador(pygame.sprite.Sprite):
     
-    def __init__(self,chao,monstros,estrela, coracao, gorilas, bananas, pocao, plataformas_quebraveis):
+    def __init__(self,chao,monstros,estrela, coracao, gorilas, pocao, plataformas_quebraveis,passaro,tiro_banana):
 
         pygame.init() 
         pygame.sprite.Sprite.__init__(self)
@@ -1163,9 +1154,7 @@ class Jogador(pygame.sprite.Sprite):
         self.estrela = estrela
         self.gorilas = gorilas
         self.passaro = passaro
-        self.bananas = bananas
         self.pocao = pocao
-
         self.tiro_banana = tiro_banana
 
         self.mario = pygame.image.load("personagem_principal.png")
