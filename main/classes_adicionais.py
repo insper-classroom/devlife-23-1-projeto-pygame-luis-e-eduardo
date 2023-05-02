@@ -131,7 +131,7 @@ class Passaro(pygame.sprite.Sprite):
         self.rect.y = (self.rect.y + self.vel_y)
 
 class Tiro(pygame.sprite.Sprite):
-    def __init__(self, sprites,monstros,plataforma,plataformas_quebraveis, x, y):
+    def __init__(self, sprites,monstros,plataforma,plataformas_quebraveis,gorilas,passaro, x, y):
         pygame.sprite.Sprite.__init__(self)
 
         img_laser = pygame.image.load('bola.png')
@@ -150,6 +150,8 @@ class Tiro(pygame.sprite.Sprite):
         self.monstros = monstros
         self.plataforma = plataforma
         self.plataformas_quebraveis = plataformas_quebraveis
+        self.gorilas = gorilas
+        self.passaro = passaro
         sprites.add(self) 
         self.sprites = sprites 
     
@@ -167,9 +169,15 @@ class Tiro(pygame.sprite.Sprite):
             lista_plataformas_quebraveis = pygame.sprite.spritecollide(self, self.plataformas_quebraveis,True)
             for tiro in lista_plataformas_quebraveis:
                 self.kill()
+            lista_plataformas_quebraveis = pygame.sprite.spritecollide(self, self.gorilas,True)
+            for tiro in lista_plataformas_quebraveis:
+                self.kill()
+            lista_plataformas_quebraveis = pygame.sprite.spritecollide(self, self.passaro,True)
+            for tiro in lista_plataformas_quebraveis:
+                self.kill()
 
 class Tiro_monstro(pygame.sprite.Sprite):
-    def __init__(self, sprites,plataforma,plataformas_quebraveis, x, y, tiro_monstro):
+    def __init__(self, sprites,plataforma,plataformas_quebraveis, x, y, tiro_monstro, direcao):
         pygame.sprite.Sprite.__init__(self)
 
         img_laser = pygame.image.load('banana.png')
@@ -180,11 +188,11 @@ class Tiro_monstro(pygame.sprite.Sprite):
         self.vel_y_laser = 0
         self.rect.x = x
         self.rect.y = y - 10
-        sorteio = randint(1,2)
-        if sorteio == 1:
-            self.vel_x_laser = -200
-        else:
+        
+        if direcao == "direita":
             self.vel_x_laser = +200
+        else:
+            self.vel_x_laser = -200
 
         self.flag_tiro = False
         self.plataforma = plataforma

@@ -11,7 +11,6 @@ from classes_adicionais import *
 class GameOver():
     def __init__(self, window):
 
-        
         fonte_padrao = pygame.font.get_default_font()
         self.fonte = pygame.font.Font(fonte_padrao, 24)
         self.window = window
@@ -115,7 +114,9 @@ class Telas():
         self.img_coracao = pygame.transform.scale(img_coracao, (25,25))
 
         self.last_updated = 0
-        
+
+        assets["gorila_vivo"] = True
+
         chao = pygame.image.load("grass.png")
         self.chao = pygame.transform.scale(chao,(50,15))
         self.plataforma = pygame.sprite.Group()
@@ -453,7 +454,7 @@ class Tela1_2:
             if event.type==pygame.KEYDOWN and event.key == pygame.K_e:
                 assets["tiro"] -= 1
                 if assets["tiro"] >= 0:
-                    Tiro(self.sprites, self.monstros, self.plataforma,self.plataformas_quebraveis,self.jogador.rect.x, self.jogador.rect.y+25)
+                    Tiro(self.sprites, self.monstros, self.plataforma,self.plataformas_quebraveis,self.gorilas,self.passaro, self.jogador.rect.x, self.jogador.rect.y+25)
 
             if self.jogador.rect.x > 850 and assets["estrela"] == 1:
                 return Tela2_0(self.window)
@@ -543,7 +544,7 @@ class Tela2_0:
         #criando o chao
         for i in range(30):
             x = 32*i
-            Plataform(self.sprites,self.plataforma,self.plataformas_quebraveis,x, 480, 'grass')
+            Plataform(self.sprites,self.plataforma,self.plataformas_quebraveis,self.gorilas,self.passaro, x, 480, 'grass')
 
         #criando as plataformas 
 
@@ -661,19 +662,19 @@ class Tela2_1:
         self.lista_de_monstros = []
         for i in range(6):
             x = randint(self.limita_monstros_x[0],self.limita_monstros_x[1])
-            self.monstro = Monstro(self.sprites,self.monstros, x, 412) 
-            self.lista_de_monstros.append(self.monstro)
+            a = Monstro(self.sprites,self.monstros, x, 412) 
+            self.lista_de_monstros.append(a)
 
         self.lista_de_gorilas = []
         for i in range(1):
-            self.gorilas = Gorila(self.sprites,self.gorilas, 50, 220, 'esquerda') 
-            self.lista_de_gorilas.append(self.gorilas)
+            b = Gorila(self.sprites,self.gorilas, 50, 220, 'esquerda') 
+            self.lista_de_gorilas.append(b)
 
         self.lista_passaros = []
         for i in range(1):
             x = randint(200,800)
-            self.passaro = Passaro(self.sprites,self.passaro, x, 30,self.jogador,self.lista_passaros) 
-            self.lista_de_gorilas.append(self.passaro)
+            c = Passaro(self.sprites,self.passaro, x, 30,self.jogador,self.lista_passaros) 
+            self.lista_de_gorilas.append(c)
         
         img_tiro = pygame.image.load('bola.png')
         self.tiro = pygame.transform.scale(img_tiro,(15,15))
@@ -729,7 +730,7 @@ class Tela2_1:
             if event.type==pygame.KEYDOWN and event.key == pygame.K_e:
                 assets["tiro"] -= 1
                 if assets["tiro"] >= 0:
-                    Tiro(self.sprites, self.monstros, self.plataforma,self.plataformas_quebraveis,self.jogador.rect.x, self.jogador.rect.y+25)
+                    Tiro(self.sprites, self.monstros, self.plataforma,self.plataformas_quebraveis,self.gorilas,self.passaro, self.jogador.rect.x, self.jogador.rect.y+25)
             if self.jogador.rect.x > 850 and assets["estrela"] == 3:
                 return Tela2_2(self.window)
             if assets["vidas"] <= 0:
@@ -770,9 +771,11 @@ class Tela2_1:
                 window.blit(self.tiro,(i*14-210+560,39))
         
         self.contador+=1
-        if self.contador == 60:
+        if self.contador == 120:
             self.contador = 0
-            Tiro_monstro(self.sprites, self.plataforma,self.plataformas_quebraveis,380, 290, self.tiro_monstro)
+            if assets["gorila_vivo"]:
+                assets["gorila_vivo"] = False
+                Tiro_monstro(self.sprites, self.plataforma,self.plataformas_quebraveis,140, 290, self.tiro_monstro,"direita")
 
 
         self.sprites.draw(self.window)
@@ -881,7 +884,7 @@ class Tela2_2:
             if event.type==pygame.KEYDOWN and event.key == pygame.K_e:
                 assets["tiro"] -= 1
                 if assets["tiro"] >= 0:
-                    Tiro(self.sprites, self.monstros, self.plataforma,self.plataformas_quebraveis,self.jogador.rect.x, self.jogador.rect.y+25)
+                    Tiro(self.sprites, self.monstros, self.plataforma,self.plataformas_quebraveis,self.gorilas,self.passaro,self.jogador.rect.x, self.jogador.rect.y+25)
             if self.jogador.rect.x > 850 and assets["estrela"] == 2:
                 return Tela3_0(self.window)
             if assets["vidas"] <= 0:
@@ -999,7 +1002,7 @@ class Tela3_0:
             if event.type==pygame.KEYDOWN and event.key == pygame.K_e:
                 assets["tiro"] -= 1
                 if assets["tiro"] >= 0:
-                    Tiro(self.sprites, self.monstros, self.plataforma,self.plataformas_quebraveis,self.jogador.rect.x, self.jogador.rect.y+25)
+                    Tiro(self.sprites, self.monstros, self.plataforma,self.plataformas_quebraveis,self.gorilas, self.passaro, self.jogador.rect.x, self.jogador.rect.y+25)
             if self.jogador.rect.x > 850 and assets["estrela"] == 2:
                 return Tela3(self.window)
             if assets["vidas"] <= 0:
