@@ -209,7 +209,45 @@ class Tiro(pygame.sprite.Sprite):
             lista_plataformas_quebraveis = pygame.sprite.spritecollide(self, self.plataformas_quebraveis,True)
             for tiro in lista_plataformas_quebraveis:
                 self.kill()
-            
+
+class Tiro_monstro(pygame.sprite.Sprite):
+    def __init__(self, sprites,plataforma,plataformas_quebraveis, x, y, tiro_monstro):
+        pygame.sprite.Sprite.__init__(self)
+
+        img_laser = pygame.image.load('banana.png')
+        self.image = pygame.transform.scale(img_laser,(30,30))
+        
+        self.tiro_monstro = tiro_monstro
+        self.rect = self.image.get_rect()
+        self.vel_y_laser = 0
+        self.rect.x = x
+        self.rect.y = y - 10
+        sorteio = randint(1,2)
+        if sorteio == 1:
+            self.vel_x_laser = -200
+        else:
+            self.vel_x_laser = +200
+
+        self.flag_tiro = False
+        self.plataforma = plataforma
+        self.plataformas_quebraveis = plataformas_quebraveis
+
+        sprites.add(self) 
+        self.tiro_monstro.add(self)
+        self.sprites = sprites 
+    
+    def update(self, delta_t):
+        
+            self.rect.x = (self.rect.x + self.vel_x_laser*delta_t)
+            if self.rect.x > 912 or self.rect.x < 0:
+                self.kill()
+            lista_plataformas = pygame.sprite.spritecollide(self, self.plataforma,False)
+            for tiro in lista_plataformas:   
+                self.kill()
+            lista_plataformas_quebraveis = pygame.sprite.spritecollide(self, self.plataformas_quebraveis,False)
+            for tiro in lista_plataformas_quebraveis:
+                self.kill()
+
 class GameOver():
     def __init__(self, window):
 
@@ -218,6 +256,32 @@ class GameOver():
         self.fonte = pygame.font.Font(fonte_padrao, 24)
         self.window = window
         imagem = pygame.image.load("game_over.png")
+        self.image = pygame.transform.scale(imagem,(912,580))
+
+
+    def recebe_eventos(self):
+        for evento in pygame.event.get():
+            if evento.type == pygame.QUIT:
+                return None 
+            elif evento.type == pygame.KEYDOWN and evento.key == pygame.K_SPACE:
+                assets["vidas"] = 5
+                assets["estrela"] = 0
+                assets["tiro"] = 20
+                return Tela1(self.window)
+        return self
+
+    def desenha(self, window):
+        window.fill((0, 0, 0))
+        window.blit(self.image,(0,0))
+
+class YouWin():
+    def __init__(self, window):
+
+        
+        fonte_padrao = pygame.font.get_default_font()
+        self.fonte = pygame.font.Font(fonte_padrao, 24)
+        self.window = window
+        imagem = pygame.image.load("you win.jpg")
         self.image = pygame.transform.scale(imagem,(912,580))
 
 
@@ -257,7 +321,7 @@ class TelaInicial:
                 posicao = pygame.mouse.get_pos()
                 if posicao[0] >= (912-200)/2 - 35 and posicao[0] <= 912-(912-200)/2 +32:
                     if posicao[1] >=400 and posicao[1]<=470: #nao pode apertar as teclas de andar nao sei pq kkkk
-                        return Tela2_1(self.window)
+                        return Tela1_0(self.window)
                         
             elif evento.type == pygame.USEREVENT:#tocando a musica durante o jogo inteiro 
                 pygame.mixer.music.play()
@@ -304,7 +368,7 @@ class Telas():
         self.coracao = pygame.sprite.Group()
         self.banas = pygame.sprite.Group()
         self.pocao = pygame.sprite.Group()
-        self.jogador = Jogador(self.plataforma,self.monstros,self.estrela, self.coracao,self.gorilas,self.banas, self.pocao,self.plataformas_quebraveis,self.passaro)
+        self.jogador = Jogador(self.plataforma,self.monstros,self.estrela, self.coracao,self.gorilas,self.banas, self.pocao,self.plataformas_quebraveis)
         self.sprites.add(self.jogador)
         
         assets["estrela"] = 0 #iniciando as coroas com 0 pem toda tela nova 
@@ -328,7 +392,7 @@ class Telas():
             elif monstro.rect.x <= lista_limitantes_x[0]:
                 monstro.rect.x += 10 #direita 
                 assets["posicao_monstro"] = 'direita'
-
+            
     def desenha(self,window):
         
         #colocando o fundo do jogo 
@@ -667,14 +731,14 @@ class Tela1_2:
         for i in range(assets["vidas"]):
             window.blit(self.img_coracao,(i*20,0))
         for i in range(assets["tiro"]):
-            if i<5:
-                window.blit(self.tiro,(i*14 + 835,0))
-            if i < 10 and i >= 5:
-                window.blit(self.tiro,(i*14-70+835,13))
-            if i < 15 and i>=10:
-                window.blit(self.tiro,(i*14-140+835,26))
-            if i < 20 and i>=15:
-                window.blit(self.tiro,(i*14-210+835,39))
+            if i<10:
+                window.blit(self.tiro,(i*14 + 770,0))
+            if i < 20 and i >= 10:
+                window.blit(self.tiro,(i*14-70+700,13))
+            if i < 30 and i>=20:
+                window.blit(self.tiro,(i*14-140+630,26))
+            if i < 40 and i>=30:
+                window.blit(self.tiro,(i*14-210+560,39))
 
         # quant_tiros = assets["tiro"]
         # tiro = pygame.transform.scale(self.tiro,(40,40))
@@ -811,14 +875,15 @@ class Tela2_0:
             window.blit(self.img_coracao,(i*20,0))
         
         for i in range(assets["tiro"]):
-            if i<5:
-                window.blit(self.tiro,(i*14 + 835,0))
-            if i < 10 and i >= 5:
-                window.blit(self.tiro,(i*14-70+835,13))
-            if i < 15 and i>=10:
-                window.blit(self.tiro,(i*14-140+835,26))
-            if i < 20 and i>=15:
-                window.blit(self.tiro,(i*14-210+835,39))
+            if i<10:
+                window.blit(self.tiro,(i*14 + 770,0))
+            if i < 20 and i >= 10:
+                window.blit(self.tiro,(i*14-70+700,13))
+            if i < 30 and i>=20:
+                window.blit(self.tiro,(i*14-140+630,26))
+            if i < 40 and i>=30:
+                window.blit(self.tiro,(i*14-210+560,39))
+
 
         self.sprites.draw(self.window)
 
@@ -855,6 +920,8 @@ class Tela2_1:
 
         img_tiro = pygame.image.load('bola.png')
         self.tiro = pygame.transform.scale(img_tiro,(15,15))
+
+        self.contador = 0
 
     def gera_mapa(self):
         
@@ -913,6 +980,7 @@ class Tela2_1:
 
             if event.type==pygame.KEYDOWN: #movimentacao dos monstros 
                 Telas.movimenta_monstro(self,self.limita_monstros_x)
+            
             #self.aparece_text_box = False 
 
         ultimo_tempo = self.last_updated 
@@ -933,6 +1001,22 @@ class Tela2_1:
         #desenhando a vida do usuario 
         for i in range(assets["vidas"]):
             window.blit(self.img_coracao,(i*20,0))
+        
+        for i in range(assets["tiro"]):
+            if i<10:
+                window.blit(self.tiro,(i*14 + 770,0))
+            if i < 20 and i >= 10:
+                window.blit(self.tiro,(i*14-70+700,13))
+            if i < 30 and i>=20:
+                window.blit(self.tiro,(i*14-140+630,26))
+            if i < 40 and i>=30:
+                window.blit(self.tiro,(i*14-210+560,39))
+        
+        self.contador+=1
+        if self.contador == 60:
+            self.contador = 0
+            Tiro_monstro(self.sprites, self.plataforma,self.plataformas_quebraveis,380, 290, self.tiro_monstro)
+
 
         self.sprites.draw(self.window)
 
@@ -1056,20 +1140,20 @@ class Tela2_2:
             window.blit(self.img_coracao,(i*20,0))
         
         for i in range(assets["tiro"]):
-            if i<5:
-                window.blit(self.tiro,(i*14 + 835,0))
-            if i < 10 and i >= 5:
-                window.blit(self.tiro,(i*14-70+835,13))
-            if i < 15 and i>=10:
-                window.blit(self.tiro,(i*14-140+835,26))
-            if i < 20 and i>=15:
-                window.blit(self.tiro,(i*14-210+835,39))
+            if i<10:
+                window.blit(self.tiro,(i*14 + 770,0))
+            if i < 20 and i >= 10:
+                window.blit(self.tiro,(i*14-70+700,13))
+            if i < 30 and i>=20:
+                window.blit(self.tiro,(i*14-140+630,26))
+            if i < 40 and i>=30:
+                window.blit(self.tiro,(i*14-210+560,39))
 
         self.sprites.draw(self.window)
 
 class Jogador(pygame.sprite.Sprite):
     
-    def __init__(self,chao,monstros,estrela, coracao, gorilas, bananas, pocao, plataformas_quebraveis,passaro):
+    def __init__(self,chao,monstros,estrela, coracao, gorilas, bananas, pocao, plataformas_quebraveis):
 
         pygame.init() 
         pygame.sprite.Sprite.__init__(self)
@@ -1081,6 +1165,8 @@ class Jogador(pygame.sprite.Sprite):
         self.passaro = passaro
         self.bananas = bananas
         self.pocao = pocao
+
+        self.tiro_banana = tiro_banana
 
         self.mario = pygame.image.load("personagem_principal.png")
         self.image = pygame.transform.scale(self.mario, (50,50))
@@ -1177,6 +1263,10 @@ class Jogador(pygame.sprite.Sprite):
         for cada_colisao in collisions:
             if assets["vidas"] < 5:
                 assets["vidas"] += 1
+
+        collisions = pygame.sprite.spritecollide(self, self.tiro_banana, True)
+        for cada_colisao in collisions:
+            assets["vidas"] -= 1
 
         collisions = pygame.sprite.spritecollide(self, self.pocao, True)
         for cada_colisao in collisions:
