@@ -81,7 +81,7 @@ class TelaInicial:
                 posicao = pygame.mouse.get_pos()
                 if posicao[0] >= (912-200)/2 - 35 and posicao[0] <= 912-(912-200)/2 +32:
                     if posicao[1] >=400 and posicao[1]<=470: #nao pode apertar as teclas de andar nao sei pq kkkk
-                        return Tela2_2(self.window)
+                        return Tela1_0(self.window)
                         
             elif evento.type == pygame.USEREVENT:#tocando a musica durante o jogo inteiro 
                 pygame.mixer.music.play()
@@ -389,7 +389,7 @@ class Tela1_2:
 
         #gerando os monstros no mapa 
         self.limita_monstros_x = [350,750]
-        self.lista_passaros = []
+        self.lista_de_monstros = []
         for i in range(8):
             x = randint(self.limita_monstros_x[0],self.limita_monstros_x[1])
             self.monstro = Monstro(self.sprites,self.monstros, x, 440) 
@@ -883,7 +883,7 @@ class Tela2_2:
                 if assets["tiro"] >= 0:
                     Tiro(self.sprites, self.monstros, self.plataforma,self.plataformas_quebraveis,self.jogador.rect.x, self.jogador.rect.y+25)
             if self.jogador.rect.x > 850 and assets["estrela"] == 2:
-                return Tela3(self.window)
+                return Tela3_0(self.window)
             if assets["vidas"] <= 0:
                 return GameOver(self.window)
 
@@ -1188,15 +1188,13 @@ class Jogador(pygame.sprite.Sprite):
         collisions = pygame.sprite.spritecollide(self, self.passaro, True)
         for cada_colisao in collisions:
             assets["vidas"] -= 1
-                
-            
 
         collisions = pygame.sprite.spritecollide(self, self.pocao, True)
         for cada_colisao in collisions:
-            if assets["tiro"] <= 15:
+            if assets["tiro"] <= 35:
                 assets["tiro"] += 5
-            if assets["tiro"]>15 and assets["tiro"]<20:
-                assets["tiro"] = 20
+            if assets["tiro"]>35 and assets["tiro"]<40:
+                assets["tiro"] = 40
 
         self.elapsed_ticks += delta_t
         if self.speedx != 0:
@@ -1243,36 +1241,3 @@ class Jogador(pygame.sprite.Sprite):
             self.speedy -= self.JUMP_SIZE
             self.state = self.JUMPING
 
-class Jogo:
-    
-    def __init__(self):
-        
-        pygame.init()
-        self.sprites = pygame.sprite.Group()
-
-        self.window = pygame.display.set_mode((912,512))
-
-        self.tela_atual = TelaInicial(self.window)
-        self.last_updated = pygame.time.get_ticks()
-
-    def recebe_eventos(self):
-        
-        self.tela_atual = self.tela_atual.recebe_eventos()
-        # recebe_eventos tela atual
-        if self.tela_atual is None:
-            return False
-        return True
-
-    def game_loop(self):
-        
-        while self.recebe_eventos():
-            self.tela_atual.desenha(self.window)
-            pygame.display.update()
-
-    def finaliza(self):
-        pygame.quit()
-
-if __name__ == '__main__':
-    jogo = Jogo()
-    jogo.game_loop()
-    jogo.finaliza()
