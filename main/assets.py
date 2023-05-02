@@ -6,11 +6,36 @@ assets["fundo1"] = "fundo1.png"
 assets["fundo4"] = "fundo4.png"
 assets["fundo3"] = "fundo3.png"
 assets["fundo5"] = "fundo5.png"
+assets["tela_inicial"] = "fundo_inicial.png"
+assets["game_over"] = "game_over.png"
+assets["grass"] = "grass.png"
+assets["sand"] = "sand.png"
+assets["terra"] = "terra.png"
+assets["you_win"] = "you win.jpg"
+#itens
+assets["img_banana"] = "banana.png"
+assets["img_berry"] = "berry.png"
+assets["img_bola"] = "bola.png"
+assets["img_bloco1"] = "bloco1.png"
+assets["img_coracao"] = "coracao.png"
+assets["img_coracao1"] = "coracao1.png"
+assets["img_estrela"] = "estrela.png"
 
 #imagens 
-assets["sanji"] = "sanji.png"
+assets["img_sanji"] = "sanji.png"
+assets["img_gorila"] = "gorila.png"
+assets["img_zoro"] = "zoro.png"
+assets["tiro1"] = "tiro1.png"
+assets["img_macaco"] = "macaco1.png"
+assets["img_passaro"] = "passaro.png"
+assets["img_parado"] = "parado.png"
+assets["img_andando"] = "andando.png"
+assets["img_pulando"] = "pulando.png"
 
 #falas
+assets["text_box1"] = "text_box1.png"
+assets["text_box2"] = "text_box2.png"
+assets["text_box3"] = "text_box3.png"
 assets["text_box4"] = "text_box4.png"
 
 assets["tiro"] = 40

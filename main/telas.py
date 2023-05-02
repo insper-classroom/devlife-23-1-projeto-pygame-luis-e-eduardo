@@ -81,6 +81,7 @@ class TelaInicial:
                 if posicao[0] >= (912-200)/2 - 35 and posicao[0] <= 912-(912-200)/2 +32:
                     if posicao[1] >=400 and posicao[1]<=470: #nao pode apertar as teclas de andar nao sei pq kkkk
                         return Tela3_2(self.window)
+                        return Tela1_0(self.window)
                         
             elif evento.type == pygame.USEREVENT:#tocando a musica durante o jogo inteiro 
                 pygame.mixer.music.play()
@@ -544,7 +545,7 @@ class Tela2_0:
         #criando o chao
         for i in range(30):
             x = 32*i
-            Plataform(self.sprites,self.plataforma,self.plataformas_quebraveis,self.gorilas,self.passaro, x, 480, 'grass')
+            Plataform(self.sprites,self.plataforma,self.plataformas_quebraveis, x, 480, 'grass')
 
         #criando as plataformas 
 
