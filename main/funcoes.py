@@ -130,16 +130,25 @@ class Monstro(pygame.sprite.Sprite):
 class Banana_tiro(pygame.sprite.Sprite):
     def __init__(self, jogador):
         pygame.sprite.Sprite.__init__(self)
-        self.image = assets["monstro_img"]
+        self.image = pygame.image.load("tiro.png")  
         self.rect = self.image.get_rect()
         self.rect.x = jogador.rect.centerx
         self.rect.y = 0
         self.velocidade = 1
 
-    def update(self):
-        self.rect.y += self.velocidade
-
 class Gorila(pygame.sprite.Sprite):      
+    def __init__(self,sprites,gorila,x,y):
+        self.gorila = gorila
+        pygame.sprite.Sprite.__init__(self)
+        img_gorila = pygame.image.load(assets["gorila_img"])  
+        self.image = pygame.transform.scale(img_gorila, (120,150))
+        self.rect = self.image.get_rect()
+        self.rect.x = x
+        self.rect.y = y
+        sprites.add(self)
+        self.gorila.add(self)
+
+class Passaro(pygame.sprite.Sprite):      
     def __init__(self,sprites,gorila,x,y):
         self.gorila = gorila
         pygame.sprite.Sprite.__init__(self)
@@ -262,7 +271,7 @@ class TelaInicial:
                 posicao = pygame.mouse.get_pos()
                 if posicao[0] >= (912-200)/2 - 35 and posicao[0] <= 912-(912-200)/2 +32:
                     if posicao[1] >=400 and posicao[1]<=470: #nao pode apertar as teclas de andar nao sei pq kkkk
-                        return Tela1_2(self.window)
+                        return Tela1_0(self.window)
                         
             elif evento.type == pygame.USEREVENT:#tocando a musica durante o jogo inteiro 
                 pygame.mixer.music.play()
@@ -308,7 +317,7 @@ class Telas():
         self.coracao = pygame.sprite.Group()
         self.banas = pygame.sprite.Group()
         self.pocao = pygame.sprite.Group()
-        self.jogador = Jogador(self.plataforma,self.monstros,self.estrela, self.coracao,self.gorilas,self.banas, self.pocao)
+        self.jogador = Jogador(self.plataforma,self.monstros,self.estrela, self.coracao,self.gorilas,self.banas, self.pocao,self.plataformas_quebraveis)
         self.sprites.add(self.jogador)
         
         assets["estrela"] = 0 #iniciando as coroas com 0 pem toda tela nova 
@@ -962,9 +971,9 @@ class Tela2_2:
         self.gera_mapa()
 
         #gerando os monstros no mapa 
-        self.limita_monstros_x = [0,500]
+        self.limita_monstros_x = [275,650]
         self.lista_de_monstros = []
-        for i in range(0):
+        for i in range(4):
             x = randint(self.limita_monstros_x[0],self.limita_monstros_x[1])
             self.monstro = Monstro(self.sprites,self.monstros, x, 412) 
             self.lista_de_monstros.append(self.monstro)
@@ -987,11 +996,29 @@ class Tela2_2:
         gera_plataforma(self,40, 'x', -50, 450)
         gera_plataforma(self,18, 'x', -50, 300)
         gera_plataforma(self,20, 'x', 550, 300)
+
+        gera_plataforma(self,5, 'x', 150, 220)
+        gera_plataforma(self,5, 'x', 620, 220)
+        gera_plataforma(self,5, 'x', 380, 140)
         
         x = 0
         for i in range(5):
             Plataform(self.sprites,self.plataforma,self.plataformas_quebraveis,200, 428 - x, 'sand')
             x += 25
+        x = 0
+        for i in range(5):
+            Plataform(self.sprites,self.plataforma,self.plataformas_quebraveis,225, 428 - x, 'sand')
+            x += 25
+        Estrela(self.sprites,self.estrela, 20, 415)
+        x = 0
+        for i in range(5):
+            Plataform(self.sprites,self.plataforma,self.plataformas_quebraveis,700, 428 - x, 'sand')
+            x += 25
+        x = 0
+        for i in range(5):
+            Plataform(self.sprites,self.plataforma,self.plataformas_quebraveis,725, 428 - x, 'sand')
+            x += 25
+        Estrela(self.sprites,self.estrela, 850, 415)
 
     def recebe_eventos(self):
 
@@ -1063,7 +1090,7 @@ class Tela2_2:
 
 class Jogador(pygame.sprite.Sprite):
     
-    def __init__(self,chao,monstros,estrela, coracao, gorilas, bananas, pocao):
+    def __init__(self,chao,monstros,estrela, coracao, gorilas, bananas, pocao, plataformas_quebraveis):
 
         pygame.init() 
         pygame.sprite.Sprite.__init__(self)
@@ -1081,6 +1108,7 @@ class Jogador(pygame.sprite.Sprite):
         self.rect = self.image.get_rect()
 
         self.chao = chao
+        self.plataformas_quebraveis = plataformas_quebraveis
 
         self.speedx = 0
         self.speedy = 0
@@ -1143,14 +1171,17 @@ class Jogador(pygame.sprite.Sprite):
             self.rect.left = 0
         elif self.rect.right >= self.WIDTH:
             self.rect.right = self.WIDTH - 1
-        # Se colidiu com algum bloco, volta para o ponto antes da colisão
         collisions = pygame.sprite.spritecollide(self, self.chao, False)
-        # Corrige a posição do personagem para antes da colisão
         for collision in collisions:
-            # Estava indo para a direita
             if self.speedx > 0:
                 self.rect.right = collision.rect.left
-            # Estava indo para a esquerda
+            elif self.speedx < 0:
+                self.rect.left = collision.rect.right
+
+        collisions1 = pygame.sprite.spritecollide(self, self.plataformas_quebraveis, False)
+        for collision in collisions1:
+            if self.speedx > 0:
+                self.rect.right = collision.rect.left
             elif self.speedx < 0:
                 self.rect.left = collision.rect.right
 
