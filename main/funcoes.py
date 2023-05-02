@@ -236,7 +236,7 @@ class TelaInicial:
                 posicao = pygame.mouse.get_pos()
                 if posicao[0] >= (912-200)/2 - 35 and posicao[0] <= 912-(912-200)/2 +32:
                     if posicao[1] >=400 and posicao[1]<=470: #nao pode apertar as teclas de andar nao sei pq kkkk
-                        return Tela2_2(self.window)
+                        return Tela2_0(self.window)
                         
             elif evento.type == pygame.USEREVENT:#tocando a musica durante o jogo inteiro 
                 pygame.mixer.music.play()
@@ -355,7 +355,7 @@ class Tela1_0: #Tela1.0: tutorial de mudança de mapa e coleta de estrelas
         #criando o chao
         for i in range(30):
             x = 32*i
-            Plataform(self.sprites,self.plataforma,x, 480, 'grass')
+            Plataform(self.sprites,self.plataforma,self.plataformas_quebraveis,x, 480, 'grass')
 
         Estrela(self.sprites,self.estrela, 700, 440)
      
@@ -449,30 +449,15 @@ class Tela1: #Tela1: tutorial de movimentacao e pulo
         #criando o chao
         for i in range(30):
             x = 32*i
-            Plataform(self.sprites,self.plataforma,x, 480, 'grass')
+            Plataform(self.sprites,self.plataforma,self.plataformas_quebraveis,x, 480, 'grass')
 
-        x = 0
-        for i in range(4):
-            x += 24
-            Plataform(self.sprites,self.plataforma,250 + x, 430, 'bloco')
+        gera_plataforma(self,4,'x',274,430)
+        gera_plataforma(self,4,'x',414,400)
+        gera_plataforma(self,4,'x',554,430)
+        gera_plataforma(self,4,'y',452,750)
 
-        x = 0
-        for i in range(4):
-            x += 24
-            Plataform(self.sprites,self.plataforma,390 + x, 400, 'bloco')
-
-        x = 0
-        for i in range(4):
-            x += 24
-            Plataform(self.sprites,self.plataforma,530 + x, 430, 'bloco')
-
-        x = 0
-        for i in range(4):
-            Plataform(self.sprites,self.plataforma,750, 452 - x, 'bloco')
-            x += 25
-        
-        Plataform(self.sprites,self.plataforma,726, 377, 'bloco')
-        Plataform(self.sprites,self.plataforma,774, 377, 'bloco')
+        Plataform(self.sprites,self.plataforma,self.plataformas_quebraveis,726, 380, 'bloco')
+        Plataform(self.sprites,self.plataforma,self.plataformas_quebraveis,774, 380, 'bloco')
 
         Estrela(self.sprites,self.estrela, 760, 337)
      
@@ -572,42 +557,23 @@ class Tela1_2:
         #criando o chao
         for i in range(30):
             x = 32*i
-            Plataform(self.sprites,self.plataforma,x, 480, 'grass')
+            Plataform(self.sprites,self.plataforma,self.plataformas_quebraveis,x, 480, 'grass')
 
         diferenca_entre_blocos_y = 25
         #colocar bloco no chao, y = 452
         
         #criando as plataformas 
-        Plataform(self.sprites,self.plataforma,300, 452, 'bloco')
-        Plataform(self.sprites,self.plataforma,300, 452 - diferenca_entre_blocos_y, 'bloco')
+        Plataform(self.sprites,self.plataforma,self.plataformas_quebraveis,300, 452, 'bloco')
+        Plataform(self.sprites,self.plataforma,self.plataformas_quebraveis,300, 452 - diferenca_entre_blocos_y, 'bloco')
 
-        Plataform(self.sprites,self.plataforma,800, 452, 'bloco')
-        Plataform(self.sprites,self.plataforma,800, 452 - diferenca_entre_blocos_y, 'bloco')
+        Plataform(self.sprites,self.plataforma,self.plataformas_quebraveis,800, 452, 'bloco')
+        Plataform(self.sprites,self.plataforma,self.plataformas_quebraveis,800, 452 - diferenca_entre_blocos_y, 'bloco')
 
-        x = 0
-        for i in range(10):
-            x += 24
-            Plataform(self.sprites,self.plataforma,410 + x, 390, 'bloco')
-
-        x = 0
-        for i in range(6):
-            Plataform(self.sprites,self.plataforma,600 + x, 300, 'bloco')
-            x += 24
-        
-        x = 0
-        for i in range(6):
-            Plataform(self.sprites,self.plataforma,400 + x, 210, 'bloco')
-            x += 24
-
-        x = 0
-        for i in range(6):
-            Plataform(self.sprites,self.plataforma,180 + x, 260, 'bloco')
-            x += 24
-        
-        x = 0
-        for i in range(3):
-            Plataform(self.sprites,self.plataforma,50 + x, 180, 'bloco')
-            x += 24
+        gera_plataforma(self,10,'x',434,390)
+        gera_plataforma(self,6,'x',600,300)
+        gera_plataforma(self,6,'x',400,210)
+        gera_plataforma(self,6,'x',180,260)
+        gera_plataforma(self,3,'x',50,180)
 
         Estrela(self.sprites,self.estrela, 84, 140)
         Coracao(self.sprites, self.coracao, 410, 140)
@@ -734,7 +700,7 @@ class Tela2_0:
         #criando o chao
         for i in range(30):
             x = 32*i
-            Plataform(self.sprites,self.plataforma,x, 480, 'grass')
+            Plataform(self.sprites,self.plataforma,self.plataformas_quebraveis,x, 480, 'grass')
 
         #criando as plataformas 
 
@@ -868,7 +834,7 @@ class Tela2_1:
         #criando o chao
         for i in range(30):
             x = 32*i
-            Plataform(self.sprites,self.plataforma,x, 480, 'grass')
+            Plataform(self.sprites,self.plataforma,self.plataformas_quebraveis,x, 480, 'grass')
 
         #criando as plataformas e as estrelas 
         gera_plataforma(self,40, 'x', -50, 450)
