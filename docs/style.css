@@ -176,7 +176,7 @@ main {
     font-size: 18px;
     line-height: 1.5;
     margin-bottom: 20px;
-    text-indent: 4rem;
+    
   }
 
 /* .intermediario{
@@ -242,6 +242,7 @@ main {
  .historico{
     align-items: center;
     display: flex;
+    size: 1rem;
   }
   
 footer {
