@@ -1207,7 +1207,7 @@ class Tela3_2:
     
     def __init__(self, window):
         #criando o fund0
-        fundo = pygame.image.load(assets["fundo3"]) #imagem gerdada pela AI "https://www.scenario.com/""
+        fundo = pygame.image.load(assets["fundo5"]) #imagem gerdada pela AI "https://www.scenario.com/""
         self.fundo = pygame.transform.scale(fundo, (912,512))
 
         #pre-stes de todas as telas 
@@ -1225,12 +1225,17 @@ class Tela3_2:
             self.lista_de_monstros.append(self.monstro)
 
         self.lista_de_gorilas = []
-        for i in range(1):
-            gorilas = Gorila(self.sprites,self.gorilas, 690, 250, 'direita') 
-            self.lista_de_gorilas.append(gorilas)
+        gorilas1 = Gorila(self.sprites,self.gorilas, 800, 350, 'direita') 
+        self.lista_de_gorilas.append(gorilas1)
+        gorilas2 = Gorila(self.sprites,self.gorilas, 750, 250, 'direita') 
+        self.lista_de_gorilas.append(gorilas2)
+        gorilas3 = Gorila(self.sprites,self.gorilas, 710, 150, 'direita') 
+        self.lista_de_gorilas.append(gorilas3)
+        gorilas4 = Gorila(self.sprites,self.gorilas, 780, 50, 'direita') 
+        self.lista_de_gorilas.append(gorilas4)
 
         self.lista_passaros = []
-        for i in range(6):
+        for i in range(3):
             x = randint(200,800)
             y = randint(31,81)
             passaro = Passaro(self.sprites,self.passaro, x, y,self.jogador,self.lista_passaros) 
@@ -1247,7 +1252,21 @@ class Tela3_2:
             x = 32*i
             Plataform(self.sprites,self.plataforma,self.plataformas_quebraveis,x, 480, 'grass')
 
-        gera_plataforma(self,8,'x',700,80)
+        gera_plataforma(self,10,'x',700,450)
+        gera_plataforma(self,10,'x',700,350)
+        gera_plataforma(self,10,'x',700,250)
+        gera_plataforma(self,10,'x',700,150)
+
+        gera_plataforma(self,3,'x',100,400)
+        gera_plataforma(self,3,'x',250,350)
+        gera_plataforma(self,3,'x',400,300)
+        gera_plataforma(self,2,'x',550,250)
+        gera_plataforma(self,2,'x',650,200)
+        gera_plataforma(self,4,'x',450,150)
+        gera_plataforma(self,4,'x',260,150)
+        gera_plataforma(self,4,'x',80,150)
+      
+  
 
     def recebe_eventos(self):
 
