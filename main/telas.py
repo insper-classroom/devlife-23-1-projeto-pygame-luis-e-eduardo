@@ -427,6 +427,7 @@ class Tela1_2(Telas):
         self.text_box1 = pygame.transform.smoothscale(text_box1,(230,230))
         self.aparece_text_box = False 
 
+        #imagem para os tiros do jogador 
         img_tiro = pygame.image.load(assets["img_bola"])
         self.tiro = pygame.transform.scale(img_tiro,(15,15))
 
@@ -1263,12 +1264,6 @@ class Tela3_2(Telas):
             self.lista_de_monstros.append(self.monstro)
 
         self.lista_de_gorilas = []
-        # gorilas1 = Gorila(self.sprites,self.gorilas, 800, 350, 'direita') 
-        # self.lista_de_gorilas.append(gorilas1)
-        # gorilas2 = Gorila(self.sprites,self.gorilas, 750, 250, 'direita') 
-        # self.lista_de_gorilas.append(gorilas2)
-        # gorilas3 = Gorila(self.sprites,self.gorilas, 710, 150, 'direita') 
-        # self.lista_de_gorilas.append(gorilas3)
         gorilas4 = Gorila(self.sprites,self.gorilas, 780, 50, 'direita') 
         self.lista_de_gorilas.append(gorilas4)
 
@@ -1306,8 +1301,6 @@ class Tela3_2(Telas):
         gera_plataforma(self,4,'x',80,160)
 
         Carne(self.sprites, self.carne, 100, 100)
-      
-  
 
     def recebe_eventos(self):
 
@@ -1381,7 +1374,6 @@ class Tela3_2(Telas):
         
         assets["vel_nana"] = True
         self.contador+=1
-        print(self.contador)
         if self.contador == 120:
             self.contador = 0
             
@@ -1546,33 +1538,21 @@ class Jogador(pygame.sprite.Sprite):
     def update(self, delta_t):
         
         self.speedy += self.GRAVITY
-        # Atualiza o estado para caindo
         if self.speedy > 0:
             self.state = self.FALLING
-        # Atualiza a posição y
         self.rect.y += self.speedy
-        # Se colidiu com algum bloco, volta para o ponto antes da colisão
         collisions = pygame.sprite.spritecollide(self, self.chao, False)
-        # Corrige a posição do personagem para antes da colisão
         for collision in collisions:
-            # Estava indo para baixo
             if self.speedy > 0:
                 self.rect.bottom = collision.rect.top
-                # Se colidiu com algo, para de cair
                 self.speedy = 0
-                # Atualiza o estado para parado
                 self.state = self.STILL
-            # Estava indo para cima
             elif self.speedy < 0:
                 self.rect.top = collision.rect.bottom
-                # Se colidiu com algo, para de cair
                 self.speedy = 0
-                # Atualiza o estado para parado
                 self.state = self.STILL
 
-        # Tenta andar em x
         self.rect.x += self.speedx
-        # Corrige a posição caso tenha passado do tamanho da janela
         if self.rect.left < 0:
             self.rect.left = 0
         elif self.rect.right >= self.WIDTH:
@@ -1673,38 +1653,6 @@ class Jogador(pygame.sprite.Sprite):
             self.speedy -= self.JUMP_SIZE
             self.state = self.JUMPING
 
-class Jogo:
-    
-    def __init__(self):
-        
-        pygame.init()
-        self.sprites = pygame.sprite.Group()
 
-        self.window = pygame.display.set_mode((912,512))
-
-        self.tela_atual = TelaInicial(self.window)
-        self.last_updated = pygame.time.get_ticks()
-
-    def recebe_eventos(self):
-        
-        self.tela_atual = self.tela_atual.recebe_eventos()
-        # recebe_eventos tela atual
-        if self.tela_atual is None:
-            return False
-        return True
-
-    def game_loop(self):
-        
-        while self.recebe_eventos():
-            self.tela_atual.desenha(self.window)
-            pygame.display.update()
-
-    def finaliza(self):
-        pygame.quit()
-
-if __name__ == '__main__':
-    jogo = Jogo()
-    jogo.game_loop()
-    jogo.finaliza()
 
 
