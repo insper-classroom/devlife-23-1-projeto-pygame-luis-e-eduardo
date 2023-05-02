@@ -207,8 +207,12 @@ class Tiro_monstro(pygame.sprite.Sprite):
         
         if direcao == "direita":
             self.vel_x_laser = +200
+            if assets["vel_nana"]:
+                self.vel_x_laser = 100
         else:
             self.vel_x_laser = -200
+            if assets["vel_nana"]:
+                self.vel_x_laser = -100
 
         self.flag_tiro = False
         self.plataforma = plataforma

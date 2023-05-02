@@ -54,8 +54,8 @@ class TelaInicial:
                 posicao = pygame.mouse.get_pos()
                 if posicao[0] >= (912-200)/2 - 35 and posicao[0] <= 912-(912-200)/2 +32:
                     if posicao[1] >=400 and posicao[1]<=470: #nao pode apertar as teclas de andar nao sei pq kkkk
-                        return Tela3_3(self.window)
-                        return Tela1_0(self.window)
+                        return Tela3_2(self.window)
+                        
                         
             elif evento.type == pygame.USEREVENT:#tocando a musica durante o jogo inteiro 
                 pygame.mixer.music.play()
@@ -945,6 +945,7 @@ class Tela3_0:
         self.tiro = pygame.transform.scale(img_tiro,(15,15))
 
         self.contador = 0
+        self.contador2= 0
     
     def gera_mapa(self):
         
@@ -1201,12 +1202,12 @@ class Tela3_2(Telas):
             self.lista_de_monstros.append(self.monstro)
 
         self.lista_de_gorilas = []
-        gorilas1 = Gorila(self.sprites,self.gorilas, 800, 350, 'direita') 
-        self.lista_de_gorilas.append(gorilas1)
-        gorilas2 = Gorila(self.sprites,self.gorilas, 750, 250, 'direita') 
-        self.lista_de_gorilas.append(gorilas2)
-        gorilas3 = Gorila(self.sprites,self.gorilas, 710, 150, 'direita') 
-        self.lista_de_gorilas.append(gorilas3)
+        # gorilas1 = Gorila(self.sprites,self.gorilas, 800, 350, 'direita') 
+        # self.lista_de_gorilas.append(gorilas1)
+        # gorilas2 = Gorila(self.sprites,self.gorilas, 750, 250, 'direita') 
+        # self.lista_de_gorilas.append(gorilas2)
+        # gorilas3 = Gorila(self.sprites,self.gorilas, 710, 150, 'direita') 
+        # self.lista_de_gorilas.append(gorilas3)
         gorilas4 = Gorila(self.sprites,self.gorilas, 780, 50, 'direita') 
         self.lista_de_gorilas.append(gorilas4)
 
@@ -1220,6 +1221,7 @@ class Tela3_2(Telas):
         img_tiro = pygame.image.load(assets["img_bola"])
         self.tiro = pygame.transform.scale(img_tiro,(15,15))
         self.contador = 0
+        self.contador2 = 0
 
     def gera_mapa(self):
         
@@ -1233,14 +1235,14 @@ class Tela3_2(Telas):
         gera_plataforma(self,10,'x',700,250)
         gera_plataforma(self,10,'x',700,150)
 
-        gera_plataforma(self,3,'x',100,400)
+        gera_plataforma(self,3,'x',100,410)
         gera_plataforma(self,3,'x',250,350)
-        gera_plataforma(self,3,'x',400,300)
+        gera_plataforma(self,3,'x',400,310)
         gera_plataforma(self,2,'x',550,250)
-        gera_plataforma(self,2,'x',650,200)
-        gera_plataforma(self,4,'x',450,150)
-        gera_plataforma(self,4,'x',260,150)
-        gera_plataforma(self,4,'x',80,150)
+        gera_plataforma(self,2,'x',650,210)
+        gera_plataforma(self,4,'x',450,160)
+        gera_plataforma(self,4,'x',260,160)
+        gera_plataforma(self,4,'x',80,160)
 
         Carne(self.sprites, self.carne, 100, 100)
       
@@ -1316,18 +1318,22 @@ class Tela3_2(Telas):
             if i < 40 and i>=30:
                 window.blit(self.tiro,(i*14-210+560,39))
         
+        assets["vel_nana"] = True
         self.contador+=1
         print(self.contador)
         if self.contador == 120:
             self.contador = 0
-            if assets["gorila_vivo2"]:
-                Tiro_monstro(self.sprites, self.plataforma,self.plataformas_quebraveis,730, 290, self.tiro_monstro,"esquerda")
-            if assets["gorila_vivo"]:
-                Tiro_monstro(self.sprites, self.plataforma,self.plataformas_quebraveis,790, 390, self.tiro_monstro,"esquerda")
-            if assets["gorila_vivo3"]:
-                Tiro_monstro(self.sprites, self.plataforma,self.plataformas_quebraveis,730, 190, self.tiro_monstro,"esquerda")
-            if assets["gorila_vivo4"]:
-                Tiro_monstro(self.sprites, self.plataforma,self.plataformas_quebraveis,730, 90, self.tiro_monstro,"esquerda")
+            
+            self.contador2+=1
+            if self.contador2 == 4:
+                self.contador2 = 0          
+                Tiro_monstro(self.sprites, self.plataforma,self.plataformas_quebraveis,900, 290, self.tiro_monstro,"esquerda")
+            if self.contador2 == 3:
+                Tiro_monstro(self.sprites, self.plataforma,self.plataformas_quebraveis,900, 390, self.tiro_monstro,"esquerda")
+                Tiro_monstro(self.sprites, self.plataforma,self.plataformas_quebraveis,900, 190, self.tiro_monstro,"esquerda")
+            if self.contador2 == 2:
+                if assets["gorila_vivo"]:
+                    Tiro_monstro(self.sprites, self.plataforma,self.plataformas_quebraveis,730, 90, self.tiro_monstro,"esquerda")
         self.sprites.draw(self.window)
 
 class Tela3_3:
