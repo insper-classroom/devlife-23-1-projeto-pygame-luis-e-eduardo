@@ -947,12 +947,12 @@ class Tela3_0:
             self.lista_de_monstros.append(self.monstro)
 
         self.lista_de_gorilas = []
-        for i in range(0):
-            gorilas = Gorila(self.sprites,self.gorilas, 750, 200, 'direita') 
+        for i in range(1):
+            gorilas = Gorila(self.sprites,self.gorilas, 690, 250, 'direita') 
             self.lista_de_gorilas.append(gorilas)
 
         self.lista_passaros = []
-        for i in range(1):
+        for i in range(2):
             x = randint(200,800)
             passaro = Passaro(self.sprites,self.passaro, x, 30,self.jogador,self.lista_passaros) 
             self.lista_de_gorilas.append(passaro)
@@ -969,12 +969,42 @@ class Tela3_0:
 
         gera_plataforma(self,4,'x',100,410)
         gera_plataforma(self,4,'x',210,350)
-        gera_plataforma(self,4,'x',320,290)
-        gera_plataforma(self,4,'x',240,200)
+        gera_plataforma(self,6,'x',320,290)
+        gera_plataforma(self,8,'x',100,190)
+        Estrela(self.sprites,self.estrela, 140, 155)
+        Coracao(self.sprites, self.coracao, 200, 152)
+        
+        gera_plataforma(self,3,'x',500,250)
 
-        Estrela(self.sprites,self.estrela, 850, 415)
-        Coracao(self.sprites, self.coracao, 600, 260)
-        Pocao(self.sprites, self.pocao, 480, 410)
+        gera_plataforma(self,12,'x',650,200)
+        gera_plataforma(self,12,'x',650,50)
+        gera_plataforma(self,20,'x',550,350)
+        gera_plataforma(self,7,'y',200,890)
+        Estrela(self.sprites,self.estrela, 800, 315)
+
+        x = 0
+        for i in range(5):
+            Plataform(self.sprites,self.plataforma,self.plataformas_quebraveis,663, 179 - x, 'sand')
+            x += 25
+        x = 0
+        for i in range(5):
+            Plataform(self.sprites,self.plataforma,self.plataformas_quebraveis,878, 179 - x, 'sand')
+            x += 25
+        x = 0
+        for i in range(5):
+            Plataform(self.sprites,self.plataforma,self.plataformas_quebraveis,854, 179 - x, 'sand')
+            x += 25
+        x = 0
+        for i in range(5):
+            Plataform(self.sprites,self.plataforma,self.plataformas_quebraveis,830, 179 - x, 'sand')
+            x += 25
+        Pocao(self.sprites, self.pocao, 690, 160)
+        Pocao(self.sprites, self.pocao, 750, 160)
+        Coracao(self.sprites, self.coracao, 705, 165)
+        Coracao(self.sprites, self.coracao, 730, 165)
+        Pocao(self.sprites, self.pocao, 720, 160)
+        Coracao(self.sprites, self.coracao, 770, 165)
+        Pocao(self.sprites, self.pocao, 780, 160)
 
     def recebe_eventos(self):
 
