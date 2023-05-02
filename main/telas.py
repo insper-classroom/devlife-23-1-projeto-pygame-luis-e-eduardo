@@ -14,7 +14,7 @@ class GameOver():
         fonte_padrao = pygame.font.get_default_font()
         self.fonte = pygame.font.Font(fonte_padrao, 24)
         self.window = window
-        imagem = pygame.image.load("game_over.png")
+        imagem = pygame.image.load(assets["game_over"])
         self.image = pygame.transform.scale(imagem,(912,580))
 
 
@@ -42,7 +42,7 @@ class TelaInicial:
         fonte_padrao = pygame.font.get_default_font()
         self.fonte = pygame.font.Font(fonte_padrao, 24)
         self.window = window
-        imagem = pygame.image.load(assets["tela_inicial"])
+        imagem = pygame.image.load("fundo_inicial.png")
         self.image = pygame.transform.scale(imagem,(912,512))
 
 
@@ -54,7 +54,8 @@ class TelaInicial:
                 posicao = pygame.mouse.get_pos()
                 if posicao[0] >= (912-200)/2 - 35 and posicao[0] <= 912-(912-200)/2 +32:
                     if posicao[1] >=400 and posicao[1]<=470: #nao pode apertar as teclas de andar nao sei pq kkkk
-                        return Tela2_0(self.window)
+                        return Tela3_3(self.window)
+                        return Tela1_0(self.window)
                         
             elif evento.type == pygame.USEREVENT:#tocando a musica durante o jogo inteiro 
                 pygame.mixer.music.play()
@@ -84,14 +85,14 @@ class Telas():
         self.tiro_monstro = pygame.sprite.Group()
         
         self.vidas = 5
-        img_coracao = pygame.image.load("coracao.png")
+        img_coracao = pygame.image.load(assets["img_coracao"])
         self.img_coracao = pygame.transform.scale(img_coracao, (25,25))
 
         self.last_updated = 0
 
         assets["gorila_vivo"] = True
 
-        chao = pygame.image.load("grass.png")
+        chao = pygame.image.load(assets["grass"])
         self.chao = pygame.transform.scale(chao,(50,15))
         self.plataforma = pygame.sprite.Group()
         self.monstros = pygame.sprite.Group()
@@ -161,9 +162,9 @@ class Tela1_0: #Tela1.0: tutorial de mudança de mapa e coleta de estrelas
         self.gera_mapa()
 
         #npc para dar as instrucoes do "tutorial"
-        zoro = pygame.image.load("zoro.png")
+        zoro = pygame.image.load(assets["img_zoro"])
         self.zoro = pygame.transform.smoothscale(zoro,(70,80))
-        text_box3 = pygame.image.load("text_box3.png")
+        text_box3 = pygame.image.load(assets["text_box3"])
         self.text_box1 = pygame.transform.smoothscale(text_box3,(230,230))
         self.aparece_text_box = False 
         self.jogador.speedx = 0
@@ -255,9 +256,9 @@ class Tela1: #Tela1: tutorial de movimentacao e pulo
         self.gera_mapa()
 
         #npc para dar as instrucoes do "tutorial"
-        zoro = pygame.image.load("zoro.png")
+        zoro = pygame.image.load(assets["img_zoro"])
         self.zoro = pygame.transform.smoothscale(zoro,(70,80))
-        text_box1 = pygame.image.load("text_box1.png")
+        text_box1 = pygame.image.load(assets["text_box1"])
         self.text_box1 = pygame.transform.smoothscale(text_box1,(230,230))
         self.aparece_text_box = False 
         self.jogador.speedx = 0
@@ -354,13 +355,13 @@ class Tela1_2(Telas):
         self.gera_mapa()
 
         #npc para dar as instrucoes do "tutorial"
-        zoro = pygame.image.load("zoro.png")
+        zoro = pygame.image.load(assets["img_zoro"])
         self.zoro = pygame.transform.smoothscale(zoro,(70,80))
-        text_box1 = pygame.image.load("text_box2.png")
+        text_box1 = pygame.image.load(assets["text_box2"])
         self.text_box1 = pygame.transform.smoothscale(text_box1,(230,230))
         self.aparece_text_box = False 
 
-        img_tiro = pygame.image.load('bola.png')
+        img_tiro = pygame.image.load(assets["img_bola"])
         self.tiro = pygame.transform.scale(img_tiro,(15,15))
 
         #gerando os monstros no mapa 
@@ -511,12 +512,6 @@ class Tela2_0:
             self.monstro = Monstro(self.sprites,self.monstros, 600, 150) 
             self.lista_de_monstros.append(self.monstro)
         
-        self.lista_passaros = []
-        for i in range(1):
-            x = randint(200,800)
-            passaro = Passaro(self.sprites,self.passaro, x, 30,self.jogador,self.lista_passaros) 
-            self.lista_passaros.append(passaro)
-
         img_tiro = pygame.image.load('bola.png')
         self.tiro = pygame.transform.scale(img_tiro,(15,15))
     
@@ -625,7 +620,7 @@ class Tela2_0:
 
         self.sprites.draw(self.window)
 
-class Tela2_1:
+class Tela2_1(Telas):
     
     def __init__(self, window):
         #criando o fund0
@@ -643,21 +638,21 @@ class Tela2_1:
         self.lista_de_monstros = []
         for i in range(6):
             x = randint(self.limita_monstros_x[0],self.limita_monstros_x[1])
-            a = Monstro(self.sprites,self.monstros, x, 412) 
-            self.lista_de_monstros.append(a)
+            monstro = Monstro(self.sprites,self.monstros, x, 412) 
+            self.lista_de_monstros.append(monstro)
 
         self.lista_de_gorilas = []
         for i in range(1):
-            b = Gorila(self.sprites,self.gorilas, 50, 220, 'esquerda') 
-            self.lista_de_gorilas.append(b)
+            gorila = Gorila(self.sprites,self.gorilas, 50, 220, 'esquerda') 
+            self.lista_de_gorilas.append(gorila)
 
         self.lista_passaros = []
         for i in range(1):
             x = randint(200,800)
-            c = Passaro(self.sprites,self.passaro, x, 30,self.jogador,self.lista_passaros) 
-            self.lista_de_gorilas.append(c)
+            passaro = Passaro(self.sprites,self.passaro, x, 30,self.jogador,self.lista_passaros) 
+            self.lista_de_gorilas.append(passaro)
         
-        img_tiro = pygame.image.load('bola.png')
+        img_tiro = pygame.image.load(assets["img_bola"])
         self.tiro = pygame.transform.scale(img_tiro,(15,15))
 
         self.contador = 0
@@ -791,7 +786,7 @@ class Tela2_2:
             passaro = Passaro(self.sprites,self.passaro, x, 30,self.jogador,self.lista_passaros) 
             self.lista_de_gorilas.append(passaro)
 
-        img_tiro = pygame.image.load('bola.png')
+        img_tiro = pygame.image.load(assets["img_bola"])
         self.tiro = pygame.transform.scale(img_tiro,(15,15))
 
         self.contador = 0
@@ -946,7 +941,7 @@ class Tela3_0:
             passaro = Passaro(self.sprites,self.passaro, x, y,self.jogador,self.lista_passaros) 
             self.lista_de_gorilas.append(passaro)
 
-        img_tiro = pygame.image.load('bola.png')
+        img_tiro = pygame.image.load(assets["img_bola"])
         self.tiro = pygame.transform.scale(img_tiro,(15,15))
 
         self.contador = 0
@@ -1091,7 +1086,7 @@ class Tela3_1:
             passaro = Passaro(self.sprites,self.passaro, x, y,self.jogador,self.lista_passaros) 
             self.lista_passaros.append(passaro)
 
-        img_tiro = pygame.image.load('bola.png')
+        img_tiro = pygame.image.load(assets["img_bola"])
         self.tiro = pygame.transform.scale(img_tiro,(15,15))
         self.contador = 0
 
@@ -1222,7 +1217,7 @@ class Tela3_2(Telas):
             passaro = Passaro(self.sprites,self.passaro, x, y,self.jogador,self.lista_passaros) 
             self.lista_de_gorilas.append(passaro)
 
-        img_tiro = pygame.image.load('bola.png')
+        img_tiro = pygame.image.load(assets["img_bola"])
         self.tiro = pygame.transform.scale(img_tiro,(15,15))
         self.contador = 0
 
@@ -1348,7 +1343,7 @@ class Tela3_3:
         #gerando as plataformas dos mapas 
         self.gera_mapa()
 
-        img_tiro = pygame.image.load('bola.png')
+        img_tiro = pygame.image.load(assets["img_bola"])
         self.tiro = pygame.transform.scale(img_tiro,(15,15))
 
         trofeu = pygame.image.load(assets["trofeu"])
@@ -1444,7 +1439,7 @@ class Jogador(pygame.sprite.Sprite):
         self.pocao = pocao
         self.tiro_banana = tiro_banana
 
-        self.mario = pygame.image.load("estrela.png")
+        self.mario = pygame.image.load(assets["img_estrela"])
         self.image = pygame.transform.scale(self.mario, (50,50))
 
         self.rect = self.image.get_rect()
@@ -1465,13 +1460,13 @@ class Jogador(pygame.sprite.Sprite):
         self.HEIGHT = 512
 
         self.lista_jogador = []
-        imagem = pygame.image.load("andando.png")
+        imagem = pygame.image.load(assets["img_andando"])
         self.lista_jogador = load_spritesheet(imagem,1,8)
 
-        imagem = pygame.image.load("parado.png")
+        imagem = pygame.image.load(assets["img_parado"])
         self.lista_jogador_parado = load_spritesheet(imagem,1,2)
 
-        imagem = pygame.image.load("pulando.png")
+        imagem = pygame.image.load(assets["img_pulando"])
         self.lista_jogador_pulando = load_spritesheet(imagem,1,6)
 
         self.state = "parado"

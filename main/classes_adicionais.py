@@ -9,7 +9,7 @@ class Plataform(pygame.sprite.Sprite):
         self.plataformas_quebraveis = plataformas_quebraveis
         pygame.sprite.Sprite.__init__(self)
         if self.tipo == 'grass':
-            img_plataforma = pygame.image.load("grass.png")
+            img_plataforma = pygame.image.load(assets["grass"])
             self.image = pygame.transform.scale(img_plataforma, (50,15))
             self.rect = self.image.get_rect()
             self.rect.x = x
@@ -17,7 +17,7 @@ class Plataform(pygame.sprite.Sprite):
             sprites.add(self)
             self.plataforma.add(self)
         if self.tipo == 'bloco':
-            img_plataforma = pygame.image.load("bloco1.png")
+            img_plataforma = pygame.image.load(assets["img_bloco1"])
             self.image = pygame.transform.scale(img_plataforma, (50,30))
             self.rect = self.image.get_rect()
             self.rect.x = x
@@ -25,7 +25,7 @@ class Plataform(pygame.sprite.Sprite):
             sprites.add(self)
             self.plataforma.add(self)
         if self.tipo == 'sand':
-            img_plataforma = pygame.image.load("sand.png")
+            img_plataforma = pygame.image.load(assets["sand"])
             self.image = pygame.transform.scale(img_plataforma, (25,25))
             self.rect = self.image.get_rect()
             self.rect.x = x
@@ -37,7 +37,7 @@ class Estrela(pygame.sprite.Sprite):
     def __init__(self,sprites,estrela,x,y):
         self.estrela = estrela
         pygame.sprite.Sprite.__init__(self)
-        img_estrela = pygame.image.load("estrela.png")
+        img_estrela = pygame.image.load(assets["img_estrela"])
         self.image = pygame.transform.scale(img_estrela, (35,35))
         self.rect = self.image.get_rect()
         self.rect.x = x
@@ -49,7 +49,7 @@ class Coracao(pygame.sprite.Sprite):
     def __init__(self,sprites,coracao,x,y):
         self.coracao = coracao
         pygame.sprite.Sprite.__init__(self)
-        img_coracao = pygame.image.load("coracao1.png")
+        img_coracao = pygame.image.load(assets["img_coracao1"])
         self.image = pygame.transform.scale(img_coracao, (45,45))
         self.rect = self.image.get_rect()
         self.rect.x = x
@@ -61,7 +61,7 @@ class Carne(pygame.sprite.Sprite):
     def __init__(self,sprites,carne,x,y):
         self.carne = carne
         pygame.sprite.Sprite.__init__(self)
-        img_coracao = pygame.image.load("carne.png")
+        img_coracao = pygame.image.load(assets["img_carne"])
         self.image = pygame.transform.scale(img_coracao, (45,45))
         self.rect = self.image.get_rect()
         self.rect.x = x
@@ -73,7 +73,7 @@ class Pocao(pygame.sprite.Sprite):
     def __init__(self,sprites,pocao,x,y):
         self.pocao = pocao
         pygame.sprite.Sprite.__init__(self)
-        img_pocao = pygame.image.load("berry.png")
+        img_pocao = pygame.image.load(assets["img_berry"])
         self.image = pygame.transform.scale(img_pocao, (50,50))
         self.rect = self.image.get_rect()
         self.rect.x = x
@@ -146,7 +146,7 @@ class Tiro(pygame.sprite.Sprite):
     def __init__(self, sprites,monstros,plataforma,plataformas_quebraveis,gorilas,passaro, x, y):
         pygame.sprite.Sprite.__init__(self)
 
-        img_laser = pygame.image.load('bola.png')
+        img_laser = pygame.image.load(assets["img_bola"])
         self.image = pygame.transform.scale(img_laser,(15,15))
         
         self.rect = self.image.get_rect()
@@ -187,7 +187,7 @@ class Tiro(pygame.sprite.Sprite):
                 self.kill()
                 lista_plataformas_quebraveis = []
                 assets["gorila_vivo"] = False
-                
+
             lista_plataformas_quebraveis = pygame.sprite.spritecollide(self, self.passaro,True)
             for tiro in lista_plataformas_quebraveis:
                 self.kill()
@@ -196,7 +196,7 @@ class Tiro_monstro(pygame.sprite.Sprite):
     def __init__(self, sprites,plataforma,plataformas_quebraveis, x, y, tiro_monstro, direcao):
         pygame.sprite.Sprite.__init__(self)
 
-        img_laser = pygame.image.load('banana.png')
+        img_laser = pygame.image.load(assets["img_banana"])
         self.image = pygame.transform.scale(img_laser,(30,30))
         
         self.tiro_monstro = tiro_monstro
