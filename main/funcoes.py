@@ -78,7 +78,7 @@ class Coracao(pygame.sprite.Sprite):
         self.coracao = coracao
         pygame.sprite.Sprite.__init__(self)
         img_coracao = pygame.image.load("coracao.png")
-        self.image = pygame.transform.scale(img_coracao, (35,35))
+        self.image = pygame.transform.scale(img_coracao, (25,25))
         self.rect = self.image.get_rect()
         self.rect.x = x
         self.rect.y = y
@@ -149,15 +149,15 @@ class Tiro(pygame.sprite.Sprite):
     
     def update(self, delta_t):
         
-        self.rect.x = (self.rect.x + self.vel_x_laser*delta_t)
-        lista = pygame.sprite.spritecollide(self, self.monstros,True)
-        for tiro in lista:
-            self.sprites.remove(self)
-        if self.rect.x > 912 or self.rect.x < 0:
-            self.kill()
-        lista_plataformas = pygame.sprite.spritecollide(self, self.plataforma,False)
-        for tiro in lista_plataformas:   
-            self.kill()
+            self.rect.x = (self.rect.x + self.vel_x_laser*delta_t)
+            lista = pygame.sprite.spritecollide(self, self.monstros,True)
+            for tiro in lista:
+                self.sprites.remove(self)
+            if self.rect.x > 912 or self.rect.x < 0:
+                self.kill()
+            lista_plataformas = pygame.sprite.spritecollide(self, self.plataforma,False)
+            for tiro in lista_plataformas:   
+                self.kill()
             
 class GameOver():
     def __init__(self, window):
@@ -205,7 +205,7 @@ class TelaInicial:
                 posicao = pygame.mouse.get_pos()
                 if posicao[0] >= (912-200)/2 - 35 and posicao[0] <= 912-(912-200)/2 +32:
                     if posicao[1] >=400 and posicao[1]<=470: #nao pode apertar as teclas de andar nao sei pq kkkk
-                        return Tela2_0(self.window)
+                        return Tela2_1(self.window)
                         
             elif evento.type == pygame.USEREVENT:#tocando a musica durante o jogo inteiro 
                 pygame.mixer.music.play()
@@ -603,7 +603,10 @@ class Tela1_2:
             if event.type == pygame.KEYDOWN and event.key == pygame.K_SPACE:
                 self.jogador.jump()
             if event.type==pygame.KEYDOWN and event.key == pygame.K_e:
-                Tiro(self.sprites, self.monstros, self.jogador.rect.x, self.jogador.rect.y+25)
+                assets["tiro"] -= 1
+                if assets["tiro"] >= 0:
+                    Tiro(self.sprites, self.monstros, self.jogador.rect.x, self.jogador.rect.y+25)
+
             if self.jogador.rect.x > 850 and assets["estrela"] == 1:
                 return Tela2_0(self.window)
             if assets["vidas"] <= 0:
@@ -722,7 +725,9 @@ class Tela2_0:
             if event.type == pygame.KEYDOWN and event.key == pygame.K_SPACE:
                 self.jogador.jump()
             if event.type==pygame.KEYDOWN and event.key == pygame.K_e:
-                Tiro(self.sprites, self.monstros,self.plataforma, self.jogador.rect.x, self.jogador.rect.y+25)
+                assets["tiro"] -= 1
+                if assets["tiro"] >= 0:
+                    Tiro(self.sprites, self.monstros,self.plataforma, self.jogador.rect.x, self.jogador.rect.y+25)
             if self.jogador.rect.x > 850 and assets["estrela"] == 3:
                 return Tela2_1(self.window)
             if assets["vidas"] <= 0:
@@ -801,6 +806,8 @@ class Tela2_1:
         gera_plataforma(self,4, 'x', 610, 220)
         Estrela(self.sprites,self.estrela, 655, 185)
         gera_plataforma(self,2, 'x', 630, 380)
+
+        Coracao(self.sprites, self.coracao, 830, 390)
     
     def recebe_eventos(self):
 
@@ -827,7 +834,9 @@ class Tela2_1:
             if event.type == pygame.KEYDOWN and event.key == pygame.K_SPACE:
                 self.jogador.jump()
             if event.type==pygame.KEYDOWN and event.key == pygame.K_e:
-                Tiro(self.sprites, self.monstros, self.plataforma,self.jogador.rect.x, self.jogador.rect.y+25)
+                assets["tiro"] -= 1
+                if assets["tiro"] >= 0:
+                    Tiro(self.sprites, self.monstros, self.plataforma,self.jogador.rect.x, self.jogador.rect.y+25)
             if self.jogador.rect.x > 850 and assets["estrela"] == 3:
                 return Tela3(self.window)
             if assets["vidas"] <= 0:
