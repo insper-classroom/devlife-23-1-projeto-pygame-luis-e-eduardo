@@ -798,19 +798,19 @@ class Tela2_2:
         self.lista_de_monstros = []
         for i in range(2):
             x = randint(self.limita_monstros_x[0],self.limita_monstros_x[1])
-            self.monstro = Monstro(self.sprites,self.monstros, x, 412) 
-            self.lista_de_monstros.append(self.monstro)
+            monstro = Monstro(self.sprites,self.monstros, x, 412) 
+            self.lista_de_monstros.append(monstro)
 
         self.lista_de_gorilas = []
         for i in range(1):
-            self.gorilas = Gorila(self.sprites,self.gorilas, 750, 200, 'direita') 
-            self.lista_de_gorilas.append(self.gorilas)
+            gorilas = Gorila(self.sprites,self.gorilas, 750, 200, 'direita') 
+            self.lista_de_gorilas.append(gorilas)
 
         self.lista_passaros = []
         for i in range(1):
             x = randint(200,800)
-            self.passaro = Passaro(self.sprites,self.passaro, x, 30,self.jogador,self.lista_passaros) 
-            self.lista_de_gorilas.append(self.passaro)
+            passaro = Passaro(self.sprites,self.passaro, x, 30,self.jogador,self.lista_passaros) 
+            self.lista_de_gorilas.append(passaro)
 
         img_tiro = pygame.image.load('bola.png')
         self.tiro = pygame.transform.scale(img_tiro,(15,15))
