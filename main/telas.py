@@ -32,43 +32,17 @@ class GameOver():
     def desenha(self, window):
         window.fill((0, 0, 0))
         window.blit(self.image,(0,0))
-
-class YouWin():
-    def __init__(self, window):
-
-        
-        fonte_padrao = pygame.font.get_default_font()
-        self.fonte = pygame.font.Font(fonte_padrao, 24)
-        self.window = window
-        imagem = pygame.image.load("you win.jpg")
-        self.image = pygame.transform.scale(imagem,(912,580))
-
-
-    def recebe_eventos(self):
-        for evento in pygame.event.get():
-            if evento.type == pygame.QUIT:
-                return None 
-            elif evento.type == pygame.KEYDOWN and evento.key == pygame.K_SPACE:
-                assets["vidas"] = 5
-                assets["estrela"] = 0
-                assets["tiro"] = 20
-                return Tela1(self.window)
-        return self
-
-    def desenha(self, window):
-        window.fill((0, 0, 0))
-        window.blit(self.image,(0,0))
   
 class TelaInicial:
     def __init__(self, window):
         
         #chamando a musica 
-        #musica("musica_MFDOOM.mp3")
+        musica("musica_MFDOOM.mp3")
         
         fonte_padrao = pygame.font.get_default_font()
         self.fonte = pygame.font.Font(fonte_padrao, 24)
         self.window = window
-        imagem = pygame.image.load("fundo_inicial.png")
+        imagem = pygame.image.load(assets["tela_inicial"])
         self.image = pygame.transform.scale(imagem,(912,512))
 
 
@@ -80,8 +54,7 @@ class TelaInicial:
                 posicao = pygame.mouse.get_pos()
                 if posicao[0] >= (912-200)/2 - 35 and posicao[0] <= 912-(912-200)/2 +32:
                     if posicao[1] >=400 and posicao[1]<=470: #nao pode apertar as teclas de andar nao sei pq kkkk
-                        return Tela3_3(self.window)
-                        return Tela1_0(self.window)
+                        return Tela2_0(self.window)
                         
             elif evento.type == pygame.USEREVENT:#tocando a musica durante o jogo inteiro 
                 pygame.mixer.music.play()
@@ -92,12 +65,12 @@ class TelaInicial:
         largura = 200
         diferenca_largura = (912 - largura)/2
         window.blit(self.image,(0,0))
-        pygame.draw.polygon(window,(235,180,51),[(diferenca_largura,400),(912 - diferenca_largura,400),(912 - diferenca_largura,470),(diferenca_largura,470)])
-        pygame.draw.circle(window,(235,180,51),(diferenca_largura, 435), 35)
-        pygame.draw.circle(window,(235,180,51),(912-diferenca_largura, 435), 35)
+        pygame.draw.polygon(window,(0,0,0),[(diferenca_largura,400),(912 - diferenca_largura,400),(912 - diferenca_largura,470),(diferenca_largura,470)])
         img_mensagem = self.fonte.render("Jogar", True,(255,255,255))
         mensagem = pygame.transform.scale(img_mensagem, (150,60))
+        creditos = self.fonte.render("Feito por Lipe e Edu", True,(255,255,255))
         window.blit(mensagem,(diferenca_largura+20, 405))
+        window.blit(creditos,(0,0))
 
 class Telas():
     def __init__(self, window): 
@@ -538,6 +511,12 @@ class Tela2_0:
             self.monstro = Monstro(self.sprites,self.monstros, 600, 150) 
             self.lista_de_monstros.append(self.monstro)
         
+        self.lista_passaros = []
+        for i in range(1):
+            x = randint(200,800)
+            passaro = Passaro(self.sprites,self.passaro, x, 30,self.jogador,self.lista_passaros) 
+            self.lista_passaros.append(passaro)
+
         img_tiro = pygame.image.load('bola.png')
         self.tiro = pygame.transform.scale(img_tiro,(15,15))
     
@@ -600,7 +579,7 @@ class Tela2_0:
             if event.type==pygame.KEYDOWN and event.key == pygame.K_e:
                 assets["tiro"] -= 1
                 if assets["tiro"] >= 0:
-                    Tiro(self.sprites, self.monstros, self.plataforma,self.plataformas_quebraveis,self.jogador.rect.x, self.jogador.rect.y+25)
+                    Tiro(self.sprites, self.monstros, self.plataforma,self.plataformas_quebraveis,self.gorilas,self.passaro,self.jogador.rect.x, self.jogador.rect.y+25)
             if self.jogador.rect.x > 850 and assets["estrela"] == 3:
                 return Tela2_1(self.window)
             if assets["vidas"] <= 0:
@@ -1300,7 +1279,7 @@ class Tela3_2(Telas):
                 if assets["tiro"] >= 0:
                     Tiro(self.sprites, self.monstros, self.plataforma,self.plataformas_quebraveis,self.gorilas, self.passaro, self.jogador.rect.x, self.jogador.rect.y+25)
             if assets["carne"]:
-                return YouWin(self.window)
+                return Tela3_3(self.window)
             if assets["vidas"] <= 0:
                 return GameOver(self.window)
 
