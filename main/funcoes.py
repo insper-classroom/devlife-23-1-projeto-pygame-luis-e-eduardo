@@ -9,12 +9,12 @@ def gera_plataforma(self,quantidade_blocos,eixo,inicio,outro_eixo):
         if eixo == 'x':   
             x = 0
             for i in range(quantidade_blocos):
-                Plataform(self.sprites,self.plataforma,inicio + x, outro_eixo, 'bloco')
+                Plataform(self.sprites,self.plataforma,self.plataformas_quebraveis,inicio + x, outro_eixo, 'bloco')
                 x += 24 
         if eixo == 'y':
             x = 0
             for i in range(quantidade_blocos):
-                Plataform(self.sprites,self.plataforma,outro_eixo, inicio - x, 'bloco')
+                Plataform(self.sprites,self.plataforma,self.plataformas_quebraveis,outro_eixo, inicio - x, 'bloco')
                 x += 24 
 
 def load_spritesheet(spritesheet, rows, columns):
@@ -45,21 +45,35 @@ def musica(musica):
     pygame.mixer.music.play() 
 
 class Plataform(pygame.sprite.Sprite):
-    def __init__(self,sprites,plataforma,x,y,tipo):
+    def __init__(self,sprites,plataforma,plataformas_quebraveis,x,y,tipo):
         self.plataforma = plataforma
         self.tipo = tipo 
+        self.plataformas_quebraveis = plataformas_quebraveis
         pygame.sprite.Sprite.__init__(self)
         if self.tipo == 'grass':
             img_plataforma = pygame.image.load("grass.png")
             self.image = pygame.transform.scale(img_plataforma, (50,15))
+            self.rect = self.image.get_rect()
+            self.rect.x = x
+            self.rect.y = y
+            sprites.add(self)
+            self.plataforma.add(self)
         if self.tipo == 'bloco':
             img_plataforma = pygame.image.load("bloco1.png")
             self.image = pygame.transform.scale(img_plataforma, (50,30))
-        self.rect = self.image.get_rect()
-        self.rect.x = x
-        self.rect.y = y
-        sprites.add(self)
-        self.plataforma.add(self)
+            self.rect = self.image.get_rect()
+            self.rect.x = x
+            self.rect.y = y
+            sprites.add(self)
+            self.plataforma.add(self)
+        if self.tipo == 'sand':
+            img_plataforma = pygame.image.load("sand.png")
+            self.image = pygame.transform.scale(img_plataforma, (25,25))
+            self.rect = self.image.get_rect()
+            self.rect.x = x
+            self.rect.y = y
+            sprites.add(self)
+            self.plataformas_quebraveis.add(self)
 
 class Estrela(pygame.sprite.Sprite):
     def __init__(self,sprites,estrela,x,y):
@@ -126,7 +140,7 @@ class Gorila(pygame.sprite.Sprite):
         self.gorila.add(self)
 
 class Tiro(pygame.sprite.Sprite):
-    def __init__(self, sprites,monstros,plataforma, x, y):
+    def __init__(self, sprites,monstros,plataforma,plataformas_quebraveis, x, y):
         pygame.sprite.Sprite.__init__(self)
 
         img_laser = pygame.image.load('bola.png')
@@ -144,6 +158,7 @@ class Tiro(pygame.sprite.Sprite):
         self.flag_tiro = False
         self.monstros = monstros
         self.plataforma = plataforma
+        self.plataformas_quebraveis = plataformas_quebraveis
         sprites.add(self) 
         self.sprites = sprites 
     
@@ -157,6 +172,9 @@ class Tiro(pygame.sprite.Sprite):
                 self.kill()
             lista_plataformas = pygame.sprite.spritecollide(self, self.plataforma,False)
             for tiro in lista_plataformas:   
+                self.kill()
+            lista_plataformas_quebraveis = pygame.sprite.spritecollide(self, self.plataformas_quebraveis,True)
+            for tiro in lista_plataformas_quebraveis:
                 self.kill()
             
 class GameOver():
@@ -205,7 +223,7 @@ class TelaInicial:
                 posicao = pygame.mouse.get_pos()
                 if posicao[0] >= (912-200)/2 - 35 and posicao[0] <= 912-(912-200)/2 +32:
                     if posicao[1] >=400 and posicao[1]<=470: #nao pode apertar as teclas de andar nao sei pq kkkk
-                        return Tela2_1(self.window)
+                        return Tela2_2(self.window)
                         
             elif evento.type == pygame.USEREVENT:#tocando a musica durante o jogo inteiro 
                 pygame.mixer.music.play()
@@ -229,6 +247,7 @@ class Telas():
         self.window = window
         self.sprites = pygame.sprite.Group()
         self.plataform = pygame.sprite.Group()
+        self.plataformas_quebraveis = pygame.sprite.Group()
         fonte_padrao = pygame.font.get_default_font()
         self.fonte = pygame.font.Font(fonte_padrao, 24)
         
@@ -605,7 +624,7 @@ class Tela1_2:
             if event.type==pygame.KEYDOWN and event.key == pygame.K_e:
                 assets["tiro"] -= 1
                 if assets["tiro"] >= 0:
-                    Tiro(self.sprites, self.monstros, self.jogador.rect.x, self.jogador.rect.y+25)
+                    Tiro(self.sprites, self.monstros, self.plataforma, self.jogador.rect.x, self.jogador.rect.y+25)
 
             if self.jogador.rect.x > 850 and assets["estrela"] == 1:
                 return Tela2_0(self.window)
@@ -838,14 +857,109 @@ class Tela2_1:
                 if assets["tiro"] >= 0:
                     Tiro(self.sprites, self.monstros, self.plataforma,self.jogador.rect.x, self.jogador.rect.y+25)
             if self.jogador.rect.x > 850 and assets["estrela"] == 3:
+                return Tela2_2(self.window)
+            if assets["vidas"] <= 0:
+                return GameOver(self.window)
+
+            if event.type==pygame.KEYDOWN: #movimentacao dos monstros 
+                Telas.movimenta_monstro(self,self.limita_monstros_x)
+            #self.aparece_text_box = False 
+
+        ultimo_tempo = self.last_updated 
+        tempo = pygame.time.get_ticks()
+        delta_t = (tempo-ultimo_tempo)/1000
+        self.last_updated = tempo
+        self.sprites.update(delta_t)
+
+        clock.tick(120)
+
+        return self
+
+    def desenha(self,window):
+                
+        #pre-sets de desenho de todas as telas
+        Telas.desenha(self,window)
+
+        #desenhando a vida do usuario 
+        for i in range(assets["vidas"]):
+            window.blit(self.img_coracao,(i*20,0))
+
+        self.sprites.draw(self.window)
+
+class Tela2_2:
+    
+    def __init__(self, window):
+        #criando o fund0
+        fundo = pygame.image.load(assets["fundo4"]) #imagem gerdada pela AI "https://www.scenario.com/""
+        self.fundo = pygame.transform.scale(fundo, (912,512))
+
+        #pre-stes de todas as telas 
+        Telas.__init__(self,window)
+
+        #gerando as plataformas dos mapas 
+        self.gera_mapa()
+
+        #gerando os monstros no mapa 
+        self.limita_monstros_x = [0,500]
+        self.lista_de_monstros = []
+        for i in range(0):
+            x = randint(self.limita_monstros_x[0],self.limita_monstros_x[1])
+            self.monstro = Monstro(self.sprites,self.monstros, x, 412) 
+            self.lista_de_monstros.append(self.monstro)
+
+        self.lista_de_gorilas = []
+        for i in range(0):
+            self.gorilas = Gorila(self.sprites,self.gorilas, 380, 220) 
+            self.lista_de_gorilas.append(self.gorilas)
+    
+    def gera_mapa(self):
+        
+        #criando o chao
+        for i in range(30):
+            x = 32*i
+            Plataform(self.sprites,self.plataforma,self.plataformas_quebraveis,x, 480, 'grass')
+
+        gera_plataforma(self,40, 'x', -50, 450)
+        gera_plataforma(self,18, 'x', -50, 300)
+        gera_plataforma(self,20, 'x', 550, 300)
+        
+        x = 0
+        for i in range(5):
+            Plataform(self.sprites,self.plataforma,self.plataformas_quebraveis,200, 428 - x, 'sand')
+            x += 25
+
+    def recebe_eventos(self):
+
+        velocidade_x = 3
+
+        clock = pygame.time.Clock()
+        
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                return None  # Devolve None para sair
+            
+            #caso o botao seja apertado, ele soma a velocidade ate parar de apertar 
+            if event.type == pygame.KEYDOWN and event.key == pygame.K_RIGHT:
+                self.jogador.speedx = velocidade_x
+                assets["esquerda"] = False #Para o tiro
+            elif event.type == pygame.KEYUP and event.key == pygame.K_RIGHT:
+                self.jogador.speedx = 0
+                print(self.jogador.speedx)
+            if event.type == pygame.KEYDOWN and event.key == pygame.K_LEFT:
+                self.jogador.speedx = -velocidade_x
+                assets["esquerda"] = True #Para o tiro
+            elif event.type == pygame.KEYUP and event.key == pygame.K_LEFT:
+                self.jogador.speedx = 0
+            if event.type == pygame.KEYDOWN and event.key == pygame.K_SPACE:
+                self.jogador.jump()
+            if event.type==pygame.KEYDOWN and event.key == pygame.K_e:
+                assets["tiro"] -= 1
+                if assets["tiro"] >= 0:
+                    Tiro(self.sprites, self.monstros, self.plataforma,self.plataformas_quebraveis,self.jogador.rect.x, self.jogador.rect.y+25)
+            if self.jogador.rect.x > 850 and assets["estrela"] == 3:
                 return Tela3(self.window)
             if assets["vidas"] <= 0:
                 return GameOver(self.window)
-            
-            if 100 > self.jogador.rect.x < 300:
-                self.aparece_text_box = True  
-            if 100 < self.jogador.rect.x > 300:
-                self.aparece_text_box = False 
 
             if event.type==pygame.KEYDOWN: #movimentacao dos monstros 
                 Telas.movimenta_monstro(self,self.limita_monstros_x)
@@ -1031,7 +1145,7 @@ class Jogo:
 
         self.window = pygame.display.set_mode((912,512))
 
-        self.tela_atual = Tela2_1(self.window)
+        self.tela_atual = TelaInicial(self.window)
         self.last_updated = pygame.time.get_ticks()
 
     def recebe_eventos(self):
