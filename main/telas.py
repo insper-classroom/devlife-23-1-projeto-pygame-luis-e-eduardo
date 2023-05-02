@@ -10,14 +10,27 @@ from classes_adicionais import *
 
 class GameOver():
     def __init__(self, window):
+        """
+        Inicializa a tela de Game Over.
 
+        Parâmetros:
+            window (pygame.Surface): Tela do jogo.
+        """
         fonte_padrao = pygame.font.get_default_font()
         self.fonte = pygame.font.Font(fonte_padrao, 24)
         self.window = window
-        imagem = pygame.image.load(assets["tela_inicial"])
+        imagem = pygame.image.load(assets["tela_morreu"])
         self.image = pygame.transform.scale(imagem,(912,580))
  
     def recebe_eventos(self):
+        """
+        Recebe os eventos de teclado.
+
+        Retorna:
+            Tela1 (Tela inicial): Objeto da tela de jogo, caso o jogador aperte a tecla ESPAÇO.
+            None: Caso o jogador feche a janela do jogo.
+            self: Objeto da própria tela de Game Over.
+        """
         for evento in pygame.event.get():
             if evento.type == pygame.QUIT:
                 return None 
@@ -29,6 +42,12 @@ class GameOver():
         return self
 
     def desenha(self, window):
+        """
+        Desenha a tela de Game Over na tela do jogo.
+
+        Parâmetros:
+            window (pygame.Surface): Tela do jogo.
+        """
         window.blit(self.image,(0,0))
         renicia_jogo_mensagem1 = self.fonte.render("O Kirb morreu!", True,(255,255,255))
         renicia_jogo_mensagem2 = self.fonte.render("Aperte espaço para reniciar o jogo", True,(255,255,255))
@@ -100,7 +119,12 @@ class TelaInicial:
 
 class Telas():
     def __init__(self, window): 
-        
+        """
+        Classe que representa as telas do jogo - ela é usada em todas as telas do jogo
+
+        Args:
+            window (pygame.Surface): Janela em que o jogo será renderizado.
+        """ 
         self.window = window
         self.sprites = pygame.sprite.Group()
         self.plataform = pygame.sprite.Group()
@@ -135,6 +159,14 @@ class Telas():
         self.window = window
 
     def movimenta_monstro(self,lista_limitantes_x):
+        """
+        Move os monstros horizontalmente de forma aleatória, dentro de limitantes de espaço.
+        
+        Args:
+            lista_limitantes_x (list): Lista com dois valores inteiros, representando os limites
+            esquerdo e direito em que os monstros podem se movimentar.
+
+        """
 
         for monstro in self.lista_de_monstros:    
             num_aleatorio1 = randint(0,1)
@@ -153,7 +185,12 @@ class Telas():
                 assets["posicao_monstro"] = 'direita'
             
     def desenha(self,window):
-        
+        """
+        Desenha os elementos na janela.
+
+        Args:
+            window (pygame.Surface): Janela em que o jogo será renderizado.
+        """
         #colocando o fundo do jogo 
         window.blit(self.fundo,(0,0))
 
@@ -205,7 +242,11 @@ class Tela1_0: #Tela1.0: tutorial de mudança de mapa e coleta de estrelas
         Estrela(self.sprites,self.estrela, 700, 440)
      
     def recebe_eventos(self):
+        """ Recebe e processa os eventos do jogo.
 
+        Retorna uma nova tela para o jogo, dependendo do evento recebido.
+        Se o evento for fechar a janela, retorna None para encerrar o jogo.
+        """
         velocidade_x = 3
 
         clock = pygame.time.Clock()
@@ -1557,6 +1598,10 @@ class Jogador(pygame.sprite.Sprite):
         collisions = pygame.sprite.spritecollide(self, self.estrela, True)
         for cada_colisao in collisions:
             assets["estrela"] += 1
+            musica_estrela = pygame.mixer.Sound("pega_estrela.mp3")
+            musica_estrela.set_volume(0.2)
+            musica_estrela.play()
+
 
         collisions = pygame.sprite.spritecollide(self, self.coracao, True)
         for cada_colisao in collisions:
