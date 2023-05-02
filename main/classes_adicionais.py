@@ -106,7 +106,7 @@ class Passaro(pygame.sprite.Sprite):
         self.passaro = passaro
         pygame.sprite.Sprite.__init__(self)
         img_passaro = pygame.image.load("passaro.png")  
-        self.image = pygame.transform.scale(img_passaro, (100,60))
+        self.image = pygame.transform.scale(img_passaro, (90,55))
         self.rect = self.image.get_rect()
         self.rect.x = x
         self.rect.y = y
@@ -119,15 +119,15 @@ class Passaro(pygame.sprite.Sprite):
 
     def update(self,delta_t):
         if self.rect.x <= 0:
-            self.vel_x = 4
-        if self.rect.x >= 700:
+            self.vel_x = 5
+        if self.rect.x >= 850:
             self.vel_x = -4
         self.rect.x = (self.rect.x + self.vel_x)
 
-        if self.rect.y < 20:
-            self.vel_y = 2
-        if self.rect.y > 150:
-            self.vel_y = -2
+        if self.rect.y < 30:
+            self.vel_y = 1
+        if self.rect.y > 80:
+            self.vel_y = -1
         self.rect.y = (self.rect.y + self.vel_y)
 
 class Tiro(pygame.sprite.Sprite):
