@@ -54,8 +54,7 @@ class TelaInicial:
                 posicao = pygame.mouse.get_pos()
                 if posicao[0] >= (912-200)/2 - 35 and posicao[0] <= 912-(912-200)/2 +32:
                     if posicao[1] >=400 and posicao[1]<=470: #nao pode apertar as teclas de andar nao sei pq kkkk
-                        return Tela3_3(self.window)
-                        return Tela1_0(self.window)
+                        return Tela2_1(self.window)
                         
             elif evento.type == pygame.USEREVENT:#tocando a musica durante o jogo inteiro 
                 pygame.mixer.music.play()
@@ -1532,6 +1531,10 @@ class Jogador(pygame.sprite.Sprite):
         collisions = pygame.sprite.spritecollide(self, self.estrela, True)
         for cada_colisao in collisions:
             assets["estrela"] += 1
+            musica_estrela = pygame.mixer.Sound("pega_estrela.mp3")
+            musica_estrela.set_volume(0.2)
+            musica_estrela.play()
+
 
         collisions = pygame.sprite.spritecollide(self, self.coracao, True)
         for cada_colisao in collisions:

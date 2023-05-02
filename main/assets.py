@@ -1,3 +1,5 @@
+import pygame
+
 # dicionario para guardar os dados que serao usados para o jogo - tela/desenha
 assets = {}
 
@@ -69,3 +71,4 @@ state["velocidade_jogador"] = [0.0,0.0]
 state["aceleracao_gravidade"] = 1 # nao sei pq nao tem que ser negativo kkkkk
 state["tempo_0"] = 0 
 state["fps"] = 0
+
