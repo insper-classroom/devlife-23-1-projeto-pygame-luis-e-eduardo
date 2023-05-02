@@ -1,6 +1,7 @@
 from random import randint
 import pygame
 from assets import *
+
 #Comentários
 #A função load_spritesheet server para "recortar um png com os frames do movimento do jogador e nós pegamos essa função do snippets do github"
 #Para fazer o pulo do jogador, nos tambem nos baseamos no algoritimo do snippets
@@ -149,16 +150,27 @@ class Gorila(pygame.sprite.Sprite):
         self.gorila.add(self)
 
 class Passaro(pygame.sprite.Sprite):      
-    def __init__(self,sprites,gorila,x,y):
-        self.gorila = gorila
+    def __init__(self,sprites,passaro,x,y,jogador,lista_passaros):
+        self.passaro = passaro
         pygame.sprite.Sprite.__init__(self)
-        img_gorila = pygame.image.load(assets["gorila_img"])  
-        self.image = pygame.transform.scale(img_gorila, (120,150))
+        img_passaro = pygame.image.load("passaro.png")  
+        self.image = pygame.transform.scale(img_passaro, (100,60))
         self.rect = self.image.get_rect()
         self.rect.x = x
         self.rect.y = y
         sprites.add(self)
-        self.gorila.add(self)
+        self.passaro.add(self)
+        self.jogador = jogador 
+        self.lista_passaros = lista_passaros
+        self.vel_x = 3
+
+    def update(self,delta_t):
+        if self.rect.x <= 0:
+            self.vel_x = 3
+        if self.rect.x >= 700:
+            self.vel_x = -3
+        self.rect.x = (self.rect.x + self.vel_x)
+
 
 class Tiro(pygame.sprite.Sprite):
     def __init__(self, sprites,monstros,plataforma,plataformas_quebraveis, x, y):
@@ -245,7 +257,7 @@ class TelaInicial:
                 posicao = pygame.mouse.get_pos()
                 if posicao[0] >= (912-200)/2 - 35 and posicao[0] <= 912-(912-200)/2 +32:
                     if posicao[1] >=400 and posicao[1]<=470: #nao pode apertar as teclas de andar nao sei pq kkkk
-                        return Tela1_0(self.window)
+                        return Tela2_1(self.window)
                         
             elif evento.type == pygame.USEREVENT:#tocando a musica durante o jogo inteiro 
                 pygame.mixer.music.play()
@@ -288,10 +300,11 @@ class Telas():
         self.monstros = pygame.sprite.Group()
         self.gorilas = pygame.sprite.Group()
         self.estrela = pygame.sprite.Group()
+        self.passaro = pygame.sprite.Group()
         self.coracao = pygame.sprite.Group()
         self.banas = pygame.sprite.Group()
         self.pocao = pygame.sprite.Group()
-        self.jogador = Jogador(self.plataforma,self.monstros,self.estrela, self.coracao,self.gorilas,self.banas, self.pocao,self.plataformas_quebraveis)
+        self.jogador = Jogador(self.plataforma,self.monstros,self.estrela, self.coracao,self.gorilas,self.banas, self.pocao,self.plataformas_quebraveis,self.passaro)
         self.sprites.add(self.jogador)
         
         assets["estrela"] = 0 #iniciando as coroas com 0 pem toda tela nova 
@@ -555,7 +568,7 @@ class Tela1_2:
 
         #gerando os monstros no mapa 
         self.limita_monstros_x = [350,750]
-        self.lista_de_monstros = []
+        self.lista_passaros = []
         for i in range(8):
             x = randint(self.limita_monstros_x[0],self.limita_monstros_x[1])
             self.monstro = Monstro(self.sprites,self.monstros, x, 440) 
@@ -835,6 +848,11 @@ class Tela2_1:
             self.gorilas = Gorila(self.sprites,self.gorilas, 380, 220) 
             self.lista_de_gorilas.append(self.gorilas)
 
+        self.lista_passaros = []
+        for i in range(1):
+            self.passaro = Passaro(self.sprites,self.passaro, 400, 100,self.jogador,self.lista_passaros) 
+            self.lista_de_gorilas.append(self.passaro)
+
         img_tiro = pygame.image.load('bola.png')
         self.tiro = pygame.transform.scale(img_tiro,(15,15))
 
@@ -1051,7 +1069,7 @@ class Tela2_2:
 
 class Jogador(pygame.sprite.Sprite):
     
-    def __init__(self,chao,monstros,estrela, coracao, gorilas, bananas, pocao, plataformas_quebraveis):
+    def __init__(self,chao,monstros,estrela, coracao, gorilas, bananas, pocao, plataformas_quebraveis,passaro):
 
         pygame.init() 
         pygame.sprite.Sprite.__init__(self)
@@ -1060,6 +1078,7 @@ class Jogador(pygame.sprite.Sprite):
         self.monstros = monstros
         self.estrela = estrela
         self.gorilas = gorilas
+        self.passaro = passaro
         self.bananas = bananas
         self.pocao = pocao
 
