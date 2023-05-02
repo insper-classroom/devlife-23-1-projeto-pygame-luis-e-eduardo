@@ -88,7 +88,7 @@ class TelaInicial:
                 posicao = pygame.mouse.get_pos()
                 if posicao[0] >= (912-200)/2 - 35 and posicao[0] <= 912-(912-200)/2 +32:
                     if posicao[1] >=400 and posicao[1]<=470: #nao pode apertar as teclas de andar nao sei pq kkkk
-                        return Tela3_2(self.window)                        
+                        return Tela1_0(self.window)                        
             elif evento.type == pygame.USEREVENT:#tocando a musica durante o jogo inteiro 
                 pygame.mixer.music.play()
         return self
