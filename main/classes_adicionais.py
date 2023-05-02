@@ -61,7 +61,7 @@ class Carne(pygame.sprite.Sprite):
     def __init__(self,sprites,coracao,x,y):
         self.coracao = coracao
         pygame.sprite.Sprite.__init__(self)
-        img_coracao = pygame.image.load("coracao1.png")
+        img_coracao = pygame.image.load("carne.png")
         self.image = pygame.transform.scale(img_coracao, (45,45))
         self.rect = self.image.get_rect()
         self.rect.x = x

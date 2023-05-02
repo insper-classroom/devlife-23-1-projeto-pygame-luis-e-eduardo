@@ -80,7 +80,7 @@ class TelaInicial:
                 posicao = pygame.mouse.get_pos()
                 if posicao[0] >= (912-200)/2 - 35 and posicao[0] <= 912-(912-200)/2 +32:
                     if posicao[1] >=400 and posicao[1]<=470: #nao pode apertar as teclas de andar nao sei pq kkkk
-                        return Tela3_2(self.window)
+                        return Tela3_3(self.window)
                         return Tela1_0(self.window)
                         
             elif evento.type == pygame.USEREVENT:#tocando a musica durante o jogo inteiro 
@@ -1349,6 +1349,100 @@ class Tela3_2:
 
         self.sprites.draw(self.window)
 
+class Tela3_3:
+    
+    def __init__(self, window):
+        #criando o fund0
+        fundo = pygame.image.load(assets["fundo5"]) #imagem gerdada pela AI "https://www.scenario.com/""
+        self.fundo = pygame.transform.scale(fundo, (912,512))
+
+        #pre-stes de todas as telas 
+        Telas.__init__(self,window)
+
+        #gerando as plataformas dos mapas 
+        self.gera_mapa()
+
+        img_tiro = pygame.image.load('bola.png')
+        self.tiro = pygame.transform.scale(img_tiro,(15,15))
+
+        trofeu = pygame.image.load(assets["trofeu"])
+        self.trofeu = pygame.transform.smoothscale(trofeu,(400,400))
+
+        #npc para congratular a vitoria do jogador 
+        sanji = pygame.image.load(assets["sanji"])
+        sanji_certo = pygame.transform.smoothscale(sanji,(90,110))
+        self.sanji = pygame.transform.flip(sanji_certo, True, False)
+        text_box5 = pygame.image.load(assets["text_box5"])
+        self.text_box5 = pygame.transform.smoothscale(text_box5,(230,230))
+        self.aparece_text_box = False 
+
+    def gera_mapa(self):
+        
+        #criando o chao
+        for i in range(30):
+            x = 32*i
+            Plataform(self.sprites,self.plataforma,self.plataformas_quebraveis,x, 480, 'grass')
+
+    def recebe_eventos(self):
+
+        velocidade_x = 3
+
+        clock = pygame.time.Clock()
+        
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                return None  # Devolve None para sair
+            
+            #caso o botao seja apertado, ele soma a velocidade ate parar de apertar 
+            if event.type == pygame.KEYDOWN and event.key == pygame.K_RIGHT:
+                self.jogador.speedx = velocidade_x
+                assets["esquerda"] = False #Para o tiro
+            elif event.type == pygame.KEYUP and event.key == pygame.K_RIGHT:
+                self.jogador.speedx = 0
+            if event.type == pygame.KEYDOWN and event.key == pygame.K_LEFT:
+                self.jogador.speedx = -velocidade_x
+                assets["esquerda"] = True #Para o tiro
+            elif event.type == pygame.KEYUP and event.key == pygame.K_LEFT:
+                self.jogador.speedx = 0
+            if event.type == pygame.KEYDOWN and event.key == pygame.K_SPACE:
+                self.jogador.jump()
+            if event.type==pygame.KEYDOWN and event.key == pygame.K_e:
+                assets["tiro"] -= 1
+                if assets["tiro"] >= 0:
+                    Tiro(self.sprites, self.monstros, self.plataforma,self.plataformas_quebraveis,self.gorilas, self.passaro, self.jogador.rect.x, self.jogador.rect.y+25)
+            if self.jogador.rect.x > 850 and assets["estrela"] == 2:
+                return Tela3(self.window)
+            if assets["vidas"] <= 0:
+                return GameOver(self.window)
+
+            if  50 < self.jogador.rect.x < 400:
+                self.aparece_text_box = True  
+            if 50 < self.jogador.rect.x > 400:
+                self.aparece_text_box = False 
+
+        ultimo_tempo = self.last_updated 
+        tempo = pygame.time.get_ticks()
+        delta_t = (tempo-ultimo_tempo)/1000
+        self.last_updated = tempo
+        self.sprites.update(delta_t)
+
+        clock.tick(120)
+
+        return self
+
+    def desenha(self,window):
+                
+        #pre-sets de desenho de todas as telas
+        Telas.desenha(self,window)
+
+        window.blit(self.trofeu,(450,100))
+        window.blit(self.sanji,(200,380))
+
+        if self.aparece_text_box:
+            window.blit(self.text_box5,(60,265))    
+
+        self.sprites.draw(self.window)
+
 class Jogador(pygame.sprite.Sprite):
     
     def __init__(self,chao,monstros,estrela, coracao, gorilas, pocao, plataformas_quebraveis,passaro,tiro_banana):
@@ -1385,7 +1479,7 @@ class Jogador(pygame.sprite.Sprite):
         self.HEIGHT = 512
 
         self.lista_jogador = []
-        imagem = pygame.image.load("pngwing.com (1).png")
+        imagem = pygame.image.load("andando.png")
         self.lista_jogador = load_spritesheet(imagem,1,8)
 
         imagem = pygame.image.load("parado.png")

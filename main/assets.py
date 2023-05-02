@@ -12,6 +12,7 @@ assets["grass"] = "grass.png"
 assets["sand"] = "sand.png"
 assets["terra"] = "terra.png"
 assets["you_win"] = "you win.jpg"
+
 #itens
 assets["img_banana"] = "banana.png"
 assets["img_berry"] = "berry.png"
@@ -20,9 +21,10 @@ assets["img_bloco1"] = "bloco1.png"
 assets["img_coracao"] = "coracao.png"
 assets["img_coracao1"] = "coracao1.png"
 assets["img_estrela"] = "estrela.png"
+assets["trofeu"] = "trofeu.png"
 
 #imagens 
-assets["img_sanji"] = "sanji.png"
+assets["sanji"] = "sanji.png"
 assets["img_gorila"] = "gorila.png"
 assets["img_zoro"] = "zoro.png"
 assets["tiro1"] = "tiro1.png"
@@ -37,6 +39,7 @@ assets["text_box1"] = "text_box1.png"
 assets["text_box2"] = "text_box2.png"
 assets["text_box3"] = "text_box3.png"
 assets["text_box4"] = "text_box4.png"
+assets["text_box5"] = "text_box5.png"
 
 assets["tiro"] = 40
 assets["window"] = (912.0,512.0)
