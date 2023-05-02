@@ -214,6 +214,32 @@ class GameOver():
     def desenha(self, window):
         window.fill((0, 0, 0))
         window.blit(self.image,(0,0))
+
+class YouWin():
+    def __init__(self, window):
+
+        
+        fonte_padrao = pygame.font.get_default_font()
+        self.fonte = pygame.font.Font(fonte_padrao, 24)
+        self.window = window
+        imagem = pygame.image.load("you win.jpg")
+        self.image = pygame.transform.scale(imagem,(912,580))
+
+
+    def recebe_eventos(self):
+        for evento in pygame.event.get():
+            if evento.type == pygame.QUIT:
+                return None 
+            elif evento.type == pygame.KEYDOWN and evento.key == pygame.K_SPACE:
+                assets["vidas"] = 5
+                assets["estrela"] = 0
+                assets["tiro"] = 20
+                return Tela1(self.window)
+        return self
+
+    def desenha(self, window):
+        window.fill((0, 0, 0))
+        window.blit(self.image,(0,0))
   
 class TelaInicial:
     def __init__(self, window):
@@ -236,7 +262,7 @@ class TelaInicial:
                 posicao = pygame.mouse.get_pos()
                 if posicao[0] >= (912-200)/2 - 35 and posicao[0] <= 912-(912-200)/2 +32:
                     if posicao[1] >=400 and posicao[1]<=470: #nao pode apertar as teclas de andar nao sei pq kkkk
-                        return Tela2_0(self.window)
+                        return Tela1_2(self.window)
                         
             elif evento.type == pygame.USEREVENT:#tocando a musica durante o jogo inteiro 
                 pygame.mixer.music.play()
@@ -645,14 +671,14 @@ class Tela1_2:
         for i in range(assets["vidas"]):
             window.blit(self.img_coracao,(i*20,0))
         for i in range(assets["tiro"]):
-            if i<5:
-                window.blit(self.tiro,(i*14 + 835,0))
-            if i < 10 and i >= 5:
-                window.blit(self.tiro,(i*14-70+835,13))
-            if i < 15 and i>=10:
-                window.blit(self.tiro,(i*14-140+835,26))
-            if i < 20 and i>=15:
-                window.blit(self.tiro,(i*14-210+835,39))
+            if i<10:
+                window.blit(self.tiro,(i*14 + 770,0))
+            if i < 20 and i >= 10:
+                window.blit(self.tiro,(i*14-70+700,13))
+            if i < 30 and i>=20:
+                window.blit(self.tiro,(i*14-140+630,26))
+            if i < 40 and i>=30:
+                window.blit(self.tiro,(i*14-210+560,39))
 
         # quant_tiros = assets["tiro"]
         # tiro = pygame.transform.scale(self.tiro,(40,40))
@@ -789,14 +815,15 @@ class Tela2_0:
             window.blit(self.img_coracao,(i*20,0))
         
         for i in range(assets["tiro"]):
-            if i<5:
-                window.blit(self.tiro,(i*14 + 835,0))
-            if i < 10 and i >= 5:
-                window.blit(self.tiro,(i*14-70+835,13))
-            if i < 15 and i>=10:
-                window.blit(self.tiro,(i*14-140+835,26))
-            if i < 20 and i>=15:
-                window.blit(self.tiro,(i*14-210+835,39))
+            if i<10:
+                window.blit(self.tiro,(i*14 + 770,0))
+            if i < 20 and i >= 10:
+                window.blit(self.tiro,(i*14-70+700,13))
+            if i < 30 and i>=20:
+                window.blit(self.tiro,(i*14-140+630,26))
+            if i < 40 and i>=30:
+                window.blit(self.tiro,(i*14-210+560,39))
+
 
         self.sprites.draw(self.window)
 
@@ -906,6 +933,18 @@ class Tela2_1:
         #desenhando a vida do usuario 
         for i in range(assets["vidas"]):
             window.blit(self.img_coracao,(i*20,0))
+        
+        for i in range(assets["tiro"]):
+            if i<10:
+                window.blit(self.tiro,(i*14 + 770,0))
+            if i < 20 and i >= 10:
+                window.blit(self.tiro,(i*14-70+700,13))
+            if i < 30 and i>=20:
+                window.blit(self.tiro,(i*14-140+630,26))
+            if i < 40 and i>=30:
+                window.blit(self.tiro,(i*14-210+560,39))
+
+
 
         self.sprites.draw(self.window)
 
@@ -1011,14 +1050,14 @@ class Tela2_2:
             window.blit(self.img_coracao,(i*20,0))
         
         for i in range(assets["tiro"]):
-            if i<5:
-                window.blit(self.tiro,(i*14 + 835,0))
-            if i < 10 and i >= 5:
-                window.blit(self.tiro,(i*14-70+835,13))
-            if i < 15 and i>=10:
-                window.blit(self.tiro,(i*14-140+835,26))
-            if i < 20 and i>=15:
-                window.blit(self.tiro,(i*14-210+835,39))
+            if i<10:
+                window.blit(self.tiro,(i*14 + 770,0))
+            if i < 20 and i >= 10:
+                window.blit(self.tiro,(i*14-70+700,13))
+            if i < 30 and i>=20:
+                window.blit(self.tiro,(i*14-140+630,26))
+            if i < 40 and i>=30:
+                window.blit(self.tiro,(i*14-210+560,39))
 
         self.sprites.draw(self.window)
 
