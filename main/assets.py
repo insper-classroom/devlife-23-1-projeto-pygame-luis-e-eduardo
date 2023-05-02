@@ -5,6 +5,7 @@ assets = {}
 assets["fundo1"] = "fundo1.png"
 assets["fundo4"] = "fundo4.png"
 assets["fundo3"] = "fundo3.png"
+assets["fundo5"] = "fundo5.png"
 
 #imagens 
 assets["sanji"] = "sanji.png"

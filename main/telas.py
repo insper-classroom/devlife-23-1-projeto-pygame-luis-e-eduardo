@@ -80,7 +80,7 @@ class TelaInicial:
                 posicao = pygame.mouse.get_pos()
                 if posicao[0] >= (912-200)/2 - 35 and posicao[0] <= 912-(912-200)/2 +32:
                     if posicao[1] >=400 and posicao[1]<=470: #nao pode apertar as teclas de andar nao sei pq kkkk
-                        return Tela3_1(self.window)
+                        return Tela3_2(self.window)
                         
             elif evento.type == pygame.USEREVENT:#tocando a musica durante o jogo inteiro 
                 pygame.mixer.music.play()
@@ -1246,6 +1246,8 @@ class Tela3_2:
         for i in range(30):
             x = 32*i
             Plataform(self.sprites,self.plataforma,self.plataformas_quebraveis,x, 480, 'grass')
+
+        gera_plataforma(self,8,'x',700,80)
 
     def recebe_eventos(self):
 
