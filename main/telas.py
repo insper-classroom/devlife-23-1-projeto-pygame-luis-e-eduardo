@@ -737,7 +737,7 @@ class Tela2_1(Telas):
         gera_plataforma(self,2, 'x', 630, 380)
 
         Coracao(self.sprites, self.coracao, 830, 390)
-        Pocao(self.sprites, self.pocao, 650, 350)
+        Pocao(self.sprites, self.pocao, 650, 345)
         Pocao(self.sprites, self.pocao, 120, 250)
     
     def recebe_eventos(self):
