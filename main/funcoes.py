@@ -130,10 +130,14 @@ class Monstro(pygame.sprite.Sprite):
         self.monstros.add(self)
 
 class Gorila(pygame.sprite.Sprite):      
-    def __init__(self,sprites,gorila,x,y):
+    def __init__(self,sprites,gorila,x,y,lado):
         self.gorila = gorila
         pygame.sprite.Sprite.__init__(self)
-        img_gorila = pygame.image.load(assets["gorila_img"])  
+        if lado == 'direita':
+            img_gorila = pygame.image.load(assets["gorila_img"])
+        if lado == 'esquerda':  
+            img_gorila_esquerda = pygame.image.load(assets["gorila_img"])
+            img_gorila = pygame.transform.flip(img_gorila_esquerda, True, False )
         self.image = pygame.transform.scale(img_gorila, (120,150))
         self.rect = self.image.get_rect()
         self.rect.x = x
@@ -154,20 +158,20 @@ class Passaro(pygame.sprite.Sprite):
         self.passaro.add(self)
         self.jogador = jogador 
         self.lista_passaros = lista_passaros
-        self.vel_x = 3
+        self.vel_x = 1
         self.vel_y = 1
 
     def update(self,delta_t):
         if self.rect.x <= 0:
-            self.vel_x = 3
+            self.vel_x = 4
         if self.rect.x >= 700:
-            self.vel_x = -3
+            self.vel_x = -4
         self.rect.x = (self.rect.x + self.vel_x)
 
-        if self.rect.y < 120:
-            self.vel_y = 1
-        if self.rect.y > 200:
-            self.vel_y = -1
+        if self.rect.y < 20:
+            self.vel_y = 2
+        if self.rect.y > 150:
+            self.vel_y = -2
         self.rect.y = (self.rect.y + self.vel_y)
 
 class Tiro(pygame.sprite.Sprite):
@@ -907,15 +911,15 @@ class Tela2_1:
 
         self.lista_de_gorilas = []
         for i in range(1):
-            self.gorilas = Gorila(self.sprites,self.gorilas, 380, 220) 
+            self.gorilas = Gorila(self.sprites,self.gorilas, 50, 220, 'esquerda') 
             self.lista_de_gorilas.append(self.gorilas)
 
         self.lista_passaros = []
-        for i in range(2):
-            
-            self.passaro = Passaro(self.sprites,self.passaro, 400, 100,self.jogador,self.lista_passaros) 
+        for i in range(1):
+            x = randint(200,800)
+            self.passaro = Passaro(self.sprites,self.passaro, x, 30,self.jogador,self.lista_passaros) 
             self.lista_de_gorilas.append(self.passaro)
-
+        
         img_tiro = pygame.image.load('bola.png')
         self.tiro = pygame.transform.scale(img_tiro,(15,15))
 
