@@ -4,6 +4,9 @@ assets = {}
 #fundos 
 assets["fundo1"] = "fundo1.png"
 assets["fundo4"] = "fundo4.png"
+assets["fundo3"] = "fundo3.png"
+
+
 assets["tiro"] = 40
 assets["window"] = (912.0,512.0)
 assets["altura_tela"] = assets["window"][1]

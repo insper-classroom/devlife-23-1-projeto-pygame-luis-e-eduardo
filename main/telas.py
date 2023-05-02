@@ -81,7 +81,7 @@ class TelaInicial:
                 posicao = pygame.mouse.get_pos()
                 if posicao[0] >= (912-200)/2 - 35 and posicao[0] <= 912-(912-200)/2 +32:
                     if posicao[1] >=400 and posicao[1]<=470: #nao pode apertar as teclas de andar nao sei pq kkkk
-                        return Tela1_0(self.window)
+                        return Tela3_0(self.window)
                         
             elif evento.type == pygame.USEREVENT:#tocando a musica durante o jogo inteiro 
                 pygame.mixer.music.play()
@@ -926,7 +926,7 @@ class Tela3_0:
     
     def __init__(self, window):
         #criando o fund0
-        fundo = pygame.image.load(assets["fundo4"]) #imagem gerdada pela AI "https://www.scenario.com/""
+        fundo = pygame.image.load(assets["fundo3"]) #imagem gerdada pela AI "https://www.scenario.com/""
         self.fundo = pygame.transform.scale(fundo, (912,512))
 
         #pre-stes de todas as telas 
@@ -938,13 +938,13 @@ class Tela3_0:
         #gerando os monstros no mapa 
         self.limita_monstros_x = [0,100]
         self.lista_de_monstros = []
-        for i in range(2):
+        for i in range(0):
             x = randint(self.limita_monstros_x[0],self.limita_monstros_x[1])
             self.monstro = Monstro(self.sprites,self.monstros, x, 412) 
             self.lista_de_monstros.append(self.monstro)
 
         self.lista_de_gorilas = []
-        for i in range(1):
+        for i in range(0):
             self.gorilas = Gorila(self.sprites,self.gorilas, 750, 200, 'direita') 
             self.lista_de_gorilas.append(self.gorilas)
 
@@ -964,39 +964,12 @@ class Tela3_0:
             x = 32*i
             Plataform(self.sprites,self.plataforma,self.plataformas_quebraveis,x, 480, 'grass')
 
-        gera_plataforma(self,40, 'x', -50, 450)
-        gera_plataforma(self,18, 'x', -50, 300)
-        gera_plataforma(self,20, 'x', 550, 300)
+        gera_plataforma(self,4,'x',100,410)
+        gera_plataforma(self,4,'x',180,350)
+        gera_plataforma(self,4,'x',260,290)
 
-        gera_plataforma(self,5, 'x', 150, 220)
-        gera_plataforma(self,5, 'x', 620, 220)
-        gera_plataforma(self,5, 'x', 380, 140)
-        
-        x = 0
-        for i in range(5):
-            Plataform(self.sprites,self.plataforma,self.plataformas_quebraveis,200, 428 - x, 'sand')
-            x += 25
-        x = 0
-        for i in range(5):
-            Plataform(self.sprites,self.plataforma,self.plataformas_quebraveis,225, 428 - x, 'sand')
-            x += 25
-        Estrela(self.sprites,self.estrela, 20, 415)
-        x = 0
-        for i in range(5):
-            Plataform(self.sprites,self.plataforma,self.plataformas_quebraveis,700, 428 - x, 'sand')
-            x += 25
-        x = 0
-        for i in range(5):
-            Plataform(self.sprites,self.plataforma,self.plataformas_quebraveis,725, 428 - x, 'sand')
-            x += 25
         Estrela(self.sprites,self.estrela, 850, 415)
-
-        Coracao(self.sprites, self.coracao, 150, 260)
         Coracao(self.sprites, self.coracao, 600, 260)
-        Pocao(self.sprites, self.pocao, 100, 260)
-        Pocao(self.sprites, self.pocao, 700, 260)
-        Pocao(self.sprites, self.pocao, 420, 90)
-        Pocao(self.sprites, self.pocao, 380, 410)
         Pocao(self.sprites, self.pocao, 480, 410)
 
     def recebe_eventos(self):
@@ -1241,3 +1214,36 @@ class Jogador(pygame.sprite.Sprite):
             self.speedy -= self.JUMP_SIZE
             self.state = self.JUMPING
 
+class Jogo:
+    
+    def __init__(self):
+        
+        pygame.init()
+        self.sprites = pygame.sprite.Group()
+
+        self.window = pygame.display.set_mode((912,512))
+
+        self.tela_atual = TelaInicial(self.window)
+        self.last_updated = pygame.time.get_ticks()
+
+    def recebe_eventos(self):
+        
+        self.tela_atual = self.tela_atual.recebe_eventos()
+        # recebe_eventos tela atual
+        if self.tela_atual is None:
+            return False
+        return True
+
+    def game_loop(self):
+        
+        while self.recebe_eventos():
+            self.tela_atual.desenha(self.window)
+            pygame.display.update()
+
+    def finaliza(self):
+        pygame.quit()
+
+if __name__ == '__main__':
+    jogo = Jogo()
+    jogo.game_loop()
+    jogo.finaliza()
