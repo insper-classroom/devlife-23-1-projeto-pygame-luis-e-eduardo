@@ -10,12 +10,9 @@ Descrição do jogo
 Melhora e muda esse texto:No jogo, você assume o papel de um Kirb e tem como missão completar todas as fases. Para alcançar este objetivo, você precisa coletar todas as estrelas do mapa e avançar para a próxima fase. Fique atento, pois existem inimigos que vão tentar impedir o seu progresso e você precisa derrotá-los para continuar. Esteja preparado para enfrentar os desafios que surgirem em seu caminho!
 
 Observações
--Durante a elaboração do código, foram utilizadas funções do arquivo snippets disponibilizado no repositório do GitHub para facilitar a implementação.
--A documentação em docstrings foi produzida com a ajuda do ChatGPT.
--A imagem do personagem principal (Kirby) foi obtida do jogo homônimo desenvolvido pela Nintendo, enquanto alguns outros personagens foram inspirados no anime One Piece.
-As telas de fundo foram criadas pela Scenario.com, utilizando atributos como "Montanhas", "Nascer do Sol", "Neve", "Rio", "Floresta", "Vila", entre outros.
+Durante a elaboração do código, foram utilizadas funções do arquivo snippets disponibilizado no repositório do GitHub para facilitar a implementação. Além disso, a documentação em docstrings foi produzida com a ajuda do ChatGPT.
+A imagem do personagem principal (Kirby) foi obtida do jogo homônimo desenvolvido pela Nintendo, enquanto alguns outros personagens foram inspirados no anime One Piece.E também as telas de fundo foram criadas pela Scenario.com, utilizando atributos como "Montanhas", "Nascer do Sol", "Neve", "Rio", "Floresta", "Vila", entre outros.
 
 
 Integrantes do Grupo
-
 Luis Felipe Janot Barretto e Eduardo Takei Yaginuma  
