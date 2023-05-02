@@ -58,16 +58,16 @@ class Coracao(pygame.sprite.Sprite):
         self.coracao.add(self)
 
 class Carne(pygame.sprite.Sprite):
-    def __init__(self,sprites,coracao,x,y):
-        self.coracao = coracao
+    def __init__(self,sprites,carne,x,y):
+        self.carne = carne
         pygame.sprite.Sprite.__init__(self)
-        img_coracao = pygame.image.load("coracao1.png")
+        img_coracao = pygame.image.load("carne.png")
         self.image = pygame.transform.scale(img_coracao, (45,45))
         self.rect = self.image.get_rect()
         self.rect.x = x
         self.rect.y = y
         sprites.add(self)
-        self.coracao.add(self)
+        self.carne.add(self)
 
 class Pocao(pygame.sprite.Sprite):
     def __init__(self,sprites,pocao,x,y):
@@ -181,11 +181,13 @@ class Tiro(pygame.sprite.Sprite):
             lista_plataformas_quebraveis = pygame.sprite.spritecollide(self, self.plataformas_quebraveis,True)
             for tiro in lista_plataformas_quebraveis:
                 self.kill()
+
             lista_plataformas_quebraveis = pygame.sprite.spritecollide(self, self.gorilas,True)
             for tiro in lista_plataformas_quebraveis:
                 self.kill()
                 lista_plataformas_quebraveis = []
                 assets["gorila_vivo"] = False
+                
             lista_plataformas_quebraveis = pygame.sprite.spritecollide(self, self.passaro,True)
             for tiro in lista_plataformas_quebraveis:
                 self.kill()

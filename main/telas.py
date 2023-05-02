@@ -127,7 +127,8 @@ class Telas():
         self.passaro = pygame.sprite.Group()
         self.coracao = pygame.sprite.Group()
         self.pocao = pygame.sprite.Group()
-        self.jogador = Jogador(self.plataforma,self.monstros,self.estrela, self.coracao,self.gorilas, self.pocao,self.plataformas_quebraveis,self.passaro,self.tiro_monstro)
+        self.carne = pygame.sprite.Group()
+        self.jogador = Jogador(self.plataforma,self.monstros,self.estrela, self.coracao,self.gorilas, self.pocao,self.plataformas_quebraveis,self.passaro,self.tiro_monstro,self.carne)
         self.sprites.add(self.jogador)
         
         assets["estrela"] = 0 #iniciando as coroas com 0 pem toda tela nova 
@@ -1204,7 +1205,7 @@ class Tela3_1:
 
         self.sprites.draw(self.window)
 
-class Tela3_2:
+class Tela3_2(Telas):
     
     def __init__(self, window):
         #criando o fund0
@@ -1266,6 +1267,8 @@ class Tela3_2:
         gera_plataforma(self,4,'x',450,150)
         gera_plataforma(self,4,'x',260,150)
         gera_plataforma(self,4,'x',80,150)
+
+        Carne(self.sprites, self.carne, 100, 100)
       
   
 
@@ -1296,8 +1299,8 @@ class Tela3_2:
                 assets["tiro"] -= 1
                 if assets["tiro"] >= 0:
                     Tiro(self.sprites, self.monstros, self.plataforma,self.plataformas_quebraveis,self.gorilas, self.passaro, self.jogador.rect.x, self.jogador.rect.y+25)
-            if self.jogador.rect.x > 850 and assets["estrela"] == 2:
-                return Tela3(self.window)
+            if assets["carne"]:
+                return YouWin(self.window)
             if assets["vidas"] <= 0:
                 return GameOver(self.window)
 
@@ -1343,19 +1346,23 @@ class Tela3_2:
         print(self.contador)
         if self.contador == 120:
             self.contador = 0
+            if assets["gorila_vivo2"]:
+                Tiro_monstro(self.sprites, self.plataforma,self.plataformas_quebraveis,730, 290, self.tiro_monstro,"esquerda")
             if assets["gorila_vivo"]:
- 
-                Tiro_monstro(self.sprites, self.plataforma,self.plataformas_quebraveis,650, 310, self.tiro_monstro,"esquerda")
-
+                Tiro_monstro(self.sprites, self.plataforma,self.plataformas_quebraveis,790, 390, self.tiro_monstro,"esquerda")
+            if assets["gorila_vivo3"]:
+                Tiro_monstro(self.sprites, self.plataforma,self.plataformas_quebraveis,730, 190, self.tiro_monstro,"esquerda")
+            if assets["gorila_vivo4"]:
+                Tiro_monstro(self.sprites, self.plataforma,self.plataformas_quebraveis,730, 90, self.tiro_monstro,"esquerda")
         self.sprites.draw(self.window)
 
 class Jogador(pygame.sprite.Sprite):
     
-    def __init__(self,chao,monstros,estrela, coracao, gorilas, pocao, plataformas_quebraveis,passaro,tiro_banana):
+    def __init__(self,chao,monstros,estrela, coracao, gorilas, pocao, plataformas_quebraveis,passaro,tiro_banana, carne):
 
         pygame.init() 
         pygame.sprite.Sprite.__init__(self)
-
+        self.carne = carne
         self.coracao = coracao
         self.monstros = monstros
         self.estrela = estrela
@@ -1385,7 +1392,7 @@ class Jogador(pygame.sprite.Sprite):
         self.HEIGHT = 512
 
         self.lista_jogador = []
-        imagem = pygame.image.load("pngwing.com (1).png")
+        imagem = pygame.image.load("andando.png")
         self.lista_jogador = load_spritesheet(imagem,1,8)
 
         imagem = pygame.image.load("parado.png")
@@ -1461,6 +1468,10 @@ class Jogador(pygame.sprite.Sprite):
         for cada_colisao in collisions:
             if assets["vidas"] < 5:
                 assets["vidas"] += 1
+
+        collisions = pygame.sprite.spritecollide(self, self.carne, True)
+        for cada_colisao in collisions:
+            assets["carne"] = True
 
         collisions = pygame.sprite.spritecollide(self, self.tiro_banana, True)
         for cada_colisao in collisions:

@@ -52,6 +52,9 @@ assets["texto"] = False
 assets["posicao_monstro"] = 'direita'
 assets["gorila_vivo"] = True
 assets["gorila_vivo2"] = True
+assets["gorila_vivo3"] = True
+assets["gorila_vivo4"] = True
+assets["carne"] = False
 
 # dicionario para guardar os dados que serao usados para o jogo - posicoes/movimento
 state = {}
