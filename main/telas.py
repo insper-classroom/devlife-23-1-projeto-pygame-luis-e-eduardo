@@ -92,7 +92,7 @@ class TelaInicial:
                 posicao = pygame.mouse.get_pos()
                 if posicao[0] >= (912-200)/2 - 35 and posicao[0] <= 912-(912-200)/2 +32:
                     if posicao[1] >=400 and posicao[1]<=470: #nao pode apertar as teclas de andar nao sei pq kkkk
-                        return GameOver(self.window)                        
+                        return Tela1_0(self.window)                        
             elif evento.type == pygame.USEREVENT:#tocando a musica durante o jogo inteiro 
                 pygame.mixer.music.play()
         return self
@@ -463,7 +463,7 @@ class Tela1_2(Telas):
 
         Estrela(self.sprites,self.estrela, 84, 140)
         Pocao(self.sprites, self.pocao, 600, 350)
-        Pocao(self.sprites, self.pocao, 200, 200)
+        Pocao(self.sprites, self.pocao, 210, 200)
 
 
 
