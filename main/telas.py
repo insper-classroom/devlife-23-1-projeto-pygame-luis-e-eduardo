@@ -948,14 +948,14 @@ class Tela3_0:
 
         self.lista_de_gorilas = []
         for i in range(0):
-            self.gorilas = Gorila(self.sprites,self.gorilas, 750, 200, 'direita') 
-            self.lista_de_gorilas.append(self.gorilas)
+            gorilas = Gorila(self.sprites,self.gorilas, 750, 200, 'direita') 
+            self.lista_de_gorilas.append(gorilas)
 
         self.lista_passaros = []
         for i in range(1):
             x = randint(200,800)
-            self.passaro = Passaro(self.sprites,self.passaro, x, 30,self.jogador,self.lista_passaros) 
-            self.lista_de_gorilas.append(self.passaro)
+            passaro = Passaro(self.sprites,self.passaro, x, 30,self.jogador,self.lista_passaros) 
+            self.lista_de_gorilas.append(passaro)
 
         img_tiro = pygame.image.load('bola.png')
         self.tiro = pygame.transform.scale(img_tiro,(15,15))
@@ -1246,4 +1246,10 @@ class Jogo:
 
     def finaliza(self):
         pygame.quit()
+
+if __name__ == '__main__':
+    jogo = Jogo()
+    jogo.game_loop()
+    jogo.finaliza()
+
 
