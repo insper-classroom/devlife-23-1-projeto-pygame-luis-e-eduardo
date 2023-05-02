@@ -427,6 +427,7 @@ class Tela1_2(Telas):
         self.text_box1 = pygame.transform.smoothscale(text_box1,(230,230))
         self.aparece_text_box = False 
 
+        #imagem para os tiros do jogador 
         img_tiro = pygame.image.load(assets["img_bola"])
         self.tiro = pygame.transform.scale(img_tiro,(15,15))
 
@@ -1296,8 +1297,6 @@ class Tela3_2(Telas):
         gera_plataforma(self,4,'x',80,160)
 
         Carne(self.sprites, self.carne, 100, 100)
-      
-  
 
     def recebe_eventos(self):
 
@@ -1371,7 +1370,6 @@ class Tela3_2(Telas):
         
         assets["vel_nana"] = True
         self.contador+=1
-        print(self.contador)
         if self.contador == 120:
             self.contador = 0
             
@@ -1536,33 +1534,21 @@ class Jogador(pygame.sprite.Sprite):
     def update(self, delta_t):
         
         self.speedy += self.GRAVITY
-        # Atualiza o estado para caindo
         if self.speedy > 0:
             self.state = self.FALLING
-        # Atualiza a posição y
         self.rect.y += self.speedy
-        # Se colidiu com algum bloco, volta para o ponto antes da colisão
         collisions = pygame.sprite.spritecollide(self, self.chao, False)
-        # Corrige a posição do personagem para antes da colisão
         for collision in collisions:
-            # Estava indo para baixo
             if self.speedy > 0:
                 self.rect.bottom = collision.rect.top
-                # Se colidiu com algo, para de cair
                 self.speedy = 0
-                # Atualiza o estado para parado
                 self.state = self.STILL
-            # Estava indo para cima
             elif self.speedy < 0:
                 self.rect.top = collision.rect.bottom
-                # Se colidiu com algo, para de cair
                 self.speedy = 0
-                # Atualiza o estado para parado
                 self.state = self.STILL
 
-        # Tenta andar em x
         self.rect.x += self.speedx
-        # Corrige a posição caso tenha passado do tamanho da janela
         if self.rect.left < 0:
             self.rect.left = 0
         elif self.rect.right >= self.WIDTH:
