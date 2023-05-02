@@ -33,6 +33,7 @@ assets["img_passaro"] = "passaro.png"
 assets["img_parado"] = "parado.png"
 assets["img_andando"] = "andando.png"
 assets["img_pulando"] = "pulando.png"
+assets["img_carne"] = "carne.png"
 
 #falas
 assets["text_box1"] = "text_box1.png"
