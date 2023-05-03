@@ -1,6 +1,5 @@
 import pygame 
 from telas import *
-
 class Jogo:
     """
     Classe responsável por gerenciar o jogo e suas telas.
