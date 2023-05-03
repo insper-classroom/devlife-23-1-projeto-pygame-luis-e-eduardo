@@ -4,10 +4,6 @@ from assets import *
 from funcoes_adicionais import *
 from classes_adicionais import *
 
-#Comentários
-#A função load_spritesheet server para "recortar um png com os frames do movimento do jogador e nós pegamos essa função do snippets do github"
-#Para fazer o pulo do jogador, nos tambem nos baseamos no algoritimo do snippets
-
 class GameOver():
     def __init__(self, window):
         """
@@ -312,7 +308,7 @@ class Tela1(Telas): #Tela1: tutorial de movimentacao e pulo
     def __init__(self, window):
 
         #criando o fund0
-        fundo = pygame.image.load(assets["fundo1"]) #imagem gerdada pela AI "https://www.scenario.com/""
+        fundo = pygame.image.load(assets["fundo1"])
         self.fundo = pygame.transform.scale(fundo, (912,512))
 
         #pre-stes de todas as telas 
@@ -449,7 +445,7 @@ class Tela1_2(Telas):
         diferenca_entre_blocos_y = 25
         #colocar bloco no chao, y = 452
         
-        #criando as plataformas 
+        #criando as plataformas+ os items do jogo
         Plataform(self.sprites,self.plataforma,self.plataformas_quebraveis,300, 452, 'bloco')
         Plataform(self.sprites,self.plataforma,self.plataformas_quebraveis,300, 452 - diferenca_entre_blocos_y, 'bloco')
 
@@ -582,8 +578,7 @@ class Tela2_0(Telas):
             x = 32*i
             Plataform(self.sprites,self.plataforma,self.plataformas_quebraveis, x, 480, 'grass')
 
-        #criando as plataformas 
-
+        #criando as plataformas + os items dos jogos 
         gera_plataforma(self,4,'x',50,180)
         Estrela(self.sprites,self.estrela, 96, 145)
 
@@ -667,6 +662,7 @@ class Tela2_0(Telas):
         for i in range(assets["vidas"]):
             window.blit(self.img_coracao,(i*20,0))
         
+        #desenhando a quantidade de tiros
         for i in range(assets["tiro"]):
             if i<10:
                 window.blit(self.tiro,(i*14 + 770,0))
@@ -723,7 +719,7 @@ class Tela2_1(Telas):
             x = 32*i
             Plataform(self.sprites,self.plataforma,self.plataformas_quebraveis,x, 480, 'grass')
 
-        #criando as plataformas e as estrelas 
+        #criando as plataformas + os items do jogo 
         gera_plataforma(self,40, 'x', -50, 450)
         Estrela(self.sprites,self.estrela, 10, 415)
         gera_plataforma(self,25, 'x', -50, 320)
@@ -794,6 +790,7 @@ class Tela2_1(Telas):
         for i in range(assets["vidas"]):
             window.blit(self.img_coracao,(i*20,0))
         
+        #desenhando a quantidade de tiros
         for i in range(assets["tiro"]):
             if i<10:
                 window.blit(self.tiro,(i*14 + 770,0))
@@ -804,6 +801,7 @@ class Tela2_1(Telas):
             if i < 40 and i>=30:
                 window.blit(self.tiro,(i*14-210+560,39))
         
+        #verificando se o gorila esta morto ou nao para parar de gerar bananas 
         self.contador+=1
         if self.contador == 120:
             self.contador = 0
@@ -858,6 +856,7 @@ class Tela2_2(Telas):
             x = 32*i
             Plataform(self.sprites,self.plataforma,self.plataformas_quebraveis,x, 480, 'grass')
 
+        #desenhando as plataformas +itens do jogo 
         gera_plataforma(self,40, 'x', -50, 450)
         gera_plataforma(self,18, 'x', -50, 300)
         gera_plataforma(self,20, 'x', 550, 300)
@@ -949,6 +948,7 @@ class Tela2_2(Telas):
         for i in range(assets["vidas"]):
             window.blit(self.img_coracao,(i*20,0))
         
+        #desenhando a quantidade de tiros
         for i in range(assets["tiro"]):
             if i<10:
                 window.blit(self.tiro,(i*14 + 770,0))
@@ -1011,7 +1011,8 @@ class Tela3_0(Telas):
         for i in range(30):
             x = 32*i
             Plataform(self.sprites,self.plataforma,self.plataformas_quebraveis,x, 480, 'grass')
-
+        
+        #criando as plataformas do mapa + os itens para serem coletados 
         gera_plataforma(self,4,'x',100,410)
         gera_plataforma(self,4,'x',210,350)
         gera_plataforma(self,6,'x',320,290)
@@ -1107,6 +1108,7 @@ class Tela3_0(Telas):
         for i in range(assets["vidas"]):
             window.blit(self.img_coracao,(i*20,0))
         
+        #desenhando a quantidade de tiros
         for i in range(assets["tiro"]):
             if i<10:
                 window.blit(self.tiro,(i*14 + 770,0))
@@ -1138,6 +1140,7 @@ class Tela3_1(Telas):
         #gerando as plataformas dos mapas 
         self.gera_mapa()
 
+        #colocando os passaros dentro da tela como background 
         self.lista_passaros = []
         for i in range(6):
             x = randint(200,800)
@@ -1220,6 +1223,7 @@ class Tela3_1(Telas):
         for i in range(assets["vidas"]):
             window.blit(self.img_coracao,(i*20,0))
         
+        #desenhando a quantidade de tiros
         for i in range(assets["tiro"]):
             if i<10:
                 window.blit(self.tiro,(i*14 + 770,0))
@@ -1252,11 +1256,11 @@ class Tela3_2(Telas):
         self.gera_mapa()
 
         #gerando os monstros no mapa 
-        self.limita_monstros_x = [0,100]
+        self.limita_monstros_x = [200,500]
         self.lista_de_monstros = []
-        for i in range(0):
+        for i in range(6):
             x = randint(self.limita_monstros_x[0],self.limita_monstros_x[1])
-            self.monstro = Monstro(self.sprites,self.monstros, x, 412) 
+            self.monstro = Monstro(self.sprites,self.monstros, x, 440) 
             self.lista_de_monstros.append(self.monstro)
 
         self.lista_de_gorilas = []
@@ -1282,6 +1286,7 @@ class Tela3_2(Telas):
             x = 32*i
             Plataform(self.sprites,self.plataforma,self.plataformas_quebraveis,x, 480, 'grass')
 
+        #gerando as plataformas do mapa
         gera_plataforma(self,10,'x',700,450)
         gera_plataforma(self,10,'x',700,350)
         gera_plataforma(self,10,'x',700,250)
@@ -1296,7 +1301,7 @@ class Tela3_2(Telas):
         gera_plataforma(self,4,'x',260,160)
         gera_plataforma(self,4,'x',80,160)
 
-        Carne(self.sprites, self.carne, 100, 100)
+        Carne(self.sprites, self.carne, 100, 120)
 
     def recebe_eventos(self):
 
@@ -1358,6 +1363,7 @@ class Tela3_2(Telas):
         for i in range(assets["vidas"]):
             window.blit(self.img_coracao,(i*20,0))
         
+        #desenhando a quantidade de tiros
         for i in range(assets["tiro"]):
             if i<10:
                 window.blit(self.tiro,(i*14 + 770,0))
@@ -1368,6 +1374,7 @@ class Tela3_2(Telas):
             if i < 40 and i>=30:
                 window.blit(self.tiro,(i*14-210+560,39))
         
+        #mudando a velocidade das bananas 
         assets["vel_nana"] = True
         self.contador+=1
         if self.contador == 120:
@@ -1385,7 +1392,7 @@ class Tela3_2(Telas):
                     Tiro_monstro(self.sprites, self.plataforma,self.plataformas_quebraveis,730, 90, self.tiro_monstro,"esquerda")
         self.sprites.draw(self.window)
 
-class Tela3_3(Telas): 
+class Tela3_3(Telas): #tela final do jogo que mostra que o jogador ganhou!
     
     def __init__(self, window):
         #criando o fund0
@@ -1446,8 +1453,8 @@ class Tela3_3(Telas):
                 assets["tiro"] -= 1
                 if assets["tiro"] >= 0:
                     Tiro(self.sprites, self.monstros, self.plataforma,self.plataformas_quebraveis,self.gorilas, self.passaro, self.jogador.rect.x, self.jogador.rect.y+25)
-            if self.jogador.rect.x > 850 and assets["estrela"] == 2:
-                return Tela3(self.window)
+            if self.jogador.rect.x > 850 and assets["estrela"] == 0:
+                return TelaInicial(self.window)
             if assets["vidas"] <= 0:
                 return GameOver(self.window)
 
@@ -1471,8 +1478,8 @@ class Tela3_3(Telas):
         #pre-sets de desenho de todas as telas
         Telas.desenha(self,window)
 
-        window.blit(self.trofeu,(450,100))
-        window.blit(self.sanji,(200,380))
+        window.blit(self.trofeu,(450,100)) #desenhando o trofeu
+        window.blit(self.sanji,(200,380)) #desenhando o sanji
 
         if self.aparece_text_box:
             window.blit(self.text_box5,(60,265))    
@@ -1480,7 +1487,51 @@ class Tela3_3(Telas):
         self.sprites.draw(self.window)
 
 class Jogador(pygame.sprite.Sprite):
-    
+    """"
+    Args:
+        chao (pygame.sprite.Group): Grupo de sprites das plataformas do chão.
+        monstros (pygame.sprite.Group): Grupo de sprites dos monstros.
+        estrela (pygame.sprite.Group): Grupo de sprites das estrelas.
+        coracao (pygame.sprite.Group): Grupo de sprites dos corações.
+        gorilas (pygame.sprite.Group): Grupo de sprites dos gorilas.
+        pocao (pygame.sprite.Group): Grupo de sprites das poções.
+        plataformas_quebraveis (pygame.sprite.Group): Grupo de sprites das plataformas quebráveis.
+        passaro (pygame.sprite.Group): Grupo de sprites dos pássaros.
+        tiro_banana (pygame.sprite.Group): Grupo de sprites dos tiros de banana.
+        carne (pygame.sprite.Group): Grupo de sprites das carnes.
+
+    Atributos:
+        carne (pygame.sprite.Group): Grupo de sprites das carnes.
+        coracao (pygame.sprite.Group): Grupo de sprites dos corações.
+        monstros (pygame.sprite.Group): Grupo de sprites dos monstros.
+        estrela (pygame.sprite.Group): Grupo de sprites das estrelas.
+        gorilas (pygame.sprite.Group): Grupo de sprites dos gorilas.
+        passaro (pygame.sprite.Group): Grupo de sprites dos pássaros.
+        pocao (pygame.sprite.Group): Grupo de sprites das poções.
+        tiro_banana (pygame.sprite.Group): Grupo de sprites dos tiros de banana.
+        mario (pygame.Surface): Superfície com a imagem da estrela.
+        image (pygame.Surface): Imagem do jogador.
+        rect (pygame.Rect): Retângulo que delimita o jogador.
+        chao (pygame.sprite.Group): Grupo de sprites das plataformas do chão.
+        plataformas_quebraveis (pygame.sprite.Group): Grupo de sprites das plataformas quebráveis.
+        speedx (int): Velocidade horizontal do jogador.
+        speedy (int): Velocidade vertical do jogador.
+        STILL (int): Constante que representa o estado do jogador parado.
+        JUMPING (int): Constante que representa o estado do jogador pulando.
+        FALLING (int): Constante que representa o estado do jogador caindo.
+        GRAVITY (int): Valor da aceleração da gravidade.
+        JUMP_SIZE (int): Tamanho do pulo do jogador.
+        WIDTH (int): Largura da tela do jogo.
+        HEIGHT (int): Altura da tela do jogo.
+        lista_jogador (list): Lista de sprites do jogador andando.
+        lista_jogador_parado (list): Lista de sprites do jogador parado.
+        lista_jogador_pulando (list): Lista de sprites do jogador pulando.
+        state (str): Estado atual do jogador.
+        contador (int): Contador de tempo.
+        last_updated (int): Último momento em que a animação do jogador foi atualizada.
+        elapsed_ticks (int): Número de ticks que se passaram desde a última atualização da animação.
+        flag (bool): Indica se o jogador colidiu com alguma plataforma.
+    """
     def __init__(self,chao,monstros,estrela, coracao, gorilas, pocao, plataformas_quebraveis,passaro,tiro_banana, carne):
 
         pygame.init() 
@@ -1531,8 +1582,15 @@ class Jogador(pygame.sprite.Sprite):
 
         self.flag = True
 
-    def update(self, delta_t):
+    def update(self, delta_t): #parte do dessa funcao foi retira dos codigos do Toshi, para o pulo do jogador 
+        """"
+        Da update na posicao do jogador para ver se teve colisoes 
+        agrs:
+            delta_t: tempo rodado desdo ultimo update 
+        """
         
+        #pulo do personagem 
+
         self.speedy += self.GRAVITY
         if self.speedy > 0:
             self.state = self.FALLING
@@ -1560,6 +1618,8 @@ class Jogador(pygame.sprite.Sprite):
             elif self.speedx < 0:
                 self.rect.left = collision.rect.right
 
+         #verificando colicoes com sprites 
+
         collisions1 = pygame.sprite.spritecollide(self, self.plataformas_quebraveis, False)
         for collision in collisions1:
             if self.speedx > 0:
@@ -1577,7 +1637,6 @@ class Jogador(pygame.sprite.Sprite):
             musica_estrela = pygame.mixer.Sound("pega_estrela.mp3")
             musica_estrela.set_volume(0.2)
             musica_estrela.play()
-
 
         collisions = pygame.sprite.spritecollide(self, self.coracao, True)
         for cada_colisao in collisions:
@@ -1604,6 +1663,8 @@ class Jogador(pygame.sprite.Sprite):
             if assets["tiro"]>35 and assets["tiro"]<40:
                 assets["tiro"] = 40
 
+        #movimentacao do personagem, com a animacao dependendo do seu movimento 
+        
         self.elapsed_ticks += delta_t
         if self.speedx != 0:
             if self.elapsed_ticks > 0.1:
